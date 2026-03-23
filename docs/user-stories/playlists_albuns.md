@@ -116,3 +116,20 @@
 | *Prioridade* | Essencial |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US08 - Reproduzir álbum
+
+| 📌 User Story - US08 | Reproduzir álbum |
+|---------------------|--|
+| *Título* | Reproduzir um álbum |
+| *Identificação* | US08 - Reproduzir álbum |
+| *Story* | Como usuário, quero reproduzir um álbum para ouvir suas músicas em sequência. |
+| *Requisitos Relacionados* | RF08 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado, **quando** seleciono um álbum, **então** devo conseguir iniciar sua reprodução.<br><br>- **Dado** que o álbum possui músicas, **quando** inicio a reprodução, **então** elas devem ser reproduzidas em sequência.<br><br>- **Dado** que o álbum não possui músicas, **quando** tento reproduzir, **então** o sistema deve impedir a ação.<br><br>- **Dado** que estou reproduzindo um álbum, **quando** avanço ou volto músicas, **então** o sistema deve respeitar a ordem do álbum. |
+| *Testes de Aceitação* | <ol><li><strong>TA08.01 - Reprodução de álbum com músicas.</strong><ol><li>Acessar um álbum</li><li>Clicar em reproduzir</li><li>Verificar que a primeira música inicia</li><li>Verificar que as próximas seguem a ordem</li></ol></li><li><strong>TA08.02 - Avançar músicas no álbum.</strong><ol><li>Reproduzir um álbum</li><li>Avançar para próxima música</li><li>Verificar que a próxima é reproduzida corretamente</li></ol></li><li><strong>TA08.03 - Reprodução de álbum vazio.</strong><ol><li>Acessar um álbum sem músicas</li><li>Tentar reproduzir</li><li>Verificar que o sistema impede a ação</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Essencial |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
