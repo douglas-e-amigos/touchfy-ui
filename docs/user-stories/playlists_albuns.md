@@ -14,3 +14,20 @@
 | *Prioridade* | Essencial |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US02 - Editar playlist
+
+| 📌 User Story - US02 | Editar playlist |
+|---------------------|--|
+| *Título* | Editar uma playlist existente |
+| *Identificação* | US02 - Editar playlist |
+| *Story* | Como usuário, quero editar o nome, a descrição e a visibilidade de uma playlist para mantê-la atualizada. |
+| *Requisitos Relacionados* | RF02 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado, **quando** acesso uma playlist de minha autoria, **então** devo conseguir editar suas informações.<br><br>- **Dado** que altero o nome da playlist, **quando** salvo as alterações, **então** o novo nome deve ser atualizado corretamente.<br><br>- **Dado** que altero a descrição, **quando** salvo as alterações, **então** a nova descrição deve ser persistida corretamente.<br><br>- **Dado** que altero a visibilidade, **quando** salvo as alterações, **então** a playlist deve respeitar a nova configuração.<br><br>- **Dado** que não informo um nome válido, **quando** tento salvar, **então** o sistema deve exibir uma mensagem de erro.<br><br>- **Dado** que não sou o dono da playlist, **quando** tento editar, **então** o sistema deve impedir a ação. |
+| *Testes de Aceitação* | <ol><li><strong>TA02.01 - Edição de playlist com dados válidos.</strong><ol><li>Acessar uma playlist criada pelo usuário</li><li>Clicar na opção de editar playlist</li><li>Alterar o nome da playlist</li><li>Alterar a descrição</li><li>Alterar a visibilidade</li><li>Salvar alterações</li><li>Verificar que o sistema atualiza os dados com sucesso</li><li>Verificar que as alterações são refletidas na interface</li></ol></li><li><strong>TA02.02 - Alteração apenas do nome.</strong><ol><li>Acessar uma playlist criada pelo usuário</li><li>Clicar em editar playlist</li><li>Alterar apenas o nome</li><li>Salvar alterações</li><li>Verificar que o nome foi atualizado corretamente</li></ol></li><li><strong>TA02.03 - Nome não informado.</strong><ol><li>Acessar uma playlist criada pelo usuário</li><li>Clicar em editar playlist</li><li>Remover o nome da playlist</li><li>Tentar salvar alterações</li><li>Verificar que o sistema não permite salvar</li><li>Forçar o envio (ex: via requisição manual)</li><li>Verificar que o sistema exibe mensagem de erro</li><li>Verificar que os dados não foram alterados</li></ol></li><li><strong>TA02.04 - Alteração de visibilidade.</strong><ol><li>Acessar uma playlist criada pelo usuário</li><li>Clicar em editar playlist</li><li>Alterar visibilidade de pública para privada</li><li>Salvar alterações</li><li>Verificar que a playlist está privada</li><li>Verificar que outros usuários não conseguem acessá-la</li></ol></li><li><strong>TA02.05 - Usuário não autorizado tenta editar.</strong><ol><li>Acessar uma playlist de outro usuário</li><li>Tentar acessar a opção de edição</li><li>Verificar que o sistema bloqueia a ação</li><li>Forçar requisição de edição manual</li><li>Verificar que o sistema retorna erro de autorização</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Essencial |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
