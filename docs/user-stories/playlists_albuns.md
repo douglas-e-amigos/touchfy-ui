@@ -167,3 +167,20 @@
 | *Prioridade* | Essencial |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US11 - Adicionar músicas ao álbum
+
+| 📌 User Story - US11 | Adicionar músicas ao álbum |
+|---------------------|--|
+| *Título* | Adicionar músicas a um álbum |
+| *Identificação* | US11 - Adicionar músicas ao álbum |
+| *Story* | Como artista, quero adicionar músicas ao meu álbum para completá-lo antes do lançamento. |
+| *Requisitos Relacionados* | RF11 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado como artista, **quando** acesso um álbum meu, **então** devo conseguir adicionar músicas.<br><br>- **Dado** que seleciono músicas válidas, **quando** adiciono ao álbum, **então** elas devem aparecer corretamente.<br><br>- **Dado** que uma música já está no álbum, **quando** tento adicioná-la novamente, **então** o sistema deve bloquear duplicidade.<br><br>- **Dado** que tento adicionar música em álbum de outro artista, **então** o sistema deve impedir a ação. |
+| *Testes de Aceitação* | <ol><li><strong>TA11.01 - Adicionar música válida.</strong><ol><li>Acessar álbum do artista</li><li>Selecionar música disponível</li><li>Clicar em adicionar</li><li>Verificar que a música aparece no álbum</li></ol></li><li><strong>TA11.02 - Adição de música duplicada.</strong><ol><li>Tentar adicionar a mesma música novamente</li><li>Verificar que o sistema bloqueia duplicidade</li></ol></li><li><strong>TA11.03 - Tentativa não autorizada.</strong><ol><li>Acessar álbum de outro artista</li><li>Tentar adicionar música</li><li>Verificar que o sistema bloqueia a ação</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Essencial |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
