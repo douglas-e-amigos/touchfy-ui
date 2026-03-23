@@ -48,3 +48,20 @@
 | *Prioridade* | Essencial |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US04 - Adicionar música à playlist
+
+| 📌 User Story - US04 | Adicionar música |
+|---------------------|--|
+| *Título* | Adicionar música à playlist |
+| *Identificação* | US04 - Adicionar música à playlist |
+| *Story* | Como usuário, quero adicionar músicas a uma playlist para personalizá-la. |
+| *Requisitos Relacionados* | RF04 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado, **quando** acesso uma playlist de minha autoria, **então** devo conseguir adicionar músicas.<br><br>- **Dado** que seleciono uma música válida, **quando** adiciono à playlist, **então** ela deve ser incluída com sucesso.<br><br>- **Dado** que adiciono uma música, **quando** visualizo a playlist, **então** a música deve aparecer na lista.<br><br>- **Dado** que não sou dono da playlist, **quando** tento adicionar música, **então** o sistema deve impedir a ação.<br><br>- **Dado** que a música já está na playlist, **quando** tento adicioná-la novamente, **então** o sistema deve respeitar a regra definida (permitir ou bloquear duplicidade). |
+| *Testes de Aceitação* | <ol><li><strong>TA04.01 - Adição de música válida.</strong><ol><li>Acessar uma playlist do usuário</li><li>Selecionar uma música disponível</li><li>Clicar em adicionar à playlist</li><li>Verificar que o sistema adiciona a música com sucesso</li><li>Verificar que a música aparece na playlist</li></ol></li><li><strong>TA04.02 - Adição de múltiplas músicas.</strong><ol><li>Acessar uma playlist do usuário</li><li>Adicionar várias músicas</li><li>Verificar que todas foram adicionadas corretamente</li></ol></li><li><strong>TA04.03 - Usuário não autorizado tenta adicionar.</strong><ol><li>Acessar playlist de outro usuário</li><li>Tentar adicionar uma música</li><li>Verificar que o sistema bloqueia a ação</li><li>Forçar requisição manual</li><li>Verificar que o sistema retorna erro de autorização</li></ol></li><li><strong>TA04.04 - Adição de música duplicada.</strong><ol><li>Acessar uma playlist do usuário</li><li>Adicionar uma música</li><li>Tentar adicionar a mesma música novamente</li><li>Verificar comportamento conforme regra definida (permitido ou bloqueado)</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Essencial |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
