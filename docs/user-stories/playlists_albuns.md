@@ -31,3 +31,20 @@
 | *Prioridade* | Essencial |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US03 - Excluir playlist
+
+| 📌 User Story - US03 | Excluir playlist |
+|---------------------|--|
+| *Título* | Excluir uma playlist |
+| *Identificação* | US03 - Excluir playlist |
+| *Story* | Como usuário, quero excluir uma playlist para remover conteúdos que não desejo mais. |
+| *Requisitos Relacionados* | RF03 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado, **quando** acesso uma playlist de minha autoria, **então** devo conseguir excluí-la.<br><br>- **Dado** que confirmo a exclusão, **quando** a ação é realizada, **então** a playlist deve ser removida com sucesso.<br><br>- **Dado** que excluo uma playlist, **quando** acesso minha lista de playlists, **então** ela não deve mais aparecer.<br><br>- **Dado** que não confirmo a exclusão, **quando** cancelo a ação, **então** a playlist deve permanecer intacta.<br><br>- **Dado** que não sou o dono da playlist, **quando** tento excluí-la, **então** o sistema deve impedir a ação. |
+| *Testes de Aceitação* | <ol><li><strong>TA03.01 - Exclusão de playlist com confirmação.</strong><ol><li>Acessar uma playlist do usuário</li><li>Clicar na opção de excluir</li><li>Confirmar a exclusão</li><li>Verificar que o sistema remove a playlist</li><li>Verificar que a playlist não aparece mais na lista do usuário</li></ol></li><li><strong>TA03.02 - Cancelamento da exclusão.</strong><ol><li>Acessar uma playlist do usuário</li><li>Clicar em excluir</li><li>Cancelar a ação</li><li>Verificar que a playlist continua existente</li></ol></li><li><strong>TA03.03 - Usuário não autorizado tenta excluir.</strong><ol><li>Acessar playlist de outro usuário</li><li>Tentar excluir a playlist</li><li>Verificar que o sistema bloqueia a ação</li><li>Forçar requisição manual</li><li>Verificar erro de autorização</li></ol></li><li><strong>TA03.04 - Persistência da exclusão.</strong><ol><li>Excluir uma playlist</li><li>Atualizar a página</li><li>Verificar que a playlist continua inexistente</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Essencial |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
