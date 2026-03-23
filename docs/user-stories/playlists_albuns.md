@@ -65,3 +65,20 @@
 | *Prioridade* | Essencial |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US05 - Remover música da playlist
+
+| 📌 User Story - US05 | Remover música |
+|---------------------|--|
+| *Título* | Remover música da playlist |
+| *Identificação* | US05 - Remover música da playlist |
+| *Story* | Como usuário, quero remover músicas de uma playlist para mantê-la organizada. |
+| *Requisitos Relacionados* | RF05 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado, **quando** acesso uma playlist de minha autoria, **então** devo conseguir remover músicas.<br><br>- **Dado** que seleciono uma música da playlist, **quando** removo, **então** ela deve ser excluída com sucesso.<br><br>- **Dado** que removo uma música, **quando** visualizo a playlist, **então** ela não deve mais aparecer.<br><br>- **Dado** que não sou dono da playlist, **quando** tento remover música, **então** o sistema deve impedir a ação.<br><br>- **Dado** que a música não existe na playlist, **quando** tento removê-la, **então** o sistema deve tratar corretamente sem inconsistência. |
+| *Testes de Aceitação* | <ol><li><strong>TA05.01 - Remoção de música válida.</strong><ol><li>Acessar uma playlist do usuário</li><li>Selecionar uma música existente</li><li>Clicar em remover</li><li>Verificar que a música foi removida</li><li>Verificar que não aparece mais na playlist</li></ol></li><li><strong>TA05.02 - Remoção de múltiplas músicas.</strong><ol><li>Acessar uma playlist</li><li>Remover várias músicas</li><li>Verificar que todas foram removidas corretamente</li></ol></li><li><strong>TA05.03 - Usuário não autorizado tenta remover.</strong><ol><li>Acessar playlist de outro usuário</li><li>Tentar remover música</li><li>Verificar que o sistema bloqueia a ação</li><li>Forçar requisição manual</li><li>Verificar que o sistema retorna erro de autorização</li></ol></li><li><strong>TA05.04 - Remoção de música inexistente.</strong><ol><li>Acessar uma playlist do usuário</li><li>Tentar remover uma música que não está na playlist</li><li>Verificar que o sistema trata corretamente sem erro crítico</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Essencial |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
