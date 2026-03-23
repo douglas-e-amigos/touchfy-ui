@@ -150,3 +150,20 @@
 | *Prioridade* | Importante |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US10 - Criar álbum
+
+| 📌 User Story - US10 | Criar álbum |
+|---------------------|--|
+| *Título* | Criar um novo álbum |
+| *Identificação* | US10 - Criar álbum |
+| *Story* | Como artista, quero criar um novo álbum para organizar minhas músicas e disponibilizá-lo para os usuários. |
+| *Requisitos Relacionados* | RF10 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado como artista, **quando** acesso a tela de criação de álbum, **então** devo conseguir informar o nome, descrição e gênero musical.<br><br>- **Dado** que informo os dados corretamente, **quando** confirmo a criação, **então** o álbum deve ser criado com sucesso.<br><br>- **Dado** que não informo o nome do álbum, **quando** tento criar, **então** o sistema deve exibir mensagem de erro.<br><br>- **Dado** que o álbum é criado, **quando** acesso minha lista de álbuns, **então** ele deve aparecer listado corretamente. |
+| *Testes de Aceitação* | <ol><li><strong>TA10.01 - Criação de álbum com dados válidos.</strong><ol><li>Acessar tela de criação de álbum</li><li>Preencher nome, descrição e gênero</li><li>Clicar em criar álbum</li><li>Verificar que o álbum foi criado</li><li>Verificar que aparece na lista do artista</li></ol></li><li><strong>TA10.02 - Tentativa sem nome.</strong><ol><li>Acessar tela de criação de álbum</li><li>Deixar campo nome vazio</li><li>Tentar criar álbum</li><li>Verificar que o sistema retorna erro</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Essencial |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
