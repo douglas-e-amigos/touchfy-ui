@@ -218,3 +218,20 @@
 | *Prioridade* | Importante |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US14 - Excluir álbum
+
+| 📌 User Story - US14 | Excluir álbum |
+|---------------------|--|
+| *Título* | Remover álbum |
+| *Identificação* | US14 - Excluir álbum |
+| *Story* | Como artista, quero excluir meu álbum para remover do sistema álbuns que não desejo mais disponibilizar. |
+| *Requisitos Relacionados* | RF14 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado como artista, **quando** acesso meu álbum, **então** devo conseguir excluí-lo.<br><br>- **Dado** que confirmo a exclusão, **então** o álbum deve ser removido do sistema e não aparecer mais na lista do artista.<br><br>- **Dado** que tento excluir álbum de outro artista, **então** o sistema deve bloquear a ação.<br><br>- **Dado** que o álbum está vinculado a músicas, **quando** excluo, **então** o sistema deve remover ou tratar corretamente as músicas associadas. |
+| *Testes de Aceitação* | <ol><li><strong>TA14.01 - Excluir álbum próprio.</strong><ol><li>Acessar álbum do artista</li><li>Clicar em excluir</li><li>Confirmar ação</li><li>Verificar que o álbum foi removido da lista</li></ol></li><li><strong>TA14.02 - Exclusão não autorizada.</strong><ol><li>Tentar excluir álbum de outro artista</li><li>Verificar que o sistema bloqueia a ação</li></ol></li><li><strong>TA14.03 - Exclusão de álbum com músicas.</strong><ol><li>Verificar que músicas vinculadas são removidas ou tratadas</li><li>Confirmar que não há dados órfãos</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Essencial |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
