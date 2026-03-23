@@ -133,3 +133,20 @@
 | *Prioridade* | Essencial |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US09 - Salvar álbum
+
+| 📌 User Story - US09 | Salvar álbum |
+|---------------------|--|
+| *Título* | Salvar um álbum |
+| *Identificação* | US09 - Salvar álbum |
+| *Story* | Como usuário, quero salvar um álbum para acessá-lo facilmente depois. |
+| *Requisitos Relacionados* | RF09 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado, **quando** acesso um álbum, **então** devo conseguir salvá-lo.<br><br>- **Dado** que salvo um álbum, **quando** acesso minha lista de álbuns salvos, **então** ele deve aparecer corretamente.<br><br>- **Dado** que o álbum já está salvo, **quando** tento salvá-lo novamente, **então** o sistema deve tratar duplicidade corretamente.<br><br>- **Dado** que removo um álbum salvo, **quando** acesso minha lista, **então** ele não deve mais aparecer. |
+| *Testes de Aceitação* | <ol><li><strong>TA09.01 - Salvar álbum com sucesso.</strong><ol><li>Acessar um álbum</li><li>Clicar em salvar</li><li>Verificar que o álbum foi salvo</li><li>Verificar que aparece na lista do usuário</li></ol></li><li><strong>TA09.02 - Evitar duplicidade.</strong><ol><li>Acessar um álbum já salvo</li><li>Tentar salvá-lo novamente</li><li>Verificar comportamento conforme regra (bloquear ou ignorar duplicidade)</li></ol></li><li><strong>TA09.03 - Remover álbum salvo.</strong><ol><li>Acessar lista de álbuns salvos</li><li>Remover um álbum</li><li>Verificar que ele não aparece mais</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Importante |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
