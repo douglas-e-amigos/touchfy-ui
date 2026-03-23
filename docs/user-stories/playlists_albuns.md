@@ -184,3 +184,20 @@
 | *Prioridade* | Essencial |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US12 - Definir data de lançamento do álbum
+
+| 📌 User Story - US12 | Planejar lançamento |
+|---------------------|--|
+| *Título* | Planejar data de lançamento do álbum |
+| *Identificação* | US12 - Definir data de lançamento |
+| *Story* | Como artista, quero definir a data de lançamento do meu álbum para organizar sua divulgação e disponibilização para os usuários. |
+| *Requisitos Relacionados* | RF12 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado como artista, **quando** acesso meu álbum, **então** devo poder definir a data de lançamento.<br><br>- **Dado** que defino uma data válida no futuro, **quando** salvo, **então** o sistema deve registrar a data corretamente.<br><br>- **Dado** que defino uma data passada, **então** o sistema deve bloquear e exibir mensagem de erro.<br><br>- **Dado** que altero a data, **quando** salvo, **então** a nova data deve substituir a anterior. |
+| *Testes de Aceitação* | <ol><li><strong>TA12.01 - Definir data válida.</strong><ol><li>Acessar álbum do artista</li><li>Selecionar data futura</li><li>Salvar data</li><li>Verificar que a data foi registrada corretamente</li></ol></li><li><strong>TA12.02 - Definir data passada.</strong><ol><li>Acessar álbum</li><li>Selecionar data passada</li><li>Tentar salvar</li><li>Verificar que o sistema exibe erro e não altera a data</li></ol></li><li><strong>TA12.03 - Alterar data de lançamento.</strong><ol><li>Definir nova data futura</li><li>Salvar</li><li>Verificar que a nova data substitui a anterior</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Importante |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
