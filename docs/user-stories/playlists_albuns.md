@@ -99,3 +99,20 @@
 | *Prioridade* | Essencial |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US07 - Visualizar álbum
+
+| 📌 User Story - US07 | Visualizar álbum |
+|---------------------|--|
+| *Título* | Visualizar um álbum |
+| *Identificação* | US07 - Visualizar álbum |
+| *Story* | Como usuário, quero visualizar um álbum para ver as músicas do artista e informações. |
+| *Requisitos Relacionados* | RF07 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado, **quando** acesso um álbum, **então** devo visualizar suas informações (nome, descrição e músicas).<br><br>- **Dado** que o álbum possui músicas, **quando** visualizo, **então** elas devem ser listadas corretamente.<br><br>- **Dado** que o álbum não possui músicas, **quando** visualizo, **então** o sistema deve indicar que está vazio.<br><br>- **Dado** que o álbum não existe, **quando** tento acessá-lo, **então** o sistema deve exibir erro ou mensagem apropriada. |
+| *Testes de Aceitação* | <ol><li><strong>TA07.01 - Visualização de álbum com músicas.</strong><ol><li>Acessar um álbum existente</li><li>Verificar que as informações do álbum são exibidas</li><li>Verificar que a lista de músicas é exibida corretamente</li></ol></li><li><strong>TA07.02 - Visualização de álbum vazio.</strong><ol><li>Acessar um álbum sem músicas</li><li>Verificar que o sistema indica que não há músicas</li></ol></li><li><strong>TA07.03 - Álbum inexistente.</strong><ol><li>Tentar acessar um álbum inválido</li><li>Verificar que o sistema exibe mensagem de erro</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Essencial |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
