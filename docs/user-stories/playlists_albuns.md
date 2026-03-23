@@ -82,3 +82,20 @@
 | *Prioridade* | Essencial |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US06 - Reprodução de música e controle de reprodução
+
+| 📌 User Story - US06 | Reprodução de música |
+|---------------------|--|
+| *Título* | Reproduzir músicas e controlar reprodução |
+| *Identificação* | US06 - Reprodução de música |
+| *Story* | Como usuário, quero reproduzir músicas e controlar a reprodução (pausar, avançar, voltar e definir a ordem), para ouvir conteúdos conforme minha preferência. |
+| *Requisitos Relacionados* | RF06 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado, **quando** seleciono uma música, **então** devo conseguir iniciar sua reprodução.<br><br>- **Dado** que uma música está sendo reproduzida, **quando** aciono pausar, **então** a reprodução deve ser interrompida.<br><br>- **Dado** que uma música está pausada, **quando** aciono reproduzir novamente, **então** a reprodução deve continuar do ponto anterior.<br><br>- **Dado** que estou ouvindo uma playlist, **quando** avanço para a próxima música, **então** o sistema deve reproduzir a próxima da lista.<br><br>- **Dado** que estou ouvindo uma playlist, **quando** volto a música, **então** o sistema deve reproduzir a anterior.<br><br>- **Dado** que seleciono um modo de reprodução (sequencial ou aleatório), **quando** as músicas são reproduzidas, **então** o sistema deve respeitar a ordem escolhida.<br><br>- **Dado** que não há músicas disponíveis, **quando** tento reproduzir, **então** o sistema deve impedir a ação. |
+| *Testes de Aceitação* | <ol><li><strong>TA06.01 - Reprodução de música individual.</strong><ol><li>Selecionar uma música</li><li>Clicar em reproduzir</li><li>Verificar que a música inicia reprodução</li></ol></li><li><strong>TA06.02 - Pausar e retomar reprodução.</strong><ol><li>Reproduzir uma música</li><li>Clicar em pausar</li><li>Verificar que a reprodução é interrompida</li><li>Clicar em reproduzir novamente</li><li>Verificar que a música continua do ponto anterior</li></ol></li><li><strong>TA06.03 - Avançar música.</strong><ol><li>Reproduzir uma playlist</li><li>Clicar em próxima música</li><li>Verificar que a próxima música é reproduzida</li></ol></li><li><strong>TA06.04 - Voltar música.</strong><ol><li>Reproduzir uma playlist</li><li>Clicar em música anterior</li><li>Verificar que a música anterior é reproduzida</li></ol></li><li><strong>TA06.05 - Reprodução em modo sequencial.</strong><ol><li>Selecionar modo sequencial</li><li>Reproduzir uma playlist</li><li>Verificar que as músicas seguem a ordem definida</li></ol></li><li><strong>TA06.06 - Reprodução em modo aleatório.</strong><ol><li>Selecionar modo aleatório</li><li>Reproduzir uma playlist</li><li>Verificar que as músicas são reproduzidas fora da ordem padrão</li></ol></li><li><strong>TA06.07 - Tentativa de reprodução sem músicas.</strong><ol><li>Acessar playlist vazia</li><li>Tentar reproduzir</li><li>Verificar que o sistema impede a ação</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Essencial |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
