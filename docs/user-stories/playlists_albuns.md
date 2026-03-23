@@ -201,3 +201,20 @@
 | *Prioridade* | Importante |
 | *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
 | *Protótipo* |  |
+
+### User Story US13 - Editar álbum
+
+| 📌 User Story - US13 | Editar álbum |
+|---------------------|--|
+| *Título* | Editar informações do álbum |
+| *Identificação* | US13 - Editar álbum |
+| *Story* | Como artista, quero editar meu álbum para atualizar informações como nome, descrição, gênero e data de lançamento. |
+| *Requisitos Relacionados* | RF13 |
+| *Critérios de Aceitação* | - **Dado** que estou autenticado como artista, **quando** acesso meu álbum, **então** devo conseguir alterar o nome, descrição, gênero e data de lançamento.<br><br>- **Dado** que altero os dados corretamente, **quando** salvo, **então** as alterações devem ser persistidas.<br><br>- **Dado** que tento editar um álbum de outro artista, **então** o sistema deve bloquear a ação.<br><br>- **Dado** que insiro dados inválidos (ex: nome vazio ou data passada), **então** o sistema deve exibir erro e não salvar. |
+| *Testes de Aceitação* | <ol><li><strong>TA13.01 - Editar dados válidos.</strong><ol><li>Acessar álbum próprio</li><li>Alterar nome, descrição e gênero</li><li>Salvar alterações</li><li>Verificar que os dados foram atualizados</li></ol></li><li><strong>TA13.02 - Inserir dados inválidos.</strong><ol><li>Tentar salvar com nome vazio ou data de lançamento passada</li><li>Verificar que o sistema exibe erro</li><li>Verificar que os dados anteriores permanecem</li></ol></li><li><strong>TA13.03 - Edição não autorizada.</strong><ol><li>Tentar editar álbum de outro artista</li><li>Verificar que o sistema bloqueia a ação</li></ol></li></ol> |
+| *Estimativa* |  |
+| *Tempo Real Gasto* |  |
+| *Tamanho Funcional* |  |
+| *Prioridade* | Importante |
+| *Responsáveis* | - *Analista:* Paulo Douglas<br>- *Desenvolvedor:* <br>- *Revisor:* <br>- *Testador:*  |
+| *Protótipo* |  |
