@@ -90,23 +90,7 @@ O sistema poderá ser utilizado por diversos usuários. Temos os seguintes perfi
 
 ## Modelo Conceitual dos dados
 
-```mermaid
-erDiagram
-    TABELA_1 {
-        string codigo PK
-        string nome
-        string frase
-        string oracao
-    }
-    TABELA_2 {
-        string codigo PK
-        string nome
-        text texto
-        int numero
-    }
-    TABELA_2 ||--o{ TABELA_1 : "é de"
-    TABELA_2 }o--o{ TABELA_2 : "tem"
-```
+O modelo conceitual do banco de dados pode ser encontrado [aqui](./diagrama-bd.md);
 
 ## Requisitos Não Funcionais
 
