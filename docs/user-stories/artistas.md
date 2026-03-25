@@ -10,6 +10,7 @@ Este documento descreve os User Stories criados a partir da Lista de Requisitos 
 | :--------- | :----: | :--------------------------------------- | :------- |
 | 23/03/2026 | 0.0.1  | Stories do módulo de artista             | Anderson |
 | 24/03/2026 | 0.0.2  | Revisão e adequação aos requisitos RF14–RF20 | Anderson |
+| 25/03/2026 | 0.0.3  | Inclusão de stories de cadastro, edição e desativação de artista | Anderson |
 
 ### User Story US01 - Seguir Artista
 
@@ -118,6 +119,52 @@ Este documento descreve os User Stories criados a partir da Lista de Requisitos 
 | **Critérios de Aceitação** | - **Dado** que estou visualizando o perfil de um artista, **quando** a página for carregada, **então** o sistema deve exibir nome, descrição, número de ouvintes e imagem do artista.<br>- **Dado** que exista posição em ranking aplicável ao artista, **então** essa informação também deve ser exibida.<br>- **Dado** que alguma informação opcional não esteja disponível, **então** o sistema deve exibir os demais dados sem comprometer a visualização do perfil. |
 | **Testes de Aceitação** | - **TA07.01** - Exibir corretamente nome, descrição, número de ouvintes e imagem do artista.<br>- **TA07.02** - Exibir posição em ranking quando essa informação estiver disponível.<br>- **TA07.03** - Carregar perfil corretamente mesmo na ausência de alguma informação opcional. |
 | **Estimativa** | 5h |
+| **Tempo Real Gasto** |  |
+| **Tamanho Funcional** |  |
+| **Prioridade** | Média |
+| **Responsáveis** | - **Analista:** Anderson<br>- **Desenvolvedor:** <br>- **Revisor:** <br>- **Testador:** |
+
+|📌 User Story - US08 | Tornar-se Artista |
+|---------------------|--|
+| **Título** | Tornar-se artista |
+| **Identificação** | US08 - Tornar-se Artista |
+| **Story** | Como **usuário verificado**, quero me tornar um **artista**, para publicar e gerenciar meu conteúdo musical na plataforma. |
+| **Requisitos Relacionados** | - |
+| **Critérios de Aceitação** | - **Dado** que sou um usuário com e-mail verificado, **quando** eu solicitar ativação do meu perfil de artista, **então** o sistema deve permitir a criação do meu status de artista.<br>- **Dado** que eu ainda não tenha verificado meu e-mail, **quando** eu tentar me tornar artista, **então** o sistema deve impedir a ação e informar que a verificação é obrigatória.<br>- **Dado** que a ativação como artista seja concluída com sucesso, **então** devo passar a ter acesso às funcionalidades exclusivas de artista. |
+| **Testes de Aceitação** | - **TA08.01** - Usuário com e-mail verificado consegue ativar status de artista com sucesso.<br>- **TA08.02** - Usuário sem e-mail verificado recebe mensagem de impedimento ao tentar se tornar artista.<br>- **TA08.03** - Após ativação, o sistema libera funcionalidades exclusivas de artista. |
+| **Estimativa** | 5h |
+| **Tempo Real Gasto** |  |
+| **Tamanho Funcional** |  |
+| **Prioridade** | Alta |
+| **Responsáveis** | - **Analista:** Anderson<br>- **Desenvolvedor:** <br>- **Revisor:** <br>- **Testador:** |
+
+### User Story US09 - Editar Dados de Artista
+
+|📌 User Story - US09 | Editar Dados de Artista |
+|---------------------|--|
+| **Título** | Editar dados de artista |
+| **Identificação** | US09 - Editar Dados de Artista |
+| **Story** | Como **artista**, quero editar meus dados de perfil, para manter minhas informações atualizadas na plataforma. |
+| **Requisitos Relacionados** | - |
+| **Critérios de Aceitação** | - **Dado** que sou um artista autenticado, **quando** eu acessar a área de edição do meu perfil, **então** o sistema deve permitir alterar minhas informações de artista.<br>- **Dado** que eu salve alterações válidas, **então** o sistema deve atualizar os dados exibidos no meu perfil.<br>- **Dado** que eu informe dados inválidos ou obrigatórios incompletos, **então** o sistema deve exibir mensagem de erro e impedir a atualização. |
+| **Testes de Aceitação** | - **TA09.01** - Artista consegue editar suas informações com sucesso.<br>- **TA09.02** - Alterações realizadas são refletidas corretamente no perfil do artista.<br>- **TA09.03** - Sistema impede atualização com dados inválidos ou incompletos. |
+| **Estimativa** | 4h |
+| **Tempo Real Gasto** |  |
+| **Tamanho Funcional** |  |
+| **Prioridade** | Alta |
+| **Responsáveis** | - **Analista:** Anderson<br>- **Desenvolvedor:** <br>- **Revisor:** <br>- **Testador:** |
+
+### User Story US10 - Desativar Status de Artista
+
+|📌 User Story - US10 | Desativar Status de Artista |
+|---------------------|--|
+| **Título** | Desativar status de artista |
+| **Identificação** | US10 - Desativar Status de Artista |
+| **Story** | Como **artista**, quero desativar meu status de artista, para deixar de utilizar as funcionalidades específicas desse perfil na plataforma. |
+| **Requisitos Relacionados** | - |
+| **Critérios de Aceitação** | - **Dado** que sou um artista autenticado, **quando** eu solicitar a desativação do meu status de artista, **então** o sistema deve solicitar confirmação antes de concluir a ação.<br>- **Dado** que eu confirme a desativação, **então** o sistema deve remover meu acesso às funcionalidades exclusivas de artista.<br>- **Dado** que a desativação seja concluída, **então** meu perfil deve deixar de ser tratado como perfil de artista na plataforma. |
+| **Testes de Aceitação** | - **TA10.01** - Artista autenticado consegue solicitar desativação do status de artista.<br>- **TA10.02** - Sistema solicita confirmação antes de concluir a desativação.<br>- **TA10.03** - Após a desativação, funcionalidades exclusivas de artista deixam de estar disponíveis. |
+| **Estimativa** | 4h |
 | **Tempo Real Gasto** |  |
 | **Tamanho Funcional** |  |
 | **Prioridade** | Média |
