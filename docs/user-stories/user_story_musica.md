@@ -4,23 +4,31 @@
 
 Este documento descreve os User Stories criados a partir da Lista de Casos de Uso. Modelo de documento baseado nas características do processo easYProcess (YP).
 
+## Histórico de revisões
+
+| Data | Versão | Descrição | Autor |
+| :--------- | :-----: | :-------------------------------------- | :--------- |
+| 24/03/2026 | 0.0.1   | Detalhamento dos User Stories (1 ao 10) de música | Diana |
+| 25/03/2026 | 0.0.2   | Adicona tabela de reviões; separa o US03 em dois; leva "reproduzir música" para o US02 | Diana |
+
 ### Tabelas de Users Stories
 | Nome | Título |
 |------|-----------|
 | US01 | Reproduzir música e visualizar informações básicas      |
 | US02 | Controlar reprodução da música      |
 | US03 | Curtir música e acessar músicas curtidas      |
-| US04 | Visualizar créditos da música      |
-| US05 | Ocultar música das recomendações e reproduções automáticas      |
-| US06 | Compartilhar música      |
-| US07 | Adicionar música à playlist e à fila de reprodução      |
-| US08 | Reproduzir músicas em ordem aleatória      |
-| US09 | Receber recomendações de músicas      |
-| US10 | Visualizar letra da música      |
+| US04 | Acessar músicas curtidas      |
+| US05 | Visualizar créditos da música      |
+| US06 | Ocultar música das recomendações e reproduções automáticas      |
+| US07 | Compartilhar música      |
+| US08 | Adicionar música à playlist e à fila de reprodução      |
+| US09 | Reproduzir músicas em ordem aleatória      |
+| US10 | Receber recomendações de músicas      |
+| US11 | Visualizar letra da música      |
 
 ---
 
-### User Story US01 - Reproduzir música e visualizar informações básicas (US01)
+### User Story US01 - Visualizar informações básicas (US01)
 
 | **Responsáveis**  |             |
 | :---------------- | :---------- |
@@ -31,11 +39,11 @@ Este documento descreve os User Stories criados a partir da Lista de Casos de Us
 
 | Campo | Descrição |
 | :---| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Título** | Reproduzir música e visualizar informações básicas |
-| **Story**  | Como **usuário**, eu quero **reproduzir uma música e visualizar suas informações básicas**, para **ouvir a faixa selecionada e saber qual música está sendo executada**. |
-| **Requisitos Relacionados** | RF01, RF02 |
-| **Critérios de Aceitação**  | **CA01:** O sistema deve iniciar a reprodução quando o usuário selecionar uma música. <br> **CA02:** O sistema deve exibir o título da música independente de seu estado (reproduzindo ou não). <br> **CA03:** O sistema deve exibir os artistas da música independente de seu estado. <br> **CA04:** O sistema deve exibir a duração total da música independente de seu estado.|
-| **Testes de Aceitação** | **TA01.01:** Ao clicar no play de uma música disponível, a reprodução deve iniciar corretamente. <br> **TA01.02:** O título, artista e duração da música deve ser exibido corretamente no player. |
+| **Título** | Visualizar informações básicas |
+| **Story**  | Como **usuário**, eu quero **visualizar suas informações básicas**, para **saber qual música está sendo executada**. |
+| **Requisitos Relacionados** | RF02 |
+| **Critérios de Aceitação**  | **CA01:** O sistema deve exibir o título da música independente de seu estado (reproduzindo ou não). <br> **CA03:** O sistema deve exibir os artistas da música independente de seu estado. <br> **CA03:** O sistema deve exibir a duração total da música independente de seu estado. |
+| **Testes de Aceitação** | **TA01.01:** O título, artista e duração da música deve ser exibido corretamente no player. |
 | **Estimativa**              | 8h   |
 | **Tempo Real Gasto**        |      |
 | **Tamanho Funcional**       | x PF |
@@ -54,12 +62,12 @@ Este documento descreve os User Stories criados a partir da Lista de Casos de Us
 | **Testador**      | [A definir] |
 
 | Campo                       | Descrição |
-| :-------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Título** | Controlar reprodução da música |
 | **Story**  | Como **usuário**, eu quero **controlar a reprodução da música**, para **gerenciar a execução conforme minha preferência**. |
-| **Requisitos Relacionados** | RF12 |
-| **Critérios de Aceitação**  | **CA01:** O sistema deve permitir pausar e retomar a música em reprodução. <br> **CA02:** O sistema deve permitir avançar para a próxima música da fila. <br> **CA03:** O sistema deve permitir voltar para a música anterior da fila <br> **CA04:** O sistema deve permitir repetir a música atual ou repetir a fila/playlist. |
-| **Testes de Aceitação** | **TA02.01:** Ao clicar em “pausar”, a reprodução deve ser interrompida sem perder a posição atual. <br> **TA02.02:** Ao clicar em “retomar”, a música deve continuar a partir da posição pausada. <br> **TA02.03:** Ao clicar em “avançar”, o sistema deve reproduzir a próxima música disponível. <br> **TA02.04:** Ao clicar em “voltar”, o sistema deve reproduzir a música anterior. <br> **TA02.05:** Ao ativar o modo de repetição, o sistema deve repetir a música atual ou a lista conforme o modo selecionado. |
+| **Requisitos Relacionados** | RF01, RF12 |
+| **Critérios de Aceitação**  | **CA01:** O sistema deve iniciar a reprodução quando o usuário selecionar uma música. <br> **CA02:** O sistema deve permitir pausar e retomar a música em reprodução. <br> **CA03:** O sistema deve permitir avançar para a próxima música da fila. <br> **CA04:** O sistema deve permitir voltar para a música anterior da fila <br> **CA05:** O sistema deve permitir repetir a música atual ou repetir a fila/playlist. |
+| **Testes de Aceitação** | **TA02.01:** Ao clicar no play de uma música disponível, a reprodução deve iniciar corretamente. <br> **TA02.02:** Ao clicar em “pausar”, a reprodução deve ser interrompida sem perder a posição atual. <br> **TA02.03:** Ao clicar em “retomar”, a música deve continuar a partir da posição pausada. <br> **TA02.04:** Ao clicar em “avançar”, o sistema deve reproduzir a próxima música disponível. <br> **TA02.05:** Ao clicar em “voltar”, o sistema deve reproduzir a música anterior. <br> **TA02.06:** Ao ativar o modo de repetição, o sistema deve repetir a música atual ou a fila/playlist conforme o modo selecionado. |
 | **Estimativa**              | 12h  |
 | **Tempo Real Gasto**        |      |
 | **Tamanho Funcional**       | x PF |
@@ -68,7 +76,7 @@ Este documento descreve os User Stories criados a partir da Lista de Casos de Us
 
 ---
 
-### User Story US03 - Curtir música e acessar músicas curtidas (US03)
+### User Story US03 - Curtir música (US03)
 
 | **Responsáveis**  |             |
 | :---------------- | :---------- |
@@ -78,21 +86,44 @@ Este documento descreve os User Stories criados a partir da Lista de Casos de Us
 | **Testador**      | [A definir] |
 
 | Campo    | Descrição   |
-| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Título** | Curtir música e acessar músicas curtidas   |
-| **Story**  | Como **usuário**, eu quero **curtir músicas e acessar uma playlist com minhas músicas curtidas**, para **salvar e encontrar facilmente as músicas de que gosto**.      |
-| **Requisitos Relacionados** | RF04, RF05 |
-| **Critérios de Aceitação**  | **CA01:** O sistema deve permitir que o usuário marque uma música como curtida. <br> **CA02:** O sistema deve registrar a música curtida na playlist de músicas curtidas do usuário. <br> **CA03:** O sistema deve permitir visualizar a playlist de músicas curtidas. <br> **CA04:** O sistema não deve duplicar a mesma música na lista de curtidas. |
-| **Testes de Aceitação**     | **TA03.01:** Ao clicar em “curtir” em uma música, ela deve ser marcada como curtida. <br> **TA03.02:** Após curtir uma música, ela deve aparecer na lista de músicas curtidas. <br> **TA03.03:** Ao acessar a lista de músicas curtidas, o sistema deve exibir todas as músicas previamente curtidas. <br> **TA03.04:** Ao tentar curtir novamente a mesma música, ela não deve ser adicionada em duplicidade. <br> **TA03.05:** Caso tente curtir novamente uma música, ela deve ser removida da playlist. |
-| **Estimativa**              | 8h |
-| **Tempo Real Gasto**        |   |
+| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Título** | Curtir música |
+| **Story**  | Como **usuário**, eu quero **curtir uma música**, para **salvá-la entre minhas preferências.** |
+| **Requisitos Relacionados** | RF04 |
+| **Critérios de Aceitação**  | **CA01:** O sistema deve permitir que o usuário marque uma música como curtida. <br> **CA02:** O sistema deve registrar a música curtida nas preferências do usuário. <br> **CA03:** O sistema deve indicar visualmente que a música foi curtida. <br> **CA04:** Ao curtir novamente uma música já curtida, o sistema deve remover a marcação de curtida. |
+| **Testes de Aceitação**     | **TA03.01:** Ao clicar em “curtir” em uma música não curtida, ela deve ser marcada como curtida. <br> **TA03.02:** Após curtir a música, o sistema deve exibir o estado visual correspondente. <br> **TA03.03:** Ao clicar novamente em “curtir” em uma música já curtida, a marcação deve ser removida. <br> **TA03.04:** Após remover a curtida, o sistema deve atualizar o estado visual da música. |
+| **Estimativa**              | 5h   |
+| **Tempo Real Gasto**        |      |
 | **Tamanho Funcional**       | x PF |
-| **Prioridade**              | Essencial  |
+| **Prioridade**              | Essencial |
+| **Protótipo**               | *(inserir link ou imagem do protótipo)* |
+
+---
+### User Story US04 - Acessar músicas curtidas (US04)
+
+| **Responsáveis**  |             |
+| :---------------- | :---------- |
+| **Analista**      | [A definir] |
+| **Desenvolvedor** | [A definir] |
+| **Revisor**       | [A definir] |
+| **Testador**      | [A definir] |
+
+| Campo    | Descrição   |
+| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Título** | Acessar músicas curtidas   |
+| **Story**  | Como **usuário**, eu quero **acessar minha lista de músicas curtidas**, para **encontrar facilmente as músicas que salvei.** |
+| **Requisitos Relacionados** | RF05 |
+| **Critérios de Aceitação**  | **CA01:** O sistema deve manter uma lista com as músicas curtidas pelo usuário. <br> **CA02:** O sistema deve permitir que o usuário acesse a lista de músicas curtidas. <br> **CA03:** A lista deve exibir todas as músicas atualmente curtidas pelo usuário. <br> **CA04:** Músicas que tiverem a curtida removida não devem permanecer na lista. |
+| **Testes de Aceitação**     | **TA04.01:** Ao acessar a área de músicas curtidas, o sistema deve exibir a lista correspondente. <br> **TA04.02:** A lista deve conter todas as músicas previamente curtidas pelo usuário. <br> **TA04.03:** Após remover a curtida de uma música, ela não deve mais aparecer na lista. <br> **TA04.04:** Caso o usuário não possua músicas curtidas, o sistema deve exibir a lista vazia ou uma mensagem apropriada. |
+| **Estimativa**              | 5h   |
+| **Tempo Real Gasto**        |      |
+| **Tamanho Funcional**       | x PF |
+| **Prioridade**              | Essencial |
 | **Protótipo**               | *(inserir link ou imagem do protótipo)* |
 
 ---
 
-### User Story US04 - Visualizar créditos da música (US04)
+### User Story US05 - Visualizar créditos da música (US05)
 
 | **Responsáveis**  |             |
 | :---------------- | :---------- |
@@ -116,7 +147,7 @@ Este documento descreve os User Stories criados a partir da Lista de Casos de Us
 
 ---
 
-### User Story US05 - Ocultar música das recomendações e reproduções automáticas (US05)
+### User Story US06 - Ocultar música das recomendações e reproduções automáticas (US06)
 
 | **Responsáveis**  |             |
 | :---------------- | :---------- |
@@ -126,7 +157,7 @@ Este documento descreve os User Stories criados a partir da Lista de Casos de Us
 | **Testador**      | [A definir] |
 
 | Campo                       | Descrição |
-| :-------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| :-------------------------- | :---------------------------------------------------------------------------------------------------------------------------|
 | **Título** | Ocultar música das recomendações e reproduções automáticas |
 | **Story** | Como **usuário**, eu quero **ocultar uma música**, para **evitar que ela apareça novamente em recomendações e reproduções automáticas**.  |
 | **Requisitos Relacionados** | RF06    |
@@ -140,7 +171,7 @@ Este documento descreve os User Stories criados a partir da Lista de Casos de Us
 
 ---
 
-### User Story US06 - Compartilhar música (US06)
+### User Story US07 - Compartilhar música (US07)
 
 | **Responsáveis**  |             |
 | :---------------- | :---------- |
@@ -164,7 +195,7 @@ Este documento descreve os User Stories criados a partir da Lista de Casos de Us
 
 ---
 
-### User Story US07 - Adicionar música à playlist e à fila de reprodução (US07)
+### User Story US08 - Adicionar música à playlist e à fila de reprodução (US08)
 
 | **Responsáveis**  |             |
 | :---------------- | :---------- |
@@ -188,7 +219,7 @@ Este documento descreve os User Stories criados a partir da Lista de Casos de Us
 
 ---
 
-### User Story US08 - Reproduzir músicas em ordem aleatória (US08)
+### User Story US09 - Reproduzir músicas em ordem aleatória (US09)
 
 | **Responsáveis**  |             |
 | :---------------- | :---------- |
@@ -212,7 +243,7 @@ Este documento descreve os User Stories criados a partir da Lista de Casos de Us
 
 ---
 
-### User Story US09 - Receber recomendações de músicas (US09)
+### User Story US10 - Receber recomendações de músicas (US10)
 
 | **Responsáveis**  |             |
 | :---------------- | :---------- |
@@ -236,7 +267,7 @@ Este documento descreve os User Stories criados a partir da Lista de Casos de Us
 
 ---
 
-### User Story US10 - Visualizar letra da música (US10)
+### User Story US11 - Visualizar letra da música (US11)
 
 | **Responsáveis**  |             |
 | :---------------- | :---------- |
