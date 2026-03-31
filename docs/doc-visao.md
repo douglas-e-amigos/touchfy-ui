@@ -52,16 +52,13 @@ O sistema poderá ser utilizado por diversos usuários. Temos os seguintes perfi
 
 | ID   | Módulo  | Requisito Funcional | Prioridade |
 | ---- | -------- | ------------------------------------------------------ | ------- |
-| RF15 | Artista | O sistema deve permitir que um usuário que tenha o e-mail verificado possa se tornar um artista, capaz de publicar músicas na plataforma. | Alta |
-| RF16 | Artista | O sistema deve permitir que um artista possa alterar seus dados de artista, como nome e biografia. | Alta |
-| RF17 | Artista | O sistema deve permitir que um usuário verificado como artista desabilite seu perfil de artista, desativando-o do sistema, assim como suas músicas. | Alta |
-| RF18 | Artista | O sistema deve permitir que o usuário siga um artista. | Média      |
-| RF19 | Artista | O sistema deve permitir que o usuário bloqueie um artista para que ele não apareça em recomendações e reproduções automáticas.        | Média      |
-| RF20 | Artista | O sistema deve permitir navegar pela discografia do artista, organizada por álbuns, singles, EPs e compilações. | Alta       |
-| RF21 | Artista | O sistema deve exibir as músicas curtidas pelo usuário que pertencem ao artista visualizado. | Média      |
-| RF22 | Artista | O sistema deve permitir reproduzir somente músicas da discografia do artista selecionado. | Alta       |
-| RF23 | Artista | O sistema deve permitir compartilhar o perfil do artista por meio de link ou recurso equivalente.                                     | Média      |
-| RF24 | Artista | O sistema deve exibir as informações do artista: nome, descrição, posição em ranking (quando aplicável), número de ouvintes e imagem. | Média      |
+| RF14 | Artista | O sistema deve permitir que o usuário siga um artista. | Média      |
+| RF15 | Artista | O sistema deve permitir que o usuário bloqueie um artista para que ele não apareça em recomendações e reproduções automáticas.        | Média      |
+| RF16 | Artista | O sistema deve permitir navegar pela discografia do artista, organizada por álbuns, singles, EPs e compilações. | Alta       |
+| RF17 | Artista | O sistema deve exibir as músicas curtidas pelo usuário que pertencem ao artista visualizado. | Média      |
+| RF18 | Artista | O sistema deve permitir reproduzir somente músicas da discografia do artista selecionado. | Alta       |
+| RF19 | Artista | O sistema deve permitir compartilhar o perfil do artista por meio de link ou recurso equivalente.                                     | Média      |
+| RF20 | Artista | O sistema deve exibir as informações do artista: nome, descrição, posição em ranking (quando aplicável), número de ouvintes e imagem. | Média      |
 
 ---
 
@@ -69,11 +66,11 @@ O sistema poderá ser utilizado por diversos usuários. Temos os seguintes perfi
 
 | ID   | Módulo | Requisito Funcional | Prioridade |
 | ---- | -------- | ------------------------------------------------------ | ------- |
-| RF25 | Álbum  | O sistema deve exibir as informações do álbum: título, artista, data de lançamento, quantidade de músicas, duração total e capa. | Alta       |
-| RF26 | Álbum  | O sistema deve exibir a quantidade de reproduções de cada música do álbum, quando essa informação estiver disponível. | Baixa      |
-| RF27 | Álbum  | O sistema deve permitir compartilhar um álbum por meio de link ou recurso equivalente. | Média      |
-| RF28 | Álbum  | O sistema deve permitir adicionar músicas de um álbum a playlists do usuário. | Alta       |
-| RF29 | Álbum  | O sistema deve permitir adicionar um álbum à fila de reprodução. | Alta       |
+| RF21 | Álbum  | O sistema deve exibir as informações do álbum: título, artista, data de lançamento, quantidade de músicas, duração total e capa. | Alta       |
+| RF22 | Álbum  | O sistema deve exibir a quantidade de reproduções de cada música do álbum, quando essa informação estiver disponível. | Baixa      |
+| RF23 | Álbum  | O sistema deve permitir compartilhar um álbum por meio de link ou recurso equivalente. | Média      |
+| RF24 | Álbum  | O sistema deve permitir adicionar músicas de um álbum a playlists do usuário. | Alta       |
+| RF25 | Álbum  | O sistema deve permitir adicionar um álbum à fila de reprodução. | Alta       |
 
 ---
 
@@ -81,15 +78,23 @@ O sistema poderá ser utilizado por diversos usuários. Temos os seguintes perfi
 
 | ID   | Módulo   | Requisito Funcional | Prioridade |
 | ---- | -------- | ------------------------------------------------------ | ------- |
-| RF30 | Playlist | O sistema deve exibir as informações da playlist: título, descrição, criador, quantidade de músicas, capa e visibilidade (pública ou privada). | Alta       |
-| RF31 | Playlist | O sistema deve permitir definir se uma playlist será exibida ou ocultada no perfil do usuário. | Média      |
-| RF32 | Playlist | O sistema deve permitir adicionar uma playlist inteira à fila de reprodução. | Alta       |
-| RF33 | Playlist | O sistema deve permitir adicionar músicas de uma playlist a outra playlist do usuário. | Média      |
-| RF34 | Playlist | O sistema deve permitir convidar outros usuários para colaborar em uma playlist. | Média      |
-| RF35 | Playlist | O sistema deve permitir compartilhar uma playlist por meio de link ou recurso equivalente. | Média      |
-| RF36 | Playlist | O sistema deve permitir ordenar as músicas da playlist por diferentes critérios, como título, artista, data de adição e ordem personalizada.   | Alta       |
-| RF37 | Playlist | O sistema deve permitir buscar músicas dentro de uma playlist. | Alta       |
-| RF38 | Playlist | O sistema deve exibir a data em que cada música foi adicionada à playlist.                                                                     | Média      |
+| RF26 | Playlist | O sistema deve exibir as informações da playlist: título, descrição, criador, quantidade de músicas, capa e visibilidade (pública ou privada). | Alta       |
+| RF27 | Playlist | O sistema deve permitir definir se uma playlist será exibida ou ocultada no perfil do usuário. | Média      |
+| RF28 | Playlist | O sistema deve permitir adicionar uma playlist inteira à fila de reprodução. | Alta       |
+| RF29 | Playlist | O sistema deve permitir adicionar músicas de uma playlist a outra playlist do usuário. | Média      |
+| RF30 | Playlist | O sistema deve permitir convidar outros usuários para colaborar em uma playlist. | Média      |
+| RF31 | Playlist | O sistema deve permitir compartilhar uma playlist por meio de link ou recurso equivalente. | Média      |
+| RF32 | Playlist | O sistema deve permitir ordenar as músicas da playlist por diferentes critérios, como título, artista, data de adição e ordem personalizada.   | Alta       |
+| RF33 | Playlist | O sistema deve permitir buscar músicas dentro de uma playlist. | Alta       |
+| RF34 | Playlist | O sistema deve exibir a data em que cada música foi adicionada à playlist.                                                                     | Média      |
+
+## 5) Módulo: Usuários
+| ID | Módulo | Requisito Funcional | Prioridade |
+|-|-|-|-|
+| RF35 | Usuário | O sistema deve permitir que um usuário possa se cadastrar informando nome de usuário, e-mail e senha. | Alta |
+| RF36 | Usuário | O sistema deve permitir que um usuário possa se autenticar via e-mail e senha. | Alta |
+| RF37 | Usuário | O sistema deve permitir que o usuário possa editar suas informações pessoais, como nome de usuário, e-mail, senha e foto. | Alta |
+| RF38 | Usuário | O sistema deve permitir que o usuário possa desativar sua conta de forma permanente, confirmando com a senha. | Alta |
 
 ## Modelo Conceitual dos dados
 
