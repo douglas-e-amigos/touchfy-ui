@@ -88,6 +88,14 @@ O sistema poderá ser utilizado por diversos usuários. Temos os seguintes perfi
 | RF33 | Playlist | O sistema deve permitir buscar músicas dentro de uma playlist. | Alta       |
 | RF34 | Playlist | O sistema deve exibir a data em que cada música foi adicionada à playlist.                                                                     | Média      |
 
+## 5) Módulo: Usuários
+| ID | Módulo | Requisito Funcional | Prioridade |
+|-|-|-|-|
+| RF35 | Usuário | O sistema deve permitir que um usuário possa se cadastrar informando nome de usuário, e-mail e senha. | Alta |
+| RF36 | Usuário | O sistema deve permitir que um usuário possa se autenticar via e-mail e senha. | Alta |
+| RF37 | Usuário | O sistema deve permitir que o usuário possa editar suas informações pessoais, como nome de usuário, e-mail, senha e foto. | Alta |
+| RF38 | Usuário | O sistema deve permitir que o usuário possa desativar sua conta de forma permanente, confirmando com a senha. | Alta |
+
 ## Modelo Conceitual dos dados
 
 O modelo conceitual do banco de dados pode ser encontrado [aqui](./diagrama-bd.md);
