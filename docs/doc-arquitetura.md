@@ -30,7 +30,7 @@ O sistema é uma plataforma de streaming de música inspirada no Spotify, desenv
 - **Busca** - pesquisa full-text por músicas, artistas e álbuns
 - **Histórico / Curtidas** - registro de eventos de reprodução e likes
 
-# 02 — Visão de Contexto (C4 — Nível 1)
+# 02 - Visão de Contexto (C4 - Nível 1)
 
 Mostra os atores externos e como eles interagem com o sistema como um todo, sem entrar em detalhes internos.
 
@@ -58,7 +58,7 @@ Mostra os atores externos e como eles interagem com o sistema como um todo, sem 
 - O frontend (Next.js) é parte interna do sistema e não aparece como ator externo neste nível.
 - O MinIO é acessado tanto pelo backend (para gerar presigned URLs) quanto diretamente pelo navegador (para streaming de áudio), mas essa distinção só aparece no nível de containers.
 
-# 03 — Visão de Containers (C4 — Nível 2)
+# 03 - Visão de Containers (C4 - Nível 2)
 
 Mostra como o sistema se divide em unidades deployáveis e como elas se comunicam entre si.
 
@@ -82,17 +82,17 @@ Mostra como o sistema se divide em unidades deployáveis e como elas se comunica
 | Next.js | Spring Boot | HTTPS / REST + JSON | Todas as operações de dados e autenticação |
 | Spring Boot | PostgreSQL | JDBC (Spring Data JPA) | Leitura e escrita de dados relacionais |
 | Spring Boot | MinIO | S3 API (SDK) | Geração de presigned URLs; upload no fluxo do artista |
-| Next.js | MinIO | HTTPS (presigned URL) | Streaming de áudio direto — sem passar pelo backend |
+| Next.js | MinIO | HTTPS (presigned URL) | Streaming de áudio direto - sem passar pelo backend |
 
 ## Decisão: presigned URLs para streaming
 
 O áudio **nunca trafega pelo servidor Java**. O backend apenas gera uma URL temporária assinada (expira em ~60s) que o navegador usa para requisitar o arquivo diretamente ao MinIO via HTTP Range Requests. Isso atende ao **RNF04** (início de reprodução rápido) e evita que o backend se torne gargalo de I/O.
 
-# 04 — Arquitetura do Backend — Monolito Modular
+# 04 - Arquitetura do Backend - Monolito Modular
 
 ## Visão geral
 
-O backend segue a organização de **monolito modular**: um único processo deployável, mas com fronteiras de domínio bem definidas por pacotes Java. Cada módulo possui suas próprias camadas internas e **não acessa diretamente** as camadas internas de outro módulo — a comunicação entre módulos se dá exclusivamente por interfaces de serviço (chamadas de método in-process).
+O backend segue a organização de **monolito modular**: um único processo deployável, mas com fronteiras de domínio bem definidas por pacotes Java. Cada módulo possui suas próprias camadas internas e **não acessa diretamente** as camadas internas de outro módulo - a comunicação entre módulos se dá exclusivamente por interfaces de serviço (chamadas de método in-process).
 
 ## Diagrama de módulos
 
@@ -109,7 +109,7 @@ Responsável pela autenticação e gerenciamento de identidades.
 - Atualização de perfil e avatar
 
 ### Catálogo (Músicas / Álbuns / Artistas)
-Coração do sistema — gerencia todo o conteúdo musical.
+Coração do sistema - gerencia todo o conteúdo musical.
 
 - CRUD de músicas, álbuns e artistas
 - Upload de áudio e capas via MinIO
@@ -182,7 +182,7 @@ Frontend acessa MinIO diretamente via HTTP Range Requests
 POST /history  →  registra evento de play
 ```
 
-# 05 — Arquitetura do Frontend — Next.js
+# 05 - Arquitetura do Frontend - Next.js
 
 ## Visão geral
 
@@ -257,3 +257,142 @@ Frontend faz PUT direto no MinIO (sem passar pelo backend)
 Frontend notifica backend que upload concluiu
 POST /tracks  →  Backend persiste metadados no PostgreSQL
 ```
+
+# 06 - Decisões Arquiteturais (ADRs)
+
+Registro das principais decisões de arquitetura, suas motivações e as alternativas consideradas.
+
+---
+
+## ADR-01 - Monolito Modular no Backend
+
+**Status:** Aceito
+
+**Contexto:** O projeto é acadêmico, desenvolvido por um time pequeno com prazo definido. Era preciso escolher entre microserviços, monolito tradicional ou monolito modular.
+
+**Decisão:** Adotar monolito modular com pacotes bem delimitados por domínio.
+
+**Motivação:**
+- Simplicidade de deploy e operação (um único processo)
+- Sem overhead de comunicação de rede entre serviços
+- Fronteiras de domínio preservadas para facilitar eventual migração futura
+- Adequado ao tamanho e tempo do projeto acadêmico
+
+**Alternativas consideradas:**
+- Microserviços - complexidade operacional excessiva para o escopo
+- Monolito sem módulos - dificulta manutenção e viola RNF12
+
+---
+
+## ADR-02 - Autenticação com JWT Stateless
+
+**Status:** Aceito
+
+**Contexto:** O sistema precisa autenticar três perfis de usuário com diferentes permissões (RNF01, RNF03).
+
+**Decisão:** Usar JWT (JSON Web Tokens) com Spring Security. Tokens armazenados em cookies HttpOnly no cliente.
+
+**Motivação:**
+- Stateless - sem necessidade de sessão no servidor, facilita escalabilidade
+- Suporte nativo no Spring Security
+- Cookie HttpOnly protege contra XSS (RNF02)
+- Claims de role embutidos no token permitem autorização sem consulta ao banco
+
+**Alternativas consideradas:**
+- Sessions no servidor - requer estado compartilhado, dificulta escalabilidade
+- OAuth2 externo - complexidade desnecessária para o escopo
+
+---
+
+## ADR-03 - Streaming de Áudio via Presigned URLs
+
+**Status:** Aceito
+
+**Contexto:** O áudio é o recurso central da plataforma. A entrega precisa ser rápida e não pode se tornar gargalo (RNF04).
+
+**Decisão:** O backend gera presigned URLs temporárias (expiram em 60s). O navegador acessa o MinIO diretamente para streaming.
+
+**Motivação:**
+- Áudio não passa pelo servidor Java - elimina gargalo de I/O
+- HTTP Range Requests nativos no MinIO permitem seeking sem workarounds
+- Backend fica livre para processar outras requisições
+- URL temporária garante que apenas usuários autenticados acessem o conteúdo
+
+**Alternativas consideradas:**
+- Proxy de áudio no backend - simples, mas inviável para performance em escala
+- CDN externo - custo e complexidade desnecessários no contexto acadêmico
+
+---
+
+## ADR-04 - Next.js App Router com Renderização Híbrida
+
+**Status:** Aceito
+
+**Contexto:** O frontend precisa de boa performance percebida, páginas públicas com SEO e partes altamente interativas (player).
+
+**Decisão:** Usar Next.js App Router com Server Components para páginas públicas e Client Components para interações.
+
+**Motivação:**
+- SSR nas páginas de artista e álbum melhora performance e SEO
+- Client Components isolam o estado interativo sem penalizar o resto
+- App Router é a arquitetura recomendada e de longo prazo do Next.js
+
+**Alternativas consideradas:**
+- SPA pura (Vite + React) - sem SSR, pior performance percebida
+- Next.js Pages Router - legado, sem Server Components
+
+---
+
+## ADR-05 - PostgreSQL como Banco de Dados Principal
+
+**Status:** Aceito
+
+**Contexto:** O sistema armazena dados relacionais complexos com integridade referencial entre usuários, músicas, playlists e histórico (RNF13).
+
+**Decisão:** PostgreSQL 15 com Spring Data JPA.
+
+**Motivação:**
+- ACID garante integridade dos dados
+- Suporte nativo a full-text search via `pg_trgm` (módulo de Busca)
+- Amplamente suportado e bem documentado
+- Compatível com a stack Java/Spring
+
+**Alternativas consideradas:**
+- MySQL - sem `pg_trgm`, full-text search mais limitado
+- MongoDB - modelo de documentos inadequado para dados altamente relacionais
+
+---
+
+## ADR-06 - MinIO para Storage de Objetos
+
+**Status:** Aceito
+
+**Contexto:** O sistema precisa armazenar arquivos binários (áudio, capas, avatares) de forma escalável e independente do banco de dados relacional (RNF15).
+
+**Decisão:** MinIO auto-hospedado com API compatível com S3.
+
+**Motivação:**
+- API S3-compatible permite migração futura para AWS S3 sem mudança de código
+- Auto-hospedado - ideal para ambiente de desenvolvimento e testes acadêmicos
+- Suporte nativo a presigned URLs e HTTP Range Requests
+- Gratuito e de código aberto
+
+**Alternativas consideradas:**
+- AWS S3 - custo e complexidade de configuração desnecessários no contexto
+- Armazenar arquivos no sistema de arquivos local - sem escalabilidade, dificulta deploy
+
+---
+
+## ADR-07 - Separação Frontend/Backend por REST API
+
+**Status:** Aceito
+
+**Contexto:** Frontend e backend precisam evoluir de forma independente (RNF11).
+
+**Decisão:** Frontend consome o backend exclusivamente via REST API com JSON. Nenhuma lógica de servidor é compartilhada entre as camadas além do contrato de API.
+
+**Motivação:**
+- Desacoplamento total permite que cada parte evolua sem impactar a outra
+- Facilita testes independentes de cada camada
+- Contrato de API explícito (documentado via Swagger/OpenAPI) serve como limite claro
+
