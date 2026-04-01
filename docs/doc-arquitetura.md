@@ -57,3 +57,33 @@ Mostra os atores externos e como eles interagem com o sistema como um todo, sem 
 
 - O frontend (Next.js) é parte interna do sistema e não aparece como ator externo neste nível.
 - O MinIO é acessado tanto pelo backend (para gerar presigned URLs) quanto diretamente pelo navegador (para streaming de áudio), mas essa distinção só aparece no nível de containers.
+
+# 03 — Visão de Containers (C4 — Nível 2)
+
+Mostra como o sistema se divide em unidades deployáveis e como elas se comunicam entre si.
+
+## Diagrama
+
+![Visão de Container](images/c4_container_diagram.svg)
+
+## Containers
+
+| Container | Tecnologia | Responsabilidade |
+|---|---|---|
+| Next.js App | Next.js + TypeScript | Interface de usuário; SSR para páginas públicas, CSR para player e dashboards |
+| Monolito Modular | Java 25 + Spring Boot | Lógica de negócio, autenticação, geração de presigned URLs, persistência |
+| PostgreSQL 15 | PostgreSQL | Armazenamento relacional de todos os dados estruturados |
+| MinIO | MinIO (S3-compatible) | Armazenamento de objetos binários (áudio, imagens) |
+
+## Comunicações
+
+| De | Para | Protocolo | Descrição |
+|---|---|---|---|
+| Next.js | Spring Boot | HTTPS / REST + JSON | Todas as operações de dados e autenticação |
+| Spring Boot | PostgreSQL | JDBC (Spring Data JPA) | Leitura e escrita de dados relacionais |
+| Spring Boot | MinIO | S3 API (SDK) | Geração de presigned URLs; upload no fluxo do artista |
+| Next.js | MinIO | HTTPS (presigned URL) | Streaming de áudio direto — sem passar pelo backend |
+
+## Decisão: presigned URLs para streaming
+
+O áudio **nunca trafega pelo servidor Java**. O backend apenas gera uma URL temporária assinada (expira em ~60s) que o navegador usa para requisitar o arquivo diretamente ao MinIO via HTTP Range Requests. Isso atende ao **RNF04** (início de reprodução rápido) e evita que o backend se torne gargalo de I/O.
