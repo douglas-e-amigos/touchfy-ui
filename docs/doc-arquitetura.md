@@ -87,3 +87,98 @@ Mostra como o sistema se divide em unidades deployáveis e como elas se comunica
 ## Decisão: presigned URLs para streaming
 
 O áudio **nunca trafega pelo servidor Java**. O backend apenas gera uma URL temporária assinada (expira em ~60s) que o navegador usa para requisitar o arquivo diretamente ao MinIO via HTTP Range Requests. Isso atende ao **RNF04** (início de reprodução rápido) e evita que o backend se torne gargalo de I/O.
+
+# 04 — Arquitetura do Backend — Monolito Modular
+
+## Visão geral
+
+O backend segue a organização de **monolito modular**: um único processo deployável, mas com fronteiras de domínio bem definidas por pacotes Java. Cada módulo possui suas próprias camadas internas e **não acessa diretamente** as camadas internas de outro módulo — a comunicação entre módulos se dá exclusivamente por interfaces de serviço (chamadas de método in-process).
+
+## Diagrama de módulos
+
+![Arquitetura Backend](images/backend_modular_monolith.svg)
+
+## Módulos de domínio
+
+### Auth / Users
+Responsável pela autenticação e gerenciamento de identidades.
+
+- Registro, login e logout
+- Geração e validação de tokens JWT
+- Gerenciamento de roles (`OUVINTE`, `ARTISTA`, `ADMIN`)
+- Atualização de perfil e avatar
+
+### Catálogo (Músicas / Álbuns / Artistas)
+Coração do sistema — gerencia todo o conteúdo musical.
+
+- CRUD de músicas, álbuns e artistas
+- Upload de áudio e capas via MinIO
+- Metadados (duração, gênero, ano, etc.)
+- Expõe `CatalogService` como interface pública do módulo
+
+### Playlists
+Gerenciamento das coleções de músicas dos usuários.
+
+- CRUD de playlists
+- Adição, remoção e reordenação de faixas
+- Playlists públicas e privadas
+
+### Streaming / Player
+Entrega segura e rápida do áudio.
+
+- Valida se a música existe (via `CatalogService`)
+- Valida JWT do usuário
+- Gera presigned URL temporária no MinIO
+- Suporte a HTTP Range Requests para seeking
+
+### Busca
+Permite aos usuários encontrar conteúdo na plataforma.
+
+- Full-text search via `pg_trgm` (PostgreSQL)
+- Filtros por tipo (música, artista, álbum)
+- Ordenação por relevância
+
+### Histórico / Curtidas
+Registra o comportamento do usuário para personalização.
+
+- Registro assíncrono de eventos de reprodução
+- Gerenciamento de músicas curtidas
+- Histórico de reprodução paginado
+
+## Camadas internas de cada módulo
+
+```
+modulo/
+├── controller/    Endpoints REST (@RestController)
+├── service/       Lógica de negócio + interface pública
+├── repository/    Acesso a dados (Spring Data JPA)
+└── domain/        Entidades JPA e value objects
+```
+
+## Fluxo de reprodução de música
+
+```
+Usuário clica play
+       │
+       ▼
+GET /stream/{trackId}  [com JWT no header]
+       │
+       ▼
+Spring Security valida JWT
+       │
+       ▼
+StreamingService verifica se trackId existe (CatalogService)
+       │
+       ▼
+Gera presigned URL no MinIO (expira em 60s)
+       │
+       ▼
+Retorna URL para o frontend
+       │
+       ▼
+Frontend acessa MinIO diretamente via HTTP Range Requests
+       │
+       ▼  (assíncrono, não bloqueia a reprodução)
+POST /history  →  registra evento de play
+```
+
