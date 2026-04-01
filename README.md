@@ -2,6 +2,10 @@
 
 Interface do sistema Touchfy.
 
+## Documentação
+
+A documentação está na pasta `docs/`. O principal documento, o [documento de visão](./docs/doc-visao.md) e os demais estão lá.
+
 ## Estrutura de pastas
 
 ```
