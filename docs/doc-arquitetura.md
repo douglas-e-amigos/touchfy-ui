@@ -182,3 +182,78 @@ Frontend acessa MinIO diretamente via HTTP Range Requests
 POST /history  →  registra evento de play
 ```
 
+# 05 — Arquitetura do Frontend — Next.js
+
+## Visão geral
+
+O frontend adota o **App Router do Next.js** com organização por feature. A estratégia híbrida de renderização aproveita **Server Components** onde a página é majoritariamente leitura (páginas de álbum, artista, busca) e **Client Components** para partes interativas (player, formulários, playlists).
+
+## Estratégia de renderização por página
+
+| Página | Estratégia | Justificativa |
+|---|---|---|
+| Home / Descoberta | SSR | Dados frescos + bom para performance percebida |
+| Página de artista / álbum | SSR | SEO relevante para conteúdo público |
+| Busca | CSR (SWR / React Query) | Input reativo em tempo real, sem necessidade de SEO |
+| Player (barra inferior) | Client Component | Estado local + Web Audio API |
+| Dashboard do artista | CSR | Dados privados, sem necessidade de SEO |
+| Painel administrativo | CSR | Dados privados, sem necessidade de SEO |
+
+
+## Estado global
+
+O **player de música** requer estado global persistente entre navegações (música tocando, fila, volume). A recomendação é usar **Zustand** para este estado, pois:
+
+- API simples e sem boilerplate excessivo
+- Compatível com o modelo de Client Components do Next.js App Router
+- Fácil integração com a Web Audio API / elemento `<audio>`
+
+Os demais estados são locais por componente ou gerenciados via cache de servidor (SWR / React Query).
+
+## Gerenciamento de dados
+
+| Tipo de dado | Solução | Motivo |
+|---|---|---|
+| Dados de servidor (listas, perfis) | SWR ou React Query | Cache, revalidação, deduplicação automática |
+| Estado do player | Zustand | Persistência entre rotas sem re-render global |
+| Formulários | React Hook Form | Validação performática sem re-renders |
+| Auth / sessão | Cookie HttpOnly + middleware Next.js | Segurança (RNF02/RNF03) |
+
+## Autenticação no frontend
+
+O token JWT é armazenado em **cookie HttpOnly** (não acessível via JavaScript), configurado pelo backend no login. O middleware do Next.js verifica a presença do cookie para proteger rotas antes de renderizar a página, redirecionando para `/login` se necessário.
+
+```
+Requisição para /library
+        │
+        ▼
+middleware.ts verifica cookie de sessão
+        │
+   ┌────┴────┐
+   │         │
+válido    inválido
+   │         │
+   ▼         ▼
+renderiza  redirect /login
+  página
+```
+
+## Fluxo de upload (artista)
+
+```
+Artista seleciona arquivo de áudio
+        │
+        ▼
+Frontend solicita presigned URL de upload
+POST /upload/presigned  →  Backend  →  MinIO
+        │
+        ▼
+Backend retorna URL temporária de upload
+        │
+        ▼
+Frontend faz PUT direto no MinIO (sem passar pelo backend)
+        │
+        ▼
+Frontend notifica backend que upload concluiu
+POST /tracks  →  Backend persiste metadados no PostgreSQL
+```
