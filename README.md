@@ -6,6 +6,8 @@ Interface do sistema Touchfy.
 
 A documentação está na pasta `docs/`. O principal documento, o [documento de visão](./docs/doc-visao.md) e os demais estão lá.
 
+O [documento de arquitetura](./docs/doc-arquitetura.md) detalha a arquitetura do projeto.
+
 ## Estrutura de pastas
 
 ```
