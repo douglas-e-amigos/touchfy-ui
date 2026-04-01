@@ -29,3 +29,31 @@ O sistema é uma plataforma de streaming de música inspirada no Spotify, desenv
 - **Streaming / Player** - entrega de áudio via presigned URL
 - **Busca** - pesquisa full-text por músicas, artistas e álbuns
 - **Histórico / Curtidas** - registro de eventos de reprodução e likes
+
+# 02 — Visão de Contexto (C4 — Nível 1)
+
+Mostra os atores externos e como eles interagem com o sistema como um todo, sem entrar em detalhes internos.
+
+## Diagrama
+
+![Visão de contexto](images/c4_context_diagram.svg)
+
+## Atores externos
+
+| Ator | Tipo | Interação |
+|---|---|---|
+| Ouvinte | Pessoa | Navega pelo catálogo, ouve músicas, gerencia playlists e curtidas |
+| Artista | Pessoa | Faz upload de músicas e álbuns, gerencia seu conteúdo |
+| Administrador | Pessoa | Gerencia usuários, conteúdo e configurações da plataforma |
+
+## Sistemas externos
+
+| Sistema | Tipo | Papel |
+|---|---|---|
+| MinIO | Armazenamento de objetos | Armazena arquivos de áudio, capas de álbuns e avatares |
+| PostgreSQL 15 | Banco de dados relacional | Armazena todos os dados estruturados da aplicação |
+
+## Observações
+
+- O frontend (Next.js) é parte interna do sistema e não aparece como ator externo neste nível.
+- O MinIO é acessado tanto pelo backend (para gerar presigned URLs) quanto diretamente pelo navegador (para streaming de áudio), mas essa distinção só aparece no nível de containers.
