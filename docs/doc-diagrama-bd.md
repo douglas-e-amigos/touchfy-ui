@@ -125,7 +125,6 @@ erDiagram
         uuid permissao_id FK
         uuid papel_id FK
     }
-
     MUSICA ||--o{ GENERO_MUSICA : possui
     GENERO_MUSICAL ||--o{ GENERO_MUSICA : classifica
     MUSICA ||--o{ MUSICA_TAG : possui
