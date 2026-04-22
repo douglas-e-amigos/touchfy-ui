@@ -15,9 +15,9 @@ docs/
 src/
  ├── app/
  │    ├── routes/
- │    └── providers/
+ │    └── api/
  |
- ├── core/
+ ├── infrastructure/
  │
  ├── features/
  │    ├── feature1/
