@@ -9,9 +9,10 @@ O sistema é uma plataforma de streaming de música inspirada no Spotify, desenv
 
 ## Decisões arquiteturais centrais
 
-- **Backend como monolito modular** em Java 25 + Spring Boot - simplicidade operacional com fronteiras de domínio bem definidas por pacotes Java.
-- **Frontend como SPA com SSR seletivo** em Next.js - melhor experiência de usuário e SEO via App Router.
-- **Separação clara entre** dados relacionais (PostgreSQL), objetos binários (MinIO) e sessão/cache.
+- **Backend com arquitetura hexagonal** em Java 25 + Spring Boot — núcleo de domínio isolado de frameworks e infraestrutura, com comunicação ao mundo externo exclusivamente por portas e adaptadores.
+- **Frontend em Next.js com arquitetura hexagonal** — separação clara entre domínio de aplicação, portas de comunicação e adaptadores de UI/infraestrutura.
+- **Separação clara entre** dados relacionais (PostgreSQL), objetos binários (Garage) e sessão/cache.
+
 
 ## Perfis de usuário
 
@@ -50,13 +51,13 @@ Mostra os atores externos e como eles interagem com o sistema como um todo, sem 
 
 | Sistema | Tipo | Papel |
 |---|---|---|
-| MinIO | Armazenamento de objetos | Armazena arquivos de áudio, capas de álbuns e avatares |
+| Garage | Armazenamento de objetos (S3-compatible) | Armazena arquivos de áudio, capas de álbuns e avatares |
 | PostgreSQL 15 | Banco de dados relacional | Armazena todos os dados estruturados da aplicação |
 
 ## Observações
 
 - O frontend (Next.js) é parte interna do sistema e não aparece como ator externo neste nível.
-- O MinIO é acessado tanto pelo backend (para gerar presigned URLs) quanto diretamente pelo navegador (para streaming de áudio), mas essa distinção só aparece no nível de containers.
+- O Garage é acessado tanto pelo backend (para gerar presigned URLs) quanto diretamente pelo navegador (para streaming de áudio), mas essa distinção só aparece no nível de containers.
 
 # 03 - Visão de Containers (C4 - Nível 2)
 
@@ -71,9 +72,9 @@ Mostra como o sistema se divide em unidades deployáveis e como elas se comunica
 | Container | Tecnologia | Responsabilidade |
 |---|---|---|
 | Next.js App | Next.js + TypeScript | Interface de usuário; SSR para páginas públicas, CSR para player e dashboards |
-| Monolito Modular | Java 25 + Spring Boot | Lógica de negócio, autenticação, geração de presigned URLs, persistência |
+| Backend (Spring Boot) | Java 25 + Spring Boot | Lógica de negócio, autenticação, geração de presigned URLs, persistência |
 | PostgreSQL 15 | PostgreSQL | Armazenamento relacional de todos os dados estruturados |
-| MinIO | MinIO (S3-compatible) | Armazenamento de objetos binários (áudio, imagens) |
+| Garage | Garage (S3-compatible) | Armazenamento de objetos binários (áudio, imagens) |
 
 ## Comunicações
 
@@ -81,82 +82,93 @@ Mostra como o sistema se divide em unidades deployáveis e como elas se comunica
 |---|---|---|---|
 | Next.js | Spring Boot | HTTPS / REST + JSON | Todas as operações de dados e autenticação |
 | Spring Boot | PostgreSQL | JDBC (Spring Data JPA) | Leitura e escrita de dados relacionais |
-| Spring Boot | MinIO | S3 API (SDK) | Geração de presigned URLs; upload no fluxo do artista |
-| Next.js | MinIO | HTTPS (presigned URL) | Streaming de áudio direto - sem passar pelo backend |
+| Spring Boot | Garage | S3 API (SDK) | Geração de presigned URLs; upload no fluxo do artista |
+| Next.js | Garage | HTTPS (presigned URL) | Streaming de áudio direto - sem passar pelo backend |
 
 ## Decisão: presigned URLs para streaming
 
-O áudio **nunca trafega pelo servidor Java**. O backend apenas gera uma URL temporária assinada (expira em ~60s) que o navegador usa para requisitar o arquivo diretamente ao MinIO via HTTP Range Requests. Isso atende ao **RNF04** (início de reprodução rápido) e evita que o backend se torne gargalo de I/O.
+O áudio **nunca trafega pelo servidor Java**. O backend apenas gera uma URL temporária assinada (expira em ~60s) que o navegador usa para requisitar o arquivo diretamente ao Garage via HTTP Range Requests. Isso atende ao **RNF04** (início de reprodução rápido) e evita que o backend se torne gargalo de I/O.
 
 # 04 - Arquitetura do Backend - Monolito Modular
 
 ## Visão geral
 
-O backend segue a organização de **monolito modular**: um único processo deployável, mas com fronteiras de domínio bem definidas por pacotes Java. Cada módulo possui suas próprias camadas internas e **não acessa diretamente** as camadas internas de outro módulo - a comunicação entre módulos se dá exclusivamente por interfaces de serviço (chamadas de método in-process).
+O backend adota a **arquitetura hexagonal (Ports & Adapters)**. O núcleo da aplicação — domínio e casos de uso — é completamente isolado de frameworks, banco de dados e qualquer detalhe de infraestrutura. Todo acesso ao mundo externo passa por interfaces (portas) que o domínio define; os adaptadores implementam essas interfaces sem que o domínio saiba de sua existência. A dependência sempre flui de fora para dentro.
 
 ## Diagrama de módulos
 
-![Arquitetura Backend](images/backend_modular_monolith.svg)
+![Arquitetura Backend](images/backend_hexagonal.svg)
 
-## Módulos de domínio
-
+## Estrutura interna de cada módulo
+ 
+```
+modulo/
+├── domain/               ← núcleo isolado (entidades, value objects, regras de negócio)
+├── application/
+│    ├── ports/
+│    │    ├── in/         ← portas de entrada (casos de uso — interfaces)
+│    │    └── out/        ← portas de saída (repositórios, serviços externos — interfaces)
+│    └── services/        ← implementação dos casos de uso (orquestra domínio + portas out)
+└── adapters/
+     ├── in/
+     │    └── web/        ← controllers REST (@RestController) — adaptador de entrada
+     └── out/
+          ├── jpa/        ← repositórios Spring Data JPA — adaptador de saída
+          └── storage/    ← cliente Garage S3 — adaptador de saída
+```
+ 
+## Bounded contexts
+ 
 ### Auth / Users
 Responsável pela autenticação e gerenciamento de identidades.
-
+ 
 - Registro, login e logout
 - Geração e validação de tokens JWT
 - Gerenciamento de roles (`OUVINTE`, `ARTISTA`, `ADMIN`)
 - Atualização de perfil e avatar
-
 ### Catálogo (Músicas / Álbuns / Artistas)
 Coração do sistema - gerencia todo o conteúdo musical.
-
+ 
 - CRUD de músicas, álbuns e artistas
-- Upload de áudio e capas via MinIO
+- Upload de áudio e capas via Garage
 - Metadados (duração, gênero, ano, etc.)
-- Expõe `CatalogService` como interface pública do módulo
-
+- Expõe porta de entrada `CatalogUseCase` como contrato público do módulo
 ### Playlists
 Gerenciamento das coleções de músicas dos usuários.
-
+ 
 - CRUD de playlists
 - Adição, remoção e reordenação de faixas
 - Playlists públicas e privadas
-
 ### Streaming / Player
 Entrega segura e rápida do áudio.
-
-- Valida se a música existe (via `CatalogService`)
+ 
+- Valida se a música existe (via porta de saída para o módulo de Catálogo)
 - Valida JWT do usuário
-- Gera presigned URL temporária no MinIO
+- Gera presigned URL temporária no Garage
 - Suporte a HTTP Range Requests para seeking
-
 ### Busca
 Permite aos usuários encontrar conteúdo na plataforma.
-
+ 
 - Full-text search via `pg_trgm` (PostgreSQL)
 - Filtros por tipo (música, artista, álbum)
 - Ordenação por relevância
-
 ### Histórico / Curtidas
 Registra o comportamento do usuário para personalização.
-
+ 
 - Registro assíncrono de eventos de reprodução
 - Gerenciamento de músicas curtidas
 - Histórico de reprodução paginado
-
-## Camadas internas de cada módulo
-
+## Regra de dependência
+ 
 ```
-modulo/
-├── controller/    Endpoints REST (@RestController)
-├── service/       Lógica de negócio + interface pública
-├── repository/    Acesso a dados (Spring Data JPA)
-└── domain/        Entidades JPA e value objects
+Adaptadores  →  Portas  →  Domínio
+  (web, jpa)    (in/out)   (puro)
 ```
-
+ 
+Nenhuma classe do pacote `domain` importa qualquer classe de `adapters` ou de frameworks externos. A inversão de dependência é garantida pelas interfaces declaradas em `application/ports/out`.
+ 
 ## Fluxo de reprodução de música
-
+ 
 ```
 Usuário clica play
        │
@@ -164,19 +176,25 @@ Usuário clica play
 GET /stream/{trackId}  [com JWT no header]
        │
        ▼
-Spring Security valida JWT
+Adaptador Web (StreamingController) recebe requisição
        │
        ▼
-StreamingService verifica se trackId existe (CatalogService)
+Porta de entrada: StreamingUseCase.gerarUrlReproducao(trackId, userId)
        │
        ▼
-Gera presigned URL no MinIO (expira em 60s)
+Service valida usuário e consulta porta de saída: CatalogRepository.findTrack(trackId)
        │
        ▼
-Retorna URL para o frontend
+Porta de saída: StoragePort.gerarPresignedUrl(objectKey, 60s)
        │
        ▼
-Frontend acessa MinIO diretamente via HTTP Range Requests
+Adaptador de saída (GarageStorageAdapter) chama API S3 do Garage
+       │
+       ▼
+Retorna URL temporária ao frontend
+       │
+       ▼
+Frontend acessa Garage diretamente via HTTP Range Requests
        │
        ▼  (assíncrono, não bloqueia a reprodução)
 POST /history  →  registra evento de play
@@ -186,7 +204,33 @@ POST /history  →  registra evento de play
 
 ## Visão geral
 
-O frontend adota o **App Router do Next.js** com organização por feature. A estratégia híbrida de renderização aproveita **Server Components** onde a página é majoritariamente leitura (páginas de álbum, artista, busca) e **Client Components** para partes interativas (player, formulários, playlists).
+O frontend adota o **App Router do Next.js** com organização por feature e princípios da arquitetura hexagonal. O domínio de aplicação (regras de UI, modelos, casos de uso do cliente) fica isolado dos adaptadores de infraestrutura (chamadas HTTP, armazenamento local) e dos adaptadores de UI (componentes React). A dependência flui sempre de fora para dentro.
+
+## Estrutura de pastas
+ 
+```
+src/
+├── app/
+│    ├── (rotas Next.js)
+│    └── api/               ← adaptadores de entrada (BFF / route handlers)
+│
+├── features/
+│    └── [feature]/
+│         ├── domain/        ← modelos e regras de negócio do cliente
+│         ├── application/
+│         │    ├── ports/    ← interfaces de casos de uso e repositórios
+│         │    └── services/ ← implementação dos casos de uso
+│         ├── adapters/
+│         │    ├── in/       ← hooks, páginas (adaptadores de entrada)
+│         │    └── out/      ← services HTTP, storage (adaptadores de saída)
+│         └── components/    ← componentes React da feature
+│
+└── shared/
+     ├── components/         ← componentes reutilizáveis
+     ├── hooks/
+     ├── models/
+     └── utils/
+```
 
 ## Estratégia de renderização por página
 
@@ -245,13 +289,13 @@ Artista seleciona arquivo de áudio
         │
         ▼
 Frontend solicita presigned URL de upload
-POST /upload/presigned  →  Backend  →  MinIO
+POST /upload/presigned  →  Backend  →  Garage
         │
         ▼
 Backend retorna URL temporária de upload
         │
         ▼
-Frontend faz PUT direto no MinIO (sem passar pelo backend)
+Frontend faz PUT direto no Garage (sem passar pelo backend)
         │
         ▼
 Frontend notifica backend que upload concluiu
@@ -267,20 +311,19 @@ Registro das principais decisões de arquitetura, suas motivações e as alterna
 ## ADR-01 - Monolito Modular no Backend
 
 **Status:** Aceito
-
-**Contexto:** O projeto é acadêmico, desenvolvido por um time pequeno com prazo definido. Era preciso escolher entre microserviços, monolito tradicional ou monolito modular.
-
-**Decisão:** Adotar monolito modular com pacotes bem delimitados por domínio.
-
+ 
+**Contexto:** O projeto precisa de separação clara entre regras de negócio e detalhes de infraestrutura (banco, storage, HTTP) para facilitar manutenção, testes e eventual migração de tecnologias.
+ 
+**Decisão:** Adotar a arquitetura hexagonal (Ports & Adapters) em ambas as camadas. O domínio de cada módulo não conhece frameworks nem infraestrutura. A comunicação se dá exclusivamente por interfaces (portas).
+ 
 **Motivação:**
-- Simplicidade de deploy e operação (um único processo)
-- Sem overhead de comunicação de rede entre serviços
-- Fronteiras de domínio preservadas para facilitar eventual migração futura
-- Adequado ao tamanho e tempo do projeto acadêmico
-
+- Domínio testável isoladamente, sem necessidade de banco ou servidor
+- Troca de adaptadores (ex: banco, storage) sem alterar regras de negócio
+- Inversão de dependência garantida estruturalmente
+- Atende ao RNF12 (manutenibilidade modular)
 **Alternativas consideradas:**
-- Microserviços - complexidade operacional excessiva para o escopo
-- Monolito sem módulos - dificulta manutenção e viola RNF12
+- Arquitetura em camadas tradicional (controller → service → repository) — acoplamento maior entre negócio e infraestrutura
+- Clean Architecture estrita — overhead de camadas desnecessário para o escopo acadêmico
 
 ---
 
@@ -310,11 +353,11 @@ Registro das principais decisões de arquitetura, suas motivações e as alterna
 
 **Contexto:** O áudio é o recurso central da plataforma. A entrega precisa ser rápida e não pode se tornar gargalo (RNF04).
 
-**Decisão:** O backend gera presigned URLs temporárias (expiram em 60s). O navegador acessa o MinIO diretamente para streaming.
+**Decisão:** O backend gera presigned URLs temporárias (expiram em 60s). O navegador acessa o Garage diretamente para streaming.
 
 **Motivação:**
 - Áudio não passa pelo servidor Java - elimina gargalo de I/O
-- HTTP Range Requests nativos no MinIO permitem seeking sem workarounds
+- HTTP Range Requests nativos no Garage permitem seeking sem workarounds
 - Backend fica livre para processar outras requisições
 - URL temporária garante que apenas usuários autenticados acessem o conteúdo
 
@@ -363,13 +406,13 @@ Registro das principais decisões de arquitetura, suas motivações e as alterna
 
 ---
 
-## ADR-06 - MinIO para Storage de Objetos
+## ADR-06 - Garage para Storage de Objetos
 
 **Status:** Aceito
 
 **Contexto:** O sistema precisa armazenar arquivos binários (áudio, capas, avatares) de forma escalável e independente do banco de dados relacional (RNF15).
 
-**Decisão:** MinIO auto-hospedado com API compatível com S3.
+**Decisão:** Garage auto-hospedado com API compatível com S3.
 
 **Motivação:**
 - API S3-compatible permite migração futura para AWS S3 sem mudança de código
