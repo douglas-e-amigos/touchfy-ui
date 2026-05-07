@@ -10,7 +10,18 @@ export default function FyButton({
     children,
     type = "default",
     onClick,
-}: FyButtonProps): ReactElement {
+}: FyButtonProps): ReactElement | null {
+    
+    const hasContent =
+        typeof children === "string"
+            ? children.trim().length > 0
+            : children !== null && children !== undefined && typeof children !== "boolean";
+
+    if (!hasContent) {
+        console.error("Conteúdo do botão não pode ser vazio");
+        return null;
+    }
+
     const base = "px-4 py-2 rounded-md font-semibold transition-colors duration-200 cursor-pointer";
 
     const variants = {
