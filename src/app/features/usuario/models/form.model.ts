@@ -6,3 +6,8 @@ export interface RegisterForm {
     senhaNovamente: string;
     dataNascimento: string;
 }
+
+export interface LoginForm {
+    nomeUsuario: string;
+    senha: string;
+}
