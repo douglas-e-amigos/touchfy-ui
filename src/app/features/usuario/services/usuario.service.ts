@@ -5,7 +5,6 @@ import { NovoRecursoResponse } from "@/src/app/shared/models/http.model";
 export class UsuarioService {
     async cadastrarUsuario(request: CriarUsuarioRequest) {
         const response = await httpClient.post<NovoRecursoResponse>('usuarios', request);
-        console.log(response);
     }
 }
 
