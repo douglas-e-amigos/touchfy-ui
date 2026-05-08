@@ -34,7 +34,7 @@ export default function Login() {
         <div>
             <div className="flex flex-col gap-y-4">
                 <div className="flex flex-col gap-y-2">
-                    <h2>Criar conta</h2>
+                    <h2>Login</h2>
                     <span>Comece sua jornada musical gratuitamente</span>
                 </div>
                 <div className="flex flex-col gap-y-3">
