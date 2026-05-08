@@ -38,7 +38,7 @@ export async function POST(request: Request): Promise<Response> {
     );
 
   const response = await httpServer.post<NovoRecursoResponse>(
-    "/usuarios",
+    "usuarios/auth/register",
     body,
   );
 
