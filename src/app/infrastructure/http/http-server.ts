@@ -1,5 +1,8 @@
 import axios from "axios";
 
+/**
+ * @deprecated Use apenas para rotas públicas
+ */
 const httpServer = axios.create({
   baseURL: process.env.BACKEND_API_URL || "http://localhost:8080",
   headers: {
