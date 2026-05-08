@@ -5,3 +5,13 @@ export interface CriarUsuarioRequest {
     senhaNovamente: string;
     dataNascimento: Date;
 }
+
+export interface AutenticarUsuarioRequest {
+    nomeUsuario: string;
+    senha: string;
+}
+
+export interface TokenResponse {
+    accessToken: string;
+    refreshToken: string;
+}
