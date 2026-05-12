@@ -18,24 +18,27 @@ export default function MediaCard({
   const [mostrarIcone, setMostrarIcone] = useState(false);
 
   return (
-    <div
+    <div  
       role="group"
-      aria-label={`Card da mídia de ${nomeMusica}`}
       onMouseEnter={() => setMostrarIcone(true)}
       onMouseLeave={() => setMostrarIcone(false)}
+      className="rounded-lg bg-[oklch(37%_0.013_285.805)] cursor-pointer w-[23rem] h-[5rem] grid gap-x-4 p-2 items-center [grid-template-areas:'foto_musica_icone'_'foto_artista_icone'] grid-cols-[auto_1fr_auto]"
     >
-      <img src={imagemURL} alt={`Foto de ${nomeArtista}`} />
-
-      <p>{nomeMusica}</p>
-      <p>{nomeArtista}</p>
-
-      <img
-        src="/icons/play-button.svg"
-        alt="Ícone de um play de música"
-        aria-label="Ícone play música"
-        onClick={abrirMusica}
-        className={mostrarIcone ? "block" : "hidden"}
+      <img 
+        className="w-[4rem] h-[4rem] rounded [grid-area:foto]"
+        src={imagemURL} 
+        alt={`Foto de ${nomeArtista}`} 
       />
+
+      <p className="text-white font-bold [grid-area:musica] self-end">{nomeMusica}</p>
+      <p className="text-gray-400 [grid-area:artista] self-start">{nomeArtista}</p>
+
+      <button
+        onClick={abrirMusica}
+        className={`w-[2.5rem] h-[2.5rem] [grid-area:icone] ${mostrarIcone ? "block" : "hidden"}`}
+      >
+        <img src="/icons/play-button.svg" alt="Play" className="w-8 h-8" />
+      </button>
     </div>
   );
 }
