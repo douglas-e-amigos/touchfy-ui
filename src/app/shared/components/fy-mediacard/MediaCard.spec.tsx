@@ -45,10 +45,10 @@ describe("MediaCard", () => {
         const { nomeMusica } = montarComponente();
 
         const card = screen.getByRole("group", {
-            name: `Card da mídia de ${nomeMusica}`,
+            name: `Card de mídia da música ${nomeMusica}`,
         });
 
-        const icone = screen.getByRole("img", {
+        const icone = screen.getByRole("button", {
             name: "Ícone play música",
         });
 

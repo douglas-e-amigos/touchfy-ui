@@ -20,6 +20,7 @@ export default function MediaCard({
   return (
     <div  
       role="group"
+      aria-label={`Card de mídia da música ${nomeMusica}`}
       onMouseEnter={() => setMostrarIcone(true)}
       onMouseLeave={() => setMostrarIcone(false)}
       className="rounded-lg bg-[oklch(37%_0.013_285.805)] cursor-pointer w-[23rem] h-[5rem] grid gap-x-4 p-2 items-center [grid-template-areas:'foto_musica_icone'_'foto_artista_icone'] grid-cols-[auto_1fr_auto]"
@@ -36,8 +37,9 @@ export default function MediaCard({
       <button
         onClick={abrirMusica}
         className={`w-[2.5rem] h-[2.5rem] [grid-area:icone] ${mostrarIcone ? "block" : "hidden"}`}
+        aria-label="Ícone play música"
       >
-        <img src="/icons/play-button.svg" alt="Play" className="w-8 h-8" />
+        <img src="/icons/play-button.svg" alt="Ícone play música" className="w-8 h-8" />
       </button>
     </div>
   );
