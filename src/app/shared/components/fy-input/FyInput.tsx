@@ -1,3 +1,5 @@
+import { formatDateForInput } from "../../utils/date";
+
 interface FyInputProps {
   label?: string;
   placeholder: string;
@@ -7,6 +9,7 @@ interface FyInputProps {
   onChange: (value: string) => void;
   type?: 'text' | 'date' | 'password';
   error?: string;
+  value?: string;
 }
 
 export default function FyInput({
@@ -18,7 +21,10 @@ export default function FyInput({
   id,
   error,
   type = 'text',
+  value,
 }: FyInputProps): React.ReactElement {
+  const inputValue = type === 'date' ? formatDateForInput(value) : value;
+
   return (
     <div className="flex flex-col gap-y-1">
       {label && (
@@ -41,6 +47,7 @@ export default function FyInput({
           type={type}
           id={id}
           name={name}
+          value={inputValue ?? ''}
           placeholder={placeholder}
           onChange={(event) => onChange(event.target.value)}
           className={`
