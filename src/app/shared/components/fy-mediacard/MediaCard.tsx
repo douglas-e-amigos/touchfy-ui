@@ -34,13 +34,15 @@ export default function MediaCard({
       <p className="text-white font-bold [grid-area:musica] self-end">{nomeMusica}</p>
       <p className="text-gray-400 [grid-area:artista] self-start">{nomeArtista}</p>
 
-      <button
-        onClick={abrirMusica}
-        className={`w-[2.5rem] h-[2.5rem] [grid-area:icone] ${mostrarIcone ? "block" : "hidden"}`}
-        aria-label="Ícone play música"
-      >
-        <img src="/icons/play-button.svg" alt="Ícone play música" className="w-8 h-8" />
-      </button>
+      <div className="relative [grid-area:icone] w-[2.5rem] h-[2.5rem]">
+        <button
+          onClick={abrirMusica}
+          className={`absolute left-0 top-1/2 -translate-y-1/2 ${mostrarIcone ? "block" : "hidden"}`}
+          aria-label="Ícone play música"
+        >
+          <img src="/icons/play-button.svg" alt="Ícone play música" className="w-8 h-8" />
+        </button>
+      </div>
     </div>
   );
 }
