@@ -1,6 +1,7 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render } from "@testing-library/react";
 import { screen } from "@testing-library/dom";
+import userEvent from "@testing-library/user-event";
 import FyButton from "./FyButton";
 
 afterEach(() => {
@@ -16,13 +17,24 @@ describe("FyButton", () => {
         expect(button).toBeInTheDocument();
     });
 
-    it("nao renderiza o botao quando recebe texto vazio", () => {
+    it("renderiza o botao mesmo quando recebe texto vazio", () => {
         render(<FyButton>{""}</FyButton>);
-        expect(screen.queryByRole("button")).not.toBeInTheDocument();
+        expect(screen.getByRole("button")).toBeInTheDocument();
     });
 
-    it.each([true, false, null, undefined])("não renderiza o botão quando recebe %s", (children) => {
+    it.each([true, false, null, undefined])("renderiza o botão quando recebe %s", (children) => {
         render(<FyButton>{children}</FyButton>);
-        expect(screen.queryByRole("button")).not.toBeInTheDocument();
+        expect(screen.getByRole("button")).toBeInTheDocument();
     })
+
+    it("dispara onClick quando clicado", async () => {
+        const onClick = vi.fn();
+        const user = userEvent.setup();
+
+        render(<FyButton onClick={onClick}>Salvar</FyButton>);
+
+        await user.click(screen.getByRole("button", { name: "Salvar" }));
+
+        expect(onClick).toHaveBeenCalledTimes(1);
+    });
 });

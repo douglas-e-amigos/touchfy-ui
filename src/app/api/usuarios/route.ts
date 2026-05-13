@@ -16,6 +16,12 @@ export async function POST(request: Request): Promise<Response> {
   if (isBlank(body.nome))
     return NextResponse.json({ error: "Nome inválido!" }, { status: 400 });
 
+  if (isBlank(body.nomeUsuario))
+    return NextResponse.json(
+      { error: "Nome de usuário inválido!" },
+      { status: 400 },
+    );
+
   if (isBlank(body.email) || !isEmail(body.email))
     return NextResponse.json({ error: "E-mail inválido!" }, { status: 400 });
 

@@ -2,6 +2,8 @@
 
 :root {
   --primary: #ec268f;
+  --danger: #DC2626;
+  --danger-black: #2C1A1C;
 }
 
 .bg-primary {
@@ -14,6 +16,30 @@
 
 .border-primary {
   border: var(--primary);;
+}
+
+.bg-danger-black {
+  background-color: var(--danger-black);
+}
+
+.text-danger-black {
+  color: var(--danger-black);
+}
+
+.border-danger-black {
+  border: var(--danger-black);
+}
+
+.bg-danger {
+  background-color: var(--danger);
+}
+
+.text-danger {
+  color: var(--danger);
+}
+
+.border-danger {
+  border: var(--danger);
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {

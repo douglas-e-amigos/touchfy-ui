@@ -8,6 +8,49 @@ export function parseDate(value: string): Date | null {
   return date;
 }
 
+export function formatDateForInput(value: string | Date | null | undefined): string {
+  if (!value) {
+    return "";
+  }
+
+  if (value instanceof Date) {
+    return [
+      value.getFullYear(),
+      String(value.getMonth() + 1).padStart(2, "0"),
+      String(value.getDate()).padStart(2, "0"),
+    ].join("-");
+  }
+
+  const normalizedValue = value.trim();
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(normalizedValue)) {
+    return normalizedValue;
+  }
+
+  if (/^\d{4}-\d{2}-\d{2}T/.test(normalizedValue)) {
+    return normalizedValue.slice(0, 10);
+  }
+
+  const brDateMatch = normalizedValue.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+
+  if (brDateMatch) {
+    const [, day, month, year] = brDateMatch;
+    return `${year}-${month}-${day}`;
+  }
+
+  const parsedDate = new Date(normalizedValue);
+
+  if (isNaN(parsedDate.getTime())) {
+    return "";
+  }
+
+  return [
+    parsedDate.getFullYear(),
+    String(parsedDate.getMonth() + 1).padStart(2, "0"),
+    String(parsedDate.getDate()).padStart(2, "0"),
+  ].join("-");
+}
+
 export function formatDateBR(value: Date): string {
   return value.toLocaleDateString("pt-BR");
 }

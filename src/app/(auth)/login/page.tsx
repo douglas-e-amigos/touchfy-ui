@@ -1,6 +1,7 @@
 "use client";
 
 import { LockIcon, UserIcon } from "lucide-react";
+import Link from "next/link";
 import { AutenticarUsuarioRequest } from "../../features/usuario/models/dto.model";
 import { LoginForm } from "../../features/usuario/models/form.model";
 import { authService } from "../../features/usuario/services/auth.service";
@@ -9,6 +10,8 @@ import FyInput from "../../shared/components/fy-input/FyInput";
 import { useForm } from "../../shared/hooks/use-form";
 import { dependencies, validateLogin } from "./validation";
 import { useRouter } from "next/navigation";
+import { notificationService } from "../../shared/services/notification.service";
+import { getHttpErrorMessage } from "../../shared/utils/http-error";
 
 
 export default function Login() {
@@ -19,15 +22,34 @@ export default function Login() {
         senha: '',
     }, validateLogin, dependencies)
 
-    const onSubmit = () => {
-        if (!isValid()) return;
+    const onSubmit = async () => {
+        if (!isValid()) {
+            notificationService.showErrorForSeconds({
+                title: 'Não foi possível entrar',
+                message: 'Corrija os campos do formulário e tente novamente.',
+            }, 5);
+            return;
+        }
+
         const dto: AutenticarUsuarioRequest = values;
-        authService.autenticarUsuario(dto).then(() => {
-            console.log('Usuário logado com sucesso!')
-            router.push('/dashboard')
-        }).catch(err => {
-            console.error('Houve um erro: ', err);
-        })
+
+        try {
+            await authService.autenticarUsuario(dto);
+            notificationService.showSuccessForSeconds({
+                title: 'Login realizado com sucesso',
+                message: 'Redirecionando para o dashboard.',
+            }, 2);
+
+            setTimeout(() => {
+                router.push('/dashboard');
+            }, 1200);
+        } catch (error) {
+            console.error('Houve um erro: ', error);
+            notificationService.showErrorForSeconds({
+                title: 'Erro ao realizar login',
+                message: getHttpErrorMessage(error, 'Verifique suas credenciais e tente novamente.'),
+            }, 6);
+        }
     }
 
     return (
@@ -41,19 +63,24 @@ export default function Login() {
                     <FyInput id="nome-usuario-id" name="nome-usuario" label="Nome de usuário"
                         placeholder="Seu nome de usuário" icon={<UserIcon />}
                         onChange={(value) => handleChange("nomeUsuario", value)}
+                        value={values.nomeUsuario}
                         error={errors.nomeUsuario}
                     ></FyInput>
                     <FyInput id="senha-id" name="senha" label="Senha"
                         placeholder="Sua senha" icon={<LockIcon />}
                         onChange={(value) => handleChange("senha", value)}
+                        value={values.senha}
                         error={errors.senha} type="password"
                     ></FyInput>
                     <FyButton onClick={onSubmit}>
                         Entrar
                     </FyButton>
                 </div>
-                <div>
-                    {/* links */}
+                <div className="text-sm text-gray-400">
+                    <span>Não tem uma conta? </span>
+                    <Link href="/register" className="text-primary underline underline-offset-4">
+                        Criar conta
+                    </Link>
                 </div>
             </div>
         </div>
