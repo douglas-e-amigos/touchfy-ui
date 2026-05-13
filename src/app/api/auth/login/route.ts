@@ -24,6 +24,7 @@ export async function POST(request: Request): Promise<Response> {
     secure: true,
     sameSite: "strict",
     path: "/",
+    maxAge: 60 * 168 // 7 dias
   });
 
   cookieStore.set("access_token", response.data.accessToken, {
@@ -31,6 +32,7 @@ export async function POST(request: Request): Promise<Response> {
     secure: true,
     sameSite: "strict",
     path: "/",
+    maxAge: 60 * 5 // 5 minutos
   });
 
   return NextResponse.json(response.data);
