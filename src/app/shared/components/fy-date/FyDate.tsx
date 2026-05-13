@@ -13,7 +13,7 @@ export default function FyDate() {
     return (
         <div className="flex items-center gap-2 mb-2 text-gray-400">
             <img src="/icons/time.svg" className="w-[1.5rem]"/>
-            <p className="text-[#27272a]">{data}</p>
+            <p className="text-lg text-gray-300">{data}</p>
         </div>
     )
 }
