@@ -16,30 +16,34 @@ export function useForm<T extends FormValues>(
   const [errors, setErrors] = useState<FormErrors<T>>({});
 
   function handleChange(field: keyof T, value: string) {
-    const newValues = {
-      ...values,
-      [field]: value,
-    };
+    setValues((previousValues) => {
+      const newValues = {
+        ...previousValues,
+        [field]: value,
+      };
 
-    setValues(newValues);
+      if (!validateField) {
+        return newValues;
+      }
 
-    if (!validateField) return;
+      setErrors((prev) => {
+        const newErrors = { ...prev };
 
-    setErrors((prev) => {
-      const newErrors = { ...prev };
+        const fieldsToValidate = new Set<keyof T>();
+        fieldsToValidate.add(field);
 
-      const fieldsToValidate = new Set<keyof T>();
-      fieldsToValidate.add(field);
+        const deps = dependencies?.[field] || [];
+        deps.forEach((dep) => fieldsToValidate.add(dep));
 
-      const deps = dependencies?.[field] || [];
-      deps.forEach((dep) => fieldsToValidate.add(dep));
+        fieldsToValidate.forEach((f) => {
+          const error = validateField(f, newValues);
+          newErrors[f] = error || undefined;
+        });
 
-      fieldsToValidate.forEach((f) => {
-        const error = validateField(f, newValues);
-        newErrors[f] = error || undefined;
+        return newErrors;
       });
 
-      return newErrors;
+      return newValues;
     });
   }
 
