@@ -5,17 +5,17 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { faker } from "@faker-js/faker";
 
-import { authService } from "../../features/usuario/services/auth.service";
-import { UsuarioResponse } from "../../features/usuario/models/dto.model";
-import { usuarioService } from "../../features/usuario/services/usuario.service";
+import { authService } from "../../../features/usuario/services/auth.service";
+import { UsuarioResponse } from "../../../features/usuario/models/dto.model";
+import { usuarioService } from "../../../features/usuario/services/usuario.service";
 
-import MediaCard from "../../shared/components/fy-mediacard/MediaCard";
+import MediaCard from "../../../shared/components/fy-mediacard/MediaCard";
 import ImageCard, {
   Variantes,
-} from "../../shared/components/fy-imagecard/ImageCard";
-import FyDate from "../../shared/components/fy-date/FyDate";
-import FySaudacao from "../../shared/components/fy-saudacao/FySaudacao";
-import SecaoHome from "../../shared/components/fy-sectionhome/SecaoHome";
+} from "../../../shared/components/fy-imagecard/ImageCard";
+import FyDate from "../../../shared/components/fy-date/FyDate";
+import FySaudacao from "../../../shared/components/fy-saudacao/FySaudacao";
+import SecaoHome from "../../../shared/components/fy-sectionhome/SecaoHome";
 
 export default function Dashboard() {
   const router = useRouter();

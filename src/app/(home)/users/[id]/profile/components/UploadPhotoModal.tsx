@@ -1,5 +1,5 @@
-import FyButton from "@/src/app/shared/components/fy-button/FyButton";
-import FyModal from "@/src/app/shared/components/fy-modal/FyModal";
+import FyButton from "@/src/shared/components/fy-button/FyButton";
+import FyModal from "@/src/shared/components/fy-modal/FyModal";
 import { Upload, UserIcon, X } from "lucide-react";
 import { RefObject } from "react";
 

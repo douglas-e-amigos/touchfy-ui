@@ -1,4 +1,4 @@
-import httpClient from "@/src/app/infrastructure/http/http-client";
+import httpClient from "@/src/infrastructure/http/http-client";
 import {
   AtualizarUsuarioParcialmenteRequest,
   CriarUsuarioRequest,
@@ -8,7 +8,7 @@ import {
   NovoRecursoResponse,
   RecursoAtualizadoResponse,
   RecursoDeletadoResponse,
-} from "@/src/app/shared/models/http.model";
+} from "@/src/shared/models/http.model";
 
 export class UsuarioService {
   async cadastrarUsuario(

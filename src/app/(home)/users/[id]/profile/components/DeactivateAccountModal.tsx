@@ -1,6 +1,6 @@
-import FyArea from "@/src/app/shared/components/fy-area/FyArea";
-import FyButton from "@/src/app/shared/components/fy-button/FyButton";
-import FyModal from "@/src/app/shared/components/fy-modal/FyModal";
+import FyArea from "@/src/shared/components/fy-area/FyArea";
+import FyButton from "@/src/shared/components/fy-button/FyButton";
+import FyModal from "@/src/shared/components/fy-modal/FyModal";
 
 interface DeactivateAccountModalProps {
     open: boolean;

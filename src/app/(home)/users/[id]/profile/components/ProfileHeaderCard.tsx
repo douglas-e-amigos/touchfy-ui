@@ -1,6 +1,6 @@
-import { UsuarioResponse } from "@/src/app/features/usuario/models/dto.model";
-import FyArea from "@/src/app/shared/components/fy-area/FyArea";
-import FyButton from "@/src/app/shared/components/fy-button/FyButton";
+import { UsuarioResponse } from "@/src/features/usuario/models/dto.model";
+import FyArea from "@/src/shared/components/fy-area/FyArea";
+import FyButton from "@/src/shared/components/fy-button/FyButton";
 import { AtSign, CalendarIcon, Camera, PencilIcon, UserIcon } from "lucide-react";
 
 interface ProfileHeaderCardProps {

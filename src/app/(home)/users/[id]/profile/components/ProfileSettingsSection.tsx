@@ -1,6 +1,6 @@
-import FyArea from "@/src/app/shared/components/fy-area/FyArea";
-import FyButton from "@/src/app/shared/components/fy-button/FyButton";
-import FySwitch from "@/src/app/shared/components/fy-switch/FySwitch";
+import FyArea from "@/src/shared/components/fy-area/FyArea";
+import FyButton from "@/src/shared/components/fy-button/FyButton";
+import FySwitch from "@/src/shared/components/fy-switch/FySwitch";
 import { TrashIcon } from "lucide-react";
 
 interface ProfileSettingsSectionProps {

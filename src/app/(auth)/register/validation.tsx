@@ -1,4 +1,4 @@
-import { RegisterForm } from "../../features/usuario/models/form.model";
+import { RegisterForm } from "../../../features/usuario/models/form.model";
 
 import {
   isBlank,
@@ -6,7 +6,7 @@ import {
   isEqual,
   isPassword,
   isValidDateString,
-} from "../../shared/utils/validation";
+} from "../../../shared/utils/validation";
 
 export const dependencies: Partial<Record<keyof RegisterForm, (keyof RegisterForm)[]>> = {
   senha: ["senhaNovamente"],
