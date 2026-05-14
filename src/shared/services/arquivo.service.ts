@@ -1,4 +1,4 @@
-import httpClient from "@/src/app/infrastructure/http/http-client";
+import httpClient from "@/src/infrastructure/http/http-client";
 
 export class ArquivoService {
   async buscar(caminho: string): Promise<Blob> {

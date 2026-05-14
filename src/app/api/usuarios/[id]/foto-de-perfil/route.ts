@@ -1,5 +1,5 @@
-import { serverApiRequest } from "@/src/app/infrastructure/http/server-http";
-import { RecursoAtualizadoResponse } from "@/src/app/shared/models/http.model";
+import { serverApiRequest } from "@/src/infrastructure/http/server-http";
+import { RecursoAtualizadoResponse } from "@/src/shared/models/http.model";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Params {

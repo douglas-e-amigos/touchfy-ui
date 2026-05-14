@@ -1,18 +1,18 @@
 'use client';
 
-import { PartialUserUpdateForm } from "@/src/app/features/usuario/models/form.model";
-import { useForm } from "@/src/app/shared/hooks/use-form";
+import { PartialUserUpdateForm } from "@/src/features/usuario/models/form.model";
+import { useForm } from "@/src/shared/hooks/use-form";
 import { updateUserDependencies, validateUpdate } from "./validation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { authService } from "@/src/app/features/usuario/services/auth.service";
-import { usuarioService } from "@/src/app/features/usuario/services/usuario.service";
+import { authService } from "@/src/features/usuario/services/auth.service";
+import { usuarioService } from "@/src/features/usuario/services/usuario.service";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { AtualizarUsuarioParcialmenteRequest, UsuarioResponse } from "@/src/app/features/usuario/models/dto.model";
-import { formatDateForInput } from "@/src/app/shared/utils/date";
-import { notificationService } from "@/src/app/shared/services/notification.service";
-import { getHttpErrorMessage } from "@/src/app/shared/utils/http-error";
-import { arquivoService } from "@/src/app/shared/services/arquivo.service";
+import { AtualizarUsuarioParcialmenteRequest, UsuarioResponse } from "@/src/features/usuario/models/dto.model";
+import { formatDateForInput } from "@/src/shared/utils/date";
+import { notificationService } from "@/src/shared/services/notification.service";
+import { getHttpErrorMessage } from "@/src/shared/utils/http-error";
+import { arquivoService } from "@/src/shared/services/arquivo.service";
 import DeactivateAccountModal from "./components/DeactivateAccountModal";
 import EditProfileModal from "./components/EditProfileModal";
 import ProfileHeaderCard from "./components/ProfileHeaderCard";

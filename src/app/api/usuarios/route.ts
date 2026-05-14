@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import { CriarUsuarioRequest } from "../../features/usuario/models/dto.model";
+import { CriarUsuarioRequest } from "../../../features/usuario/models/dto.model";
 import {
   isBlank,
   isEmail,
   isEqual,
   isPassword,
   isValidDateString,
-} from "../../shared/utils/validation";
-import httpServer from "../../infrastructure/http/http-server";
-import { NovoRecursoResponse } from "../../shared/models/http.model";
+} from "../../../shared/utils/validation";
+import httpServer from "../../../infrastructure/http/http-server";
+import { NovoRecursoResponse } from "../../../shared/models/http.model";
 
 export async function POST(request: Request): Promise<Response> {
   const body: CriarUsuarioRequest = await request.json();

@@ -1,12 +1,12 @@
 import {
   AtualizarUsuarioParcialmenteRequest,
   UsuarioResponse,
-} from "@/src/app/features/usuario/models/dto.model";
-import { serverApiRequest } from "@/src/app/infrastructure/http/server-http";
+} from "@/src/features/usuario/models/dto.model";
+import { serverApiRequest } from "@/src/infrastructure/http/server-http";
 import {
   RecursoAtualizadoResponse,
   RecursoDeletadoResponse,
-} from "@/src/app/shared/models/http.model";
+} from "@/src/shared/models/http.model";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Params {

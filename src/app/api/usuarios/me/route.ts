@@ -1,5 +1,5 @@
-import { UsuarioResponse } from "@/src/app/features/usuario/models/dto.model";
-import { serverApiRequest } from "@/src/app/infrastructure/http/server-http";
+import { UsuarioResponse } from "@/src/features/usuario/models/dto.model";
+import { serverApiRequest } from "@/src/infrastructure/http/server-http";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {

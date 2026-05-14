@@ -2,15 +2,15 @@
 
 import { User as UserIcon, Lock as LockIcon, MailIcon, CalendarIcon } from "lucide-react";
 import Link from "next/link";
-import FyInput from "../../shared/components/fy-input/FyInput";
-import { useForm } from "../../shared/hooks/use-form";
-import { RegisterForm } from "../../features/usuario/models/form.model";
+import FyInput from "../../../shared/components/fy-input/FyInput";
+import { useForm } from "../../../shared/hooks/use-form";
+import { RegisterForm } from "../../../features/usuario/models/form.model";
 import { validateRegister, dependencies } from "./validation";
-import FyButton from "../../shared/components/fy-button/FyButton";
-import { usuarioService } from "../../features/usuario/services/usuario.service";
-import { CriarUsuarioRequest } from "../../features/usuario/models/dto.model";
-import { notificationService } from "../../shared/services/notification.service";
-import { getHttpErrorMessage } from "../../shared/utils/http-error";
+import FyButton from "../../../shared/components/fy-button/FyButton";
+import { usuarioService } from "../../../features/usuario/services/usuario.service";
+import { CriarUsuarioRequest } from "../../../features/usuario/models/dto.model";
+import { notificationService } from "../../../shared/services/notification.service";
+import { getHttpErrorMessage } from "../../../shared/utils/http-error";
 import { useRouter } from "next/navigation";
 
 export default function Register() {

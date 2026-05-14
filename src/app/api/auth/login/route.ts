@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import {
   AutenticarUsuarioRequest,
   TokenResponse,
-} from "../../../features/usuario/models/dto.model";
-import { isBlank, isPassword } from "../../../shared/utils/validation";
-import httpServer from "../../../infrastructure/http/http-server";
+} from "../../../../features/usuario/models/dto.model";
+import { isBlank, isPassword } from "../../../../shared/utils/validation";
+import httpServer from "../../../../infrastructure/http/http-server";
 import { cookies } from "next/headers";
 
 export async function POST(request: Request): Promise<Response> {

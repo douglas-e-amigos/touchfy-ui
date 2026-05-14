@@ -1,4 +1,4 @@
-import httpClient from "@/src/app/infrastructure/http/http-client";
+import httpClient from "@/src/infrastructure/http/http-client";
 import { AutenticarUsuarioRequest, TokenResponse } from "../models/dto.model";
 
 export class AuthService {

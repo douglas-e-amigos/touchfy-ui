@@ -1,6 +1,6 @@
-import { LoginForm } from "../../features/usuario/models/form.model";
+import { LoginForm } from "../../../features/usuario/models/form.model";
 
-import { isBlank, isPassword } from "../../shared/utils/validation";
+import { isBlank, isPassword } from "../../../shared/utils/validation";
 
 export const dependencies: Partial<Record<keyof LoginForm, (keyof LoginForm)[]>> = {};
 

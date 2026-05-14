@@ -1,6 +1,6 @@
-import FyButton from "@/src/app/shared/components/fy-button/FyButton";
-import FyInput from "@/src/app/shared/components/fy-input/FyInput";
-import FyModal from "@/src/app/shared/components/fy-modal/FyModal";
+import FyButton from "@/src/shared/components/fy-button/FyButton";
+import FyInput from "@/src/shared/components/fy-input/FyInput";
+import FyModal from "@/src/shared/components/fy-modal/FyModal";
 import { CalendarIcon, UserIcon } from "lucide-react";
 
 interface EditProfileModalProps {

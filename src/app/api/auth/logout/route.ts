@@ -1,4 +1,4 @@
-import httpServer from "@/src/app/infrastructure/http/http-server";
+import httpServer from "@/src/infrastructure/http/http-server";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 

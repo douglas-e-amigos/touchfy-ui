@@ -1,5 +1,5 @@
-import { PartialUserUpdateForm, UploadUserPhotoForm } from "@/src/app/features/usuario/models/form.model";
-import { isBlank, isValidDateString } from "@/src/app/shared/utils/validation";
+import { PartialUserUpdateForm, UploadUserPhotoForm } from "@/src/features/usuario/models/form.model";
+import { isBlank, isValidDateString } from "@/src/shared/utils/validation";
 
 
 export const updateUserDependencies: Partial<Record<keyof PartialUserUpdateForm, (keyof PartialUserUpdateForm)[]>> = {};
