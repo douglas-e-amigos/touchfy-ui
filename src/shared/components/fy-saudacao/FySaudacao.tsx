@@ -7,7 +7,7 @@ export default function FySaudacao({ hora }: { hora: number }) {
     )
 }
 
-enum Periodos {
+export enum Periodos {
     dia = "Bom dia",
     tarde = "Boa tarde",
     noite = "Boa noite",
@@ -21,6 +21,6 @@ function definePeriodo(hora: number): Periodos {
 
     if (hora >= 18) return Periodos.noite;
     else if (hora >= 12) return Periodos.tarde;
-    else if (hora < 5) return Periodos.madrugada;
+    else if (hora <= 5) return Periodos.madrugada;
     return Periodos.dia;
 }
