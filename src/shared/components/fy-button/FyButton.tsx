@@ -23,6 +23,10 @@ export default function FyButton({
     className,
     onClick,
 }: FyButtonProps): ReactElement | null {
+    if (isInvalidChildren(children)) {
+        console.error("Texto do botão não pode ser vazio");
+        return null;
+    }
 
     const base =
         "px-4 py-2 rounded-md font-semibold transition-colors duration-200 cursor-pointer";
@@ -46,4 +50,16 @@ export default function FyButton({
             {children}
         </button>
     );
+}
+
+function isInvalidChildren(children: ReactNode): boolean {
+    if (children === null || children === undefined) return true;
+
+    if (typeof children === "boolean") return true;
+
+    if (typeof children === "string" && children.trim().length <= 0) {
+        return true;
+    }
+
+    return false;
 }
