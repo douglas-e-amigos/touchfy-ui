@@ -1,15 +1,15 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { cleanup, render } from "@testing-library/react";
-import { screen } from "@testing-library/dom";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import FyButton from "./FyButton";
 
 afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
 });
 
 describe("FyButton", () => {
-    it("renderiza o botao com o texto informado", () => {
+    it("renderiza o botão com o texto informado", () => {
         render(<FyButton>FyButton</FyButton>);
 
         const button = screen.getByRole("button", { name: "FyButton" });
@@ -17,15 +17,37 @@ describe("FyButton", () => {
         expect(button).toBeInTheDocument();
     });
 
-    it("renderiza o botao mesmo quando recebe texto vazio", () => {
-        render(<FyButton>{""}</FyButton>);
-        expect(screen.getByRole("button")).toBeInTheDocument();
-    });
+    it.each(["", "   "])(
+        "não renderiza o botão quando recebe texto vazio: '%s'",
+        (children) => {
+            const consoleError = vi
+                .spyOn(console, "error")
+                .mockImplementation(() => {});
 
-    it.each([true, false, null, undefined])("renderiza o botão quando recebe %s", (children) => {
-        render(<FyButton>{children}</FyButton>);
-        expect(screen.getByRole("button")).toBeInTheDocument();
-    })
+            render(<FyButton>{children}</FyButton>);
+
+            expect(screen.queryByRole("button")).not.toBeInTheDocument();
+            expect(consoleError).toHaveBeenCalledWith(
+                "Texto do botão não pode ser vazio"
+            );
+        }
+    );
+
+    it.each([true, false, null, undefined])(
+        "não renderiza o botão quando recebe %s",
+        (children) => {
+            const consoleError = vi
+                .spyOn(console, "error")
+                .mockImplementation(() => {});
+
+            render(<FyButton>{children}</FyButton>);
+
+            expect(screen.queryByRole("button")).not.toBeInTheDocument();
+            expect(consoleError).toHaveBeenCalledWith(
+                "Texto do botão não pode ser vazio"
+            );
+        }
+    );
 
     it("dispara onClick quando clicado", async () => {
         const onClick = vi.fn();
