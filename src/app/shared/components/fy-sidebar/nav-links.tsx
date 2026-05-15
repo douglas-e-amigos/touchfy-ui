@@ -1,0 +1,69 @@
+'use client';
+
+import { Home, Search, Library, Plus } from 'lucide-react';
+
+import FyButton from '../fy-button/FyButton';
+import FyButtonIcon from '../fy-button/FyButtonIcon';
+
+const navigationLinks = [
+  { name: 'Início', icon: Home },
+  { name: 'Buscar', icon: Search },
+  { name: 'Biblioteca', icon: Library },
+];
+
+const playlistLinks = [
+  'Músicas Curtidas',
+  'Workout Vibes',
+  'Chill Nights',
+];
+
+export default function NavLinks() {
+  return (
+    <div className="flex flex-col h-full">
+      {/* Navegação principal */}
+      <div className="flex flex-col gap-2">
+        {navigationLinks.map((link) => {
+          const Icon = link.icon;
+
+          return (
+            <FyButton
+              key={link.name}
+              type="ghost"
+              className="w-full flex items-center gap-4 justify-start"
+            >
+              <Icon size={22} />
+              <span>{link.name}</span>
+            </FyButton>
+          );
+        })}
+      </div>
+
+      {/* Seção playlists */}
+      <div className="mt-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xs uppercase tracking-widest text-zinc-400 font-semibold">
+            Playlists
+          </h2>
+
+          <FyButtonIcon
+            variant='ghost'
+            icon={<Plus size={18} />}
+          />
+        </div>
+
+        {/* Lista de playlists */}
+        <div className="flex flex-col gap-2">
+          {playlistLinks.map((playlist) => (
+            <FyButton
+              key={playlist}
+              type="ghost"
+              className="w-full flex items-center gap-4 justify-start font-light text-sm"
+            >
+              {playlist}
+            </FyButton>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
