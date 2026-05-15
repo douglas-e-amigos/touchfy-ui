@@ -3,7 +3,7 @@
 import { Home, Search, Library, Plus } from 'lucide-react';
 
 import FyButton from '../fy-button/FyButton';
-import FyButtonIcon from '../fy-button/FyButtonIcon';
+import FyButtonIcon from '../fy-iconbutton/FyButtonIcon';
 
 const navigationLinks = [
   { name: 'Início', icon: Home },

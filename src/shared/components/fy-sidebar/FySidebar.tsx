@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import { Menu, User, LogOut } from 'lucide-react';
 import NavLinks from './nav-links';
-import FyButtonIcon from '../fy-button/FyButtonIcon';
+import FyButtonIcon from '../fy-iconbutton/FyButtonIcon';
 import { useState } from 'react';
 
 interface SidebarProps {
@@ -15,7 +15,7 @@ export default function FySidebar({
   isOpen,
   setIsOpen,
 }: SidebarProps) {
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(true);
   return (
     <>
       {/* Botão menu */}

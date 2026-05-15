@@ -2,15 +2,25 @@ import { ReactElement, ReactNode } from "react";
 
 interface FyButtonProps {
     children: ReactNode;
-    type?: 'default' | 'outline';
-    color?: 'primary' | 'red'
+    type?: 'default' | 'outline' | 'ghost';
+    color?: 'primary' | 'red';
+    className?: string;
     onClick?: () => void;
 }
+
+type ButtonColor = NonNullable<FyButtonProps["color"]>;
+
+type StyleButton = {
+    default: Record<ButtonColor, string>;
+    outline: Record<ButtonColor, string>;
+    ghost: string;
+};
 
 export default function FyButton({
     children,
     type = "default",
     color = "primary",
+    className,
     onClick,
 }: FyButtonProps): ReactElement | null {
 
@@ -18,20 +28,21 @@ export default function FyButton({
         "px-4 py-2 rounded-md font-semibold transition-colors duration-200 cursor-pointer";
 
     const styles = {
-        primary: {
-            default: "bg-primary text-white hover:bg-primary/80",
-            outline: "border border-primary text-primary bg-transparent hover:bg-primary/10",
+        default: {
+            primary: "bg-primary text-white hover:bg-primary/80",
+            red: "bg-danger text-white hover:bg-danger/80",
         },
-        red: {
-            default: "bg-danger text-white hover:bg-danger/80",
-            outline: "border border-danger text-danger bg-transparent hover:bg-danger/10",
+        outline: {
+            primary: "border border-primary text-primary bg-transparent hover:bg-primary/10",
+            red: "border border-danger text-danger bg-transparent hover:bg-danger/10",
         },
-    };
+        ghost: "bg-transparent text-gray-400 hover:text-white",
+    } satisfies StyleButton;
     
-    const variantClass = styles[color][type];
+    const variantClass = type === "ghost" ? styles.ghost : styles[type][color];
 
     return (
-        <button className={`${base} ${variantClass}`} onClick={onClick}>
+        <button className={`${base} ${variantClass} ${className || ''}`} onClick={onClick}>
             {children}
         </button>
     );
