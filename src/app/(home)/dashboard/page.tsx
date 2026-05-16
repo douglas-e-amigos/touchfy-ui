@@ -102,10 +102,10 @@ export default function Dashboard() {
   }, [abrirPlaylist]);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#08070b] text-white">
+    <main className="min-h-screen min-w-0 overflow-hidden bg-[#08070b] text-white">
       <div className="pointer-events-none fixed inset-0" />
 
-      <header className="w-screen overflow-hidden bg-gradient-to-b from-[#ec268f]/30 via-[#ec268f]/10 to-transparent p-5 shadow-2xl shadow-black/40 md:p-8">
+      <header className="w-full overflow-hidden bg-gradient-to-b from-[#ec268f]/30 via-[#ec268f]/10 to-transparent p-5 shadow-2xl shadow-black/40 md:p-8">
         <section className="mb-6 flex items-start justify-between gap-4">
           <div className="space-y-2">
             <FyDate  data={getDateFormat()}/>
