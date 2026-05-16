@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import FyToast from "../shared/components/fy-toast/FyToast";
 import "./globals.css";
-import FySidebar from "../shared/components/fy-sidebar/FySidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
