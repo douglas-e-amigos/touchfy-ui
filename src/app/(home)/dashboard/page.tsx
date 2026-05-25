@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { faker } from "@faker-js/faker";
 
-import { authService } from "../../../features/usuario/services/auth.service";
 import { UsuarioResponse } from "../../../features/usuario/models/dto.model";
 import { usuarioService } from "../../../features/usuario/services/usuario.service";
 
@@ -19,8 +17,6 @@ import SecaoHome from "../../../shared/components/fy-sectionhome/SecaoHome";
 import { getDateFormat, getHour } from "@/src/shared/utils/date";
 
 export default function Dashboard() {
-  const router = useRouter();
-
   const [usuario, setUsuario] = useState<UsuarioResponse | null>(null);
 
   useEffect(() => {
@@ -29,11 +25,6 @@ export default function Dashboard() {
       .then(setUsuario)
       .catch(console.error);
   }, []);
-
-  const logout = async () => {
-    await authService.logout();
-    router.push("/login");
-  };
 
   const rodarMusica = useCallback(() => {}, []);
 
@@ -125,13 +116,6 @@ export default function Dashboard() {
                 Ir para meu perfil
               </Link>
             ) : null}
-
-            <button
-              className="cursor-pointer rounded-2xl bg-red-600 px-4 py-2 font-semibold text-white transition hover:bg-red-700"
-              onClick={logout}
-            >
-              Sair
-            </button>
           </div>
         </section>
 

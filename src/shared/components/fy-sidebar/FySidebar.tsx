@@ -5,8 +5,11 @@ import { Menu, User, LogOut } from 'lucide-react';
 import NavLinks from './nav-links';
 import FyButtonIcon from '../fy-iconbutton/FyButtonIcon';
 import { useState } from 'react';
+import { authService } from '@/src/features/usuario/services/auth.service';
+import { useRouter } from 'next/navigation';
 
 export default function FySidebar() {
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
@@ -22,6 +25,11 @@ export default function FySidebar() {
     setIsSidebarOpen(false);
     setIsUserMenuOpen(false);
   };  
+
+  const logout = async () => {
+    await authService.logout();
+    router.push("/login");
+  };
 
   return (
     <>
@@ -107,7 +115,8 @@ export default function FySidebar() {
 
                 {/* Sair */}
                 <button
-                  className="w-full flex items-center gap-2 px-4 py-3 text-sm text-red-500 hover:bg-zinc-800 transition-colors"
+                  className="w-full cursor-pointer flex items-center gap-2 px-4 py-3 text-sm text-red-500 hover:bg-zinc-800 transition-colors"
+                  onClick={logout}
                 >
                   <LogOut className="w-4 h-4" />
                   Sair
