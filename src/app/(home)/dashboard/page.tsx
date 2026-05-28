@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { faker } from "@faker-js/faker";
 
-import { authService } from "../../../features/usuario/services/auth.service";
 import { UsuarioResponse } from "../../../features/usuario/models/dto.model";
 import { usuarioService } from "../../../features/usuario/services/usuario.service";
 
@@ -16,10 +14,9 @@ import ImageCard, {
 import FyDate from "../../../shared/components/fy-date/FyDate";
 import FySaudacao from "../../../shared/components/fy-saudacao/FySaudacao";
 import SecaoHome from "../../../shared/components/fy-sectionhome/SecaoHome";
+import { getDateFormat, getHour } from "@/src/shared/utils/date";
 
 export default function Dashboard() {
-  const router = useRouter();
-
   const [usuario, setUsuario] = useState<UsuarioResponse | null>(null);
 
   useEffect(() => {
@@ -28,11 +25,6 @@ export default function Dashboard() {
       .then(setUsuario)
       .catch(console.error);
   }, []);
-
-  const logout = async () => {
-    await authService.logout();
-    router.push("/login");
-  };
 
   const rodarMusica = useCallback(() => {}, []);
 
@@ -101,14 +93,14 @@ export default function Dashboard() {
   }, [abrirPlaylist]);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#08070b] text-white">
+    <main className="min-h-screen min-w-0 overflow-hidden bg-[#08070b] text-white">
       <div className="pointer-events-none fixed inset-0" />
 
-      <header className="w-screen overflow-hidden bg-gradient-to-b from-[#ec268f]/30 via-[#ec268f]/10 to-transparent p-5 shadow-2xl shadow-black/40 md:p-8">
+      <header className="w-full overflow-hidden bg-gradient-to-b from-[#ec268f]/30 via-[#ec268f]/10 to-transparent p-5 shadow-2xl shadow-black/40 md:p-8">
         <section className="mb-6 flex items-start justify-between gap-4">
           <div className="space-y-2">
-            <FyDate />
-            <FySaudacao />
+            <FyDate  data={getDateFormat()}/>
+            <FySaudacao hora={getHour()}/>
 
             <p className="max-w-2xl text-base leading-relaxed text-zinc-300 md:text-lg">
               Pronto para ouvir música? Confira o que preparamos para você.
@@ -124,13 +116,6 @@ export default function Dashboard() {
                 Ir para meu perfil
               </Link>
             ) : null}
-
-            <button
-              className="cursor-pointer rounded-2xl bg-red-600 px-4 py-2 font-semibold text-white transition hover:bg-red-700"
-              onClick={logout}
-            >
-              Sair
-            </button>
           </div>
         </section>
 

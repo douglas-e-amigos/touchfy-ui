@@ -8,6 +8,20 @@ export function parseDate(value: string): Date | null {
   return date;
 }
 
+export function getDateFormat(): string {
+  const date = new Date();
+  return date.toLocaleDateString("pt-BR", {
+    weekday: "long",
+    hour: "numeric",
+    month: "long"
+  })
+}
+
+export function getHour(): number {
+  const date = new Date();
+  return date.getHours();
+}
+
 export function formatDateForInput(value: string | Date | null | undefined): string {
   if (!value) {
     return "";

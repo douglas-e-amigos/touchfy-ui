@@ -5,48 +5,58 @@ import { Menu, User, LogOut } from 'lucide-react';
 import NavLinks from './nav-links';
 import FyButtonIcon from '../fy-iconbutton/FyButtonIcon';
 import { useState } from 'react';
+import { authService } from '@/src/features/usuario/services/auth.service';
+import { useRouter } from 'next/navigation';
 
-interface SidebarProps {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-}
+export default function FySidebar() {
+  const router = useRouter();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
-export default function FySidebar({
-  isOpen,
-  setIsOpen,
-}: SidebarProps) {
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(true);
+  const handleSidebarToggle = () => {
+    if (isSidebarOpen) {
+      setIsUserMenuOpen(false);
+    }
+
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleSidebarClose = () => {
+    setIsSidebarOpen(false);
+    setIsUserMenuOpen(false);
+  };  
+
+  const logout = async () => {
+    await authService.logout();
+    router.push("/login");
+  };
+
   return (
     <>
       {/* Botão menu */}
-      <div className="fixed top-4 left-4 z-50">
+      <div className="fixed top-4 left-4 z-[60] lg:hidden">
         <FyButtonIcon
           variant="outline"
           icon={<Menu size={20} />}
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={handleSidebarToggle}
         />
       </div>
 
       {/* Overlay */}
-      {isOpen && (
+      {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-40"
-          onClick={() => setIsOpen(false)}
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          onClick={handleSidebarClose}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        onMouseEnter={() => {
-          if (window.innerWidth >= 992) {
-            setIsOpen(true);
-          }
-        }}
         className={clsx(
-          'fixed top-0 left-0 z-50 h-full bg-black p-4 transition-transform duration-300',
+          'fixed top-0 left-0 z-50 h-full w-64 max-w-[85vw] bg-black p-4 transition-transform duration-300 lg:translate-x-0',
           {
-            'translate-x-0 w-64': isOpen,
-            '-translate-x-full': !isOpen,
+            'translate-x-0': isSidebarOpen,
+            '-translate-x-full': !isSidebarOpen,
           }
         )}
       >
@@ -105,7 +115,8 @@ export default function FySidebar({
 
                 {/* Sair */}
                 <button
-                  className="w-full flex items-center gap-2 px-4 py-3 text-sm text-red-500 hover:bg-zinc-800 transition-colors"
+                  className="w-full cursor-pointer flex items-center gap-2 px-4 py-3 text-sm text-red-500 hover:bg-zinc-800 transition-colors"
+                  onClick={logout}
                 >
                   <LogOut className="w-4 h-4" />
                   Sair
