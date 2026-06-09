@@ -67,6 +67,29 @@
   text-overflow: ellipsis;
 }
 
+.musicInfo {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 4px;
+
+  transition: background-color 0.2s ease;
+}
+
+.musicInfo:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.musicInfo:focus-visible {
+  outline: 2px solid #ec268f;
+  outline-offset: 3px;
+}
+
 @media (min-width: 1024px) {
   .footer {
     left: 256px;
