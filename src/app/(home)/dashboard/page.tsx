@@ -3,16 +3,16 @@
 import { useCallback, useMemo } from "react";
 import { faker } from "@faker-js/faker";
 
-
 import MediaCard from "../../../shared/components/fy-mediacard/MediaCard";
 import ImageCard, {
   Variantes,
 } from "../../../shared/components/fy-imagecard/ImageCard";
 import SecaoHome from "../../../shared/components/fy-sectionhome/SecaoHome";
 import HomeHeader from "@/src/shared/components/fy-sectionhome/HomeHeader";
+import { useMusicaAtualContext } from "@/src/shared/providers/musica-atual";
 
 export default function Dashboard() {
-  const rodarMusica = useCallback(() => {}, []);
+  const { setMusicaAtual } = useMusicaAtualContext();
 
   const abrirPlaylist = useCallback(() => {}, []);
 
@@ -22,9 +22,8 @@ export default function Dashboard() {
       imagemURL: faker.image.avatar(),
       nomeMusica: faker.music.songName(),
       nomeArtista: faker.music.artist(),
-      rodarMusica,
     }));
-  }, [rodarMusica]);
+  }, []);
 
   const artistasDestaques = useMemo(() => {
     return Array.from({ length: 5 }, (_, index) => ({
@@ -79,14 +78,22 @@ export default function Dashboard() {
   }, [abrirPlaylist]);
 
   return (
-    <main className="min-h-screen min-w-0 overflow-hidden bg-[#08070b] text-white">
+    <main className="relative min-h-screen min-w-0 overflow-x-hidden bg-[#08070b] pb-24 text-white">
       <div className="pointer-events-none fixed inset-0" />
 
       <HomeHeader />
 
       <section className="grid grid-cols-1 place-items-center gap-4 md:grid-cols-2 xl:grid-cols-3">
         {mediaCards.map((mediaCard) => (
-          <MediaCard key={mediaCard.id} {...mediaCard} />
+          <MediaCard
+            key={mediaCard.id}
+            imagemURL={mediaCard.imagemURL}
+            nomeMusica={mediaCard.nomeMusica}
+            nomeArtista={mediaCard.nomeArtista}
+            rodarMusica={() => {
+              setMusicaAtual(mediaCard);
+            }}
+          />
         ))}
       </section>
 
