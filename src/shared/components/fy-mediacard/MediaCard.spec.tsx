@@ -2,7 +2,7 @@ import { it, vi, expect, describe, afterEach } from "vitest";
 import { faker } from "@faker-js/faker";
 import { render, cleanup } from "@testing-library/react";
 import { screen } from "@testing-library/dom";
-import userEvent from '@testing-library/user-event'
+import userEvent from "@testing-library/user-event";
 import MediaCard from "./MediaCard";
 
 afterEach(() => {
@@ -39,27 +39,17 @@ describe("MediaCard", () => {
         expect(screen.getByText(nomeMusica)).toBeInTheDocument();
     })
     
-    it("mudança de estilo do ícone", async () => {
+    it("executa rodarMusica ao clicar no card", async () => {
         const user = userEvent.setup();
 
-        const { nomeMusica } = montarComponente();
+        const { nomeMusica, nomeArtista } = montarComponente();
 
-        const card = screen.getByRole("group", {
-            name: `Card de mídia da música ${nomeMusica}`,
+        const card = screen.getByRole("button", {
+            name: `Tocar música ${nomeMusica} de ${nomeArtista}`,
         });
 
-        const icone = screen.getByRole("button", {
-            name: "Ícone play música",
-        });
+        await user.click(card);
 
-        expect(icone).toHaveClass("hidden");
-
-        await user.hover(card);
-
-        expect(icone).toHaveClass("block");
-
-        await user.unhover(card);
-
-        expect(icone).toHaveClass("hidden");
+        expect(rodarMusica).toHaveBeenCalledTimes(1);
     });
 });
