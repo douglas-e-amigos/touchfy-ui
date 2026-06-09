@@ -1,5 +1,6 @@
 import { ComponentProps } from "react";
 import FyPlay from "../fy-play/FyPlay";
+import styles from "./PlayFooter.module.css";
 
 export interface PlayFooterMusica {
   readonly imagemURL: string;
@@ -13,27 +14,28 @@ interface PlayFooterProps extends Readonly<ComponentProps<"footer">> {
 
 export default function PlayFooter({
   musica,
+  className = "",
   ...footerProps
 }: PlayFooterProps) {
   return (
     <footer
       aria-label="Player da música selecionada"
-      className="fixed z-50 lg:left-64 left-0 right-0 flex h-72 w-full items-center justify-between gap-4 border-t border-zinc-800 bg-black px-6 lg:w-auto"
+      className={`${styles.footer} ${className}`}
       {...footerProps}
     >
       <article
-        className="flex min-w-0 items-center gap-3"
+        className={styles.musicInfo}
         aria-label={`Música selecionada ${musica.nomeMusica}`}
       >
         <img
           src={musica.imagemURL}
           alt={`Foto de ${musica.nomeArtista}`}
-          className="h-12 w-12 rounded object-cover"
+          className={styles.image}
         />
 
-        <div className="min-w-0">
-          <p className="truncate font-bold text-white">{musica.nomeMusica}</p>
-          <p className="truncate text-sm text-gray-400">{musica.nomeArtista}</p>
+        <div className={styles.textWrapper}>
+          <p className={styles.musicName}>{musica.nomeMusica}</p>
+          <p className={styles.artistName}>{musica.nomeArtista}</p>
         </div>
       </article>
 
