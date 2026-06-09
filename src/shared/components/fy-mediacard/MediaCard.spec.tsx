@@ -3,7 +3,7 @@ import { faker } from "@faker-js/faker";
 import { render, cleanup } from "@testing-library/react";
 import { screen } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import MediaCard from "./MediaCard";
+import { MediaCard } from "./MediaCard";
 
 afterEach(() => {
     cleanup();
