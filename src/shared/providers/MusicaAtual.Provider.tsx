@@ -1,8 +1,14 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode, useMemo } from "react";
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
-interface MusicaAtual {
+export interface MusicaAtual {
   id: number;
   imagemURL: string;
   nomeMusica: string;
@@ -24,7 +30,10 @@ export function MusicaAtualProvider({
   const [musicaAtual, setMusicaAtual] = useState<MusicaAtual | null>(null);
 
   const value = useMemo(
-    () => ({ musicaAtual, setMusicaAtual }),
+    () => ({
+      musicaAtual,
+      setMusicaAtual,
+    }),
     [musicaAtual]
   );
 
@@ -37,10 +46,12 @@ export function MusicaAtualProvider({
 
 export function useMusicaAtualContext() {
   const context = useContext(MusicaAtualContext);
-  if (context === undefined) {
+
+  if (!context) {
     throw new Error(
       "useMusicaAtualContext deve ser usado dentro de MusicaAtualProvider"
     );
   }
+
   return context;
 }

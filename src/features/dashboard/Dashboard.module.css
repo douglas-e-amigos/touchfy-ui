@@ -1,0 +1,35 @@
+.main {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: #08070b;
+  padding-bottom: 96px;
+  color: #ffffff;
+}
+
+.mediaSection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 24px 32px;
+}
+
+.mediaCard {
+  flex: 0 1 100%;
+}
+
+.footer {
+  padding: 16px 32px;
+  color: #9ca3af;
+}
+
+@media (min-width: 768px) {
+  .mediaCard {
+    flex-basis: calc((100% - 16px) / 2);
+  }
+}
+
+@media (min-width: 1024px) {
+  .mediaCard {
+    flex-basis: calc((100% - 32px) / 3);
+  }
+}

@@ -5,24 +5,27 @@ interface MediaCardProps {
   readonly rodarMusica: () => void;
   readonly nomeMusica: string;
   readonly nomeArtista: string;
+  readonly className?: string;
 }
 
-export default function MediaCard({
+export function MediaCard({
   imagemURL,
   rodarMusica: abrirMusica,
   nomeMusica,
   nomeArtista,
+  className = "",
 }: MediaCardProps) {
   return (
     <button
       type="button"
       aria-label={`Tocar música ${nomeMusica} de ${nomeArtista}`}
       onClick={abrirMusica}
-      className="
-        grid h-20 w-92 items-center gap-x-4 overflow-hidden p-2 text-left
+      className={`
+        grid h-20 w-full items-center gap-x-4 overflow-hidden p-2 text-left
         [grid-template-areas:'foto_musica_icone'_'foto_artista_icone']
         grid-cols-[auto_1fr_auto]
-      "
+        ${className}
+      `}
     >
       <img
         className="h-12 w-12 rounded [grid-area:foto]"
