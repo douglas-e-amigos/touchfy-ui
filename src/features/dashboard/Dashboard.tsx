@@ -1,7 +1,11 @@
 "use client";
 
+import ImageCard, {
+  Variantes,
+} from "@/src/shared/components/fy-imagecard/ImageCard";
 // Módulo
-import DashboardHeader from "./components/DashboardHeader";
+import DashboardHeader from "./components/DashboardHeader/DashboardHeader";
+import SecaoHome from "./components/DashboardSection/DashboardSection";
 import { itensMediaCard } from "./constants/default-card";
 import styles from "./Dashboard.module.css";
 
@@ -38,7 +42,47 @@ export default function Dashboard() {
         ))}
       </section>
 
-      <footer className={styles.footer}>Footer</footer>
+      <SecaoHome titulo="Artistas em destaque">
+        {itensMediaCard.map((item) => (
+          <ImageCard
+            key={item.id}
+            capaURL={item.image}
+            tituloCard={item.title}
+            nomeCard={item.title}
+            descritor={item.createBy}
+            variante={Variantes.CIRCULAR}
+            abrirPlaylist={() => {}}
+          />
+        ))}
+      </SecaoHome>
+
+      <SecaoHome titulo="Recomendadas para você">
+        {itensMediaCard.map((item) => (
+          <ImageCard
+            key={item.id}
+            capaURL={item.image}
+            tituloCard={item.title}
+            nomeCard={item.title}
+            descritor={item.createBy}
+            variante={Variantes.QUADRADO_SM}
+            abrirPlaylist={() => {}}
+          />
+        ))}
+      </SecaoHome>
+
+      <SecaoHome titulo="Novos lançamentos">
+        {itensMediaCard.map((item) => (
+          <ImageCard
+            key={item.id}
+            capaURL={item.image}
+            tituloCard={item.title}
+            nomeCard={item.title}
+            descritor={item.createBy}
+            variante={Variantes.QUADRADO_MD}
+            abrirPlaylist={() => {}}
+          />
+        ))}
+      </SecaoHome>
     </main>
   );
 }

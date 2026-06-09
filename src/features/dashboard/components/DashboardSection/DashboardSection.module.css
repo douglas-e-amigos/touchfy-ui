@@ -1,0 +1,61 @@
+.section {
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  margin: 8px 20px 12px;
+}
+
+.title {
+  margin: 0;
+
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+
+  color: #ffffff;
+}
+
+.seeAllButton {
+  display: none;
+
+  border: none;
+  background: transparent;
+  padding: 0;
+
+  font-size: 14px;
+  font-weight: 700;
+  color: #ec268f;
+
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+}
+
+.seeAllButton:hover {
+  color: #ffffff;
+}
+
+.cards {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 30px;
+  }
+
+  .seeAllButton {
+    display: block;
+  }
+}
