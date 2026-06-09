@@ -1,48 +1,56 @@
 "use client";
 
-import { useState } from "react";
-
 interface MediaCardProps {
-  imagemURL: string;
-  rodarMusica: () => void;
-  nomeMusica: string;
-  nomeArtista: string;
+  readonly imagemURL: string;
+  readonly rodarMusica: () => void;
+  readonly nomeMusica: string;
+  readonly nomeArtista: string;
+  readonly className?: string;
 }
 
-export default function MediaCard({
+export function MediaCard({
   imagemURL,
   rodarMusica: abrirMusica,
   nomeMusica,
   nomeArtista,
+  className = "",
 }: MediaCardProps) {
-  const [mostrarIcone, setMostrarIcone] = useState(false);
-
   return (
-    <div  
-      role="group"
-      aria-label={`Card de mídia da música ${nomeMusica}`}
-      onMouseEnter={() => setMostrarIcone(true)}
-      onMouseLeave={() => setMostrarIcone(false)}
-      className="rounded-lg bg-[oklch(37%_0.013_285.805)] cursor-pointer w-[23rem] h-[5rem] grid gap-x-4 p-2 items-center [grid-template-areas:'foto_musica_icone'_'foto_artista_icone'] grid-cols-[auto_1fr_auto]"
+    <button
+      type="button"
+      aria-label={`Tocar música ${nomeMusica} de ${nomeArtista}`}
+      onClick={abrirMusica}
+      className={`
+        grid h-20 w-full items-center gap-x-4 overflow-hidden p-2 text-left
+        [grid-template-areas:'foto_musica_icone'_'foto_artista_icone']
+        grid-cols-[auto_1fr_auto]
+        ${className}
+      `}
     >
-      <img 
-        className="w-[4rem] h-[4rem] rounded [grid-area:foto]"
-        src={imagemURL} 
-        alt={`Foto de ${nomeArtista}`} 
+      <img
+        className="h-12 w-12 rounded [grid-area:foto]"
+        src={imagemURL}
+        alt={`Foto de ${nomeArtista}`}
       />
 
-      <p className="text-white font-bold [grid-area:musica] self-end">{nomeMusica}</p>
-      <p className="text-gray-400 [grid-area:artista] self-start">{nomeArtista}</p>
+      <p className="self-end truncate font-bold text-white [grid-area:musica]">
+        {nomeMusica}
+      </p>
 
-      <div className="relative [grid-area:icone] w-[2.5rem] h-[2.5rem]">
-        <button
-          onClick={abrirMusica}
-          className={`absolute left-0 top-1/2 -translate-y-1/2 ${mostrarIcone ? "block" : "hidden"}`}
-          aria-label="Ícone play música"
-        >
-          <img src="/icons/play-button.svg" alt="Ícone play música" className="w-8 h-8" />
-        </button>
+      <p className="self-start truncate text-gray-400 [grid-area:artista]">
+        {nomeArtista}
+      </p>
+
+      <div className="relative h-10 w-10 [grid-area:icone]">
+        <img
+          src="/icons/play-button.svg"
+          alt=""
+          aria-hidden="true"
+          className=" cursor-pointer
+            absolute left-0 top-1/2 h-8 w-8 -translate-y-1/2
+            block"
+        />
       </div>
-    </div>
+    </button>
   );
 }

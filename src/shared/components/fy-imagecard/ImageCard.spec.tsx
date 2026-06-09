@@ -1,11 +1,16 @@
-import { describe, it, expect, vi } from "vitest";
+import { afterEach, describe, it, expect, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { faker } from "@faker-js/faker";
-import { render } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 import { screen } from "@testing-library/dom";
 import ImageCard, { Variantes } from "./ImageCard";
 
 const abrirPlaylist = vi.fn();
+
+afterEach(() => {
+    cleanup();
+    vi.clearAllMocks();
+});
 
 const montarComponente = (variante: Variantes = Variantes.CIRCULAR) => {
     const props = {
@@ -23,7 +28,7 @@ const montarComponente = (variante: Variantes = Variantes.CIRCULAR) => {
 
 const card = (variante?: Variantes) => {
     const { nomeCard } = montarComponente(variante);
-    return screen.getByRole("group", { name: `Card de grupo de músicas ${nomeCard}` });
+    return screen.getByRole("button", { name: `Card de grupo de músicas ${nomeCard}` });
 }
 
 describe("ImageCard", () => {
@@ -66,7 +71,7 @@ describe("ImageCard", () => {
 
     const { ano: _, ...propsWithoutAno } = props;
     rerender(<ImageCard {...propsWithoutAno} />);
-    expect(screen.queryByText(ano)).not.toBeInTheDocument;
+    expect(screen.queryByText(ano)).not.toBeInTheDocument();
     });
 
 })

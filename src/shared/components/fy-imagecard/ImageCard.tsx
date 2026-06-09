@@ -7,13 +7,13 @@ enum Variantes {
 }
 
 interface ImagemCardProps {
-  capaURL: string;
-  nomeCard: string;
-  tituloCard: string;
-  descritor: string;
-  ano?: string;
-  variante: Variantes;
-  abrirPlaylist: () => void;
+  readonly capaURL: string;
+  readonly nomeCard: string;
+  readonly tituloCard: string;
+  readonly descritor: string;
+  readonly ano?: string;
+  readonly variante: Variantes;
+  readonly abrirPlaylist: () => void;
 }
 
 export { Variantes };
@@ -38,9 +38,8 @@ export default function ImageCard({
   }
 
   return (
-    <div
+    <button
       onClick={abrirPlaylist}
-      role="group"
       aria-label={`Card de grupo de músicas ${nomeCard}`}
       tabIndex={0}
       onKeyDown={(event) => {
@@ -52,7 +51,7 @@ export default function ImageCard({
         ${variante}
         p-4
         bg-transparent
-        hover:bg-[oklch(37%_0.013_285.805)]
+        hover:bg-zinc-700
         cursor-pointer
         transition-colors
         duration-200
@@ -66,20 +65,12 @@ export default function ImageCard({
       />
 
       <div className="mt-5 flex flex-col items-center overflow--hiden ml-1 mr-1">
-        <p className="text-white font-bold text-md truncate">
-          {tituloCard}
-        </p>
+        <p className="text-white font-bold text-md truncate">{tituloCard}</p>
 
-        <p className="text-zinc-400 text-sm truncate">
-          {descritor}
-        </p>
+        <p className="text-zinc-400 text-sm truncate">{descritor}</p>
 
-        {ano ? (
-          <p className="text-zinc-500 text-sm truncate">
-            {ano}
-          </p>
-        ) : null}
+        {ano ? <p className="text-zinc-500 text-sm truncate">{ano}</p> : null}
       </div>
-    </div>
+    </button>
   );
 }
