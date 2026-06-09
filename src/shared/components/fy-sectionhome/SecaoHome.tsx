@@ -1,6 +1,6 @@
 type SecaoHomeProps = {
-  titulo: string;
-  children: React.ReactNode;
+  readonly titulo: string;
+  readonly children: React.ReactNode;
 };
 
 export default function SecaoHome({ titulo, children }: SecaoHomeProps) {
