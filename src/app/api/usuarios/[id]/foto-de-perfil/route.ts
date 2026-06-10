@@ -32,10 +32,14 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 
     return NextResponse.json(response.data);
   } catch (error: unknown) {
-    console.error("ROUTE ERROR:", getHttpErrorResponseData(error) ?? error);
+    const errorResponseData = getHttpErrorResponseData(error);
+
+    console.error("ROUTE ERROR:", errorResponseData ?? error);
 
     return NextResponse.json(
-      { message: "Erro ao atualizar foto de perfil" },
+      errorResponseData ?? {
+        message: "Erro ao atualizar foto de perfil",
+      },
       { status: getHttpErrorStatus(error) },
     );
   }

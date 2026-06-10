@@ -26,6 +26,10 @@ describe("UploadPhotoModal", () => {
         );
 
         expect(screen.getByText("Escolher Arquivo")).toBeInTheDocument();
+        expect(document.querySelector('input[type="file"]')).toHaveAttribute(
+            "accept",
+            "image/png,image/jpeg,.png,.jpg,.jpeg",
+        );
         expect(screen.getByRole("button", { name: /Salvar Foto/i })).toBeDisabled();
     });
 

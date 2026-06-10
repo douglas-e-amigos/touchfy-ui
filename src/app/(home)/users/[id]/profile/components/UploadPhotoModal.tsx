@@ -57,7 +57,7 @@ export default function UploadPhotoModal({
                     <input
                         ref={fileInputRef}
                         type="file"
-                        accept="image/*"
+                        accept="image/png,image/jpeg,.png,.jpg,.jpeg"
                         className="hidden"
                         onChange={onFileChange}
                     />
