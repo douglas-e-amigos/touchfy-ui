@@ -1,8 +1,10 @@
 "use client";
 
-import PlayFooter from "@/src/shared/components/fy-playfooter/PlayFooter";
 import { ReactNode } from "react";
-import FySidebar from "@/src/shared/components/fy-sidebar/FySidebar";
+
+import PlayFooter from "@/src/shared/components/fy-playfooter/PlayFooter";
+import Sidebar from "@/src/shared/design-system/Sidebar/Sidebar";
+
 import {
   useMusicaAtualContext,
   MusicaAtualProvider,
@@ -26,7 +28,7 @@ function DashboardShell({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <div className="h-full w-full bg-black lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
       <div className="lg:h-screen">
-        <FySidebar />
+        <Sidebar />
       </div>
       {children}
       {musicaAtual ? <PlayFooter musica={musicaAtual} /> : null}

@@ -1,30 +1,24 @@
-'use client';
+"use client";
 
-import clsx from 'clsx';
-import { Menu, User, LogOut } from 'lucide-react';
-import NavLinks from './nav-links';
-import FyButtonIcon from '../fy-iconbutton/FyButtonIcon';
-import { useState } from 'react';
-import { authService } from '@/src/features/usuario/services/auth.service';
-import { useRouter } from 'next/navigation';
+import clsx from "clsx";
+import { Menu, User, LogOut } from "lucide-react";
+import { NavLinks } from "./NavLinks";
+import FyButtonIcon from "../../components/fy-iconbutton/FyButtonIcon";
+import { authService } from "@/src/features/usuario/services/auth.service";
+import { useRouter } from "next/navigation";
+import { usePerfil } from "../../hooks/use-perfil";
+import { useSiderbar } from "../../hooks/use-sidebar";
 
-export default function FySidebar() {
+export default function Sidebar() {
   const router = useRouter();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-
-  const handleSidebarToggle = () => {
-    if (isSidebarOpen) {
-      setIsUserMenuOpen(false);
-    }
-
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const handleSidebarClose = () => {
-    setIsSidebarOpen(false);
-    setIsUserMenuOpen(false);
-  };  
+  const {
+    handleSidebarToggle,
+    handleSidebarClose,
+    setIsUserMenuOpen,
+    isUserMenuOpen,
+    isSidebarOpen,
+  } = useSiderbar();
+  const { abrirPerfil, isLoadingUsuario, usuario } = usePerfil({ router });
 
   const logout = async () => {
     await authService.logout();
@@ -55,25 +49,22 @@ export default function FySidebar() {
       {/* Sidebar */}
       <aside
         className={clsx(
-          'fixed top-0 left-0 z-50 h-full w-64 max-w-[85vw] bg-black p-4 transition-transform duration-300 lg:translate-x-0',
+          "fixed top-0 left-0 z-50 h-full w-64 max-w-[85vw] bg-black p-4 transition-transform duration-300 lg:translate-x-0",
           {
-            'translate-x-0': isSidebarOpen,
-            '-translate-x-full': !isSidebarOpen,
-          }
+            "translate-x-0": isSidebarOpen,
+            "-translate-x-full": !isSidebarOpen,
+          },
         )}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <h1 className="text-3xl font-bold text-pink-500 mb-8">
-            Melody
-          </h1>
+          <h1 className="text-3xl font-bold text-pink-500 mb-8">Melody</h1>
 
           {/* Navegação */}
           <NavLinks />
 
           {/* Usuário */}
           <div className="mt-auto pt-4 border-t border-zinc-800 relative">
-
             {/* Botão usuário */}
             <button
               type="button"
@@ -88,11 +79,11 @@ export default function FySidebar() {
               {/* Informações */}
               <div className="flex flex-col text-left overflow-hidden">
                 <p className="text-sm font-medium text-white truncate">
-                  Usuário
+                  {usuario?.nome ?? "Usuário"}
                 </p>
 
                 <p className="text-xs text-zinc-400 truncate">
-                  user@example.com
+                  {usuario?.email ?? ""}
                 </p>
               </div>
             </button>
@@ -100,18 +91,17 @@ export default function FySidebar() {
             {/* Card */}
             {isUserMenuOpen && (
               <div className="absolute bottom-20 left-0 w-50 rounded-lg border border-zinc-800 bg-zinc-900 shadow-lg overflow-hidden">
-
                 {/* Header */}
                 <div className="px-4 py-3 border-b border-zinc-800">
-                  <p className="text-sm font-medium text-white">
-                    Minha Conta
-                  </p>
+                  <p className="text-sm font-medium text-white">Minha Conta</p>
                 </div>
 
                 {/* Perfil */}
                 <button
                   type="button"
-                  className="w-full flex items-center gap-2 px-4 py-3 text-sm text-white hover:bg-zinc-800 transition-colors"
+                  className="cursor-pointer w-full flex items-center gap-2 px-4 py-3 text-sm text-white hover:bg-zinc-800 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                  onClick={abrirPerfil}
+                  disabled={isLoadingUsuario || !usuario?.id}
                 >
                   <User className="w-4 h-4" />
                   Perfil
