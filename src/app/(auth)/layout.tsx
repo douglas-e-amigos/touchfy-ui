@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { AuthBanner } from "./AuthBanner";
 
 
-export default function AuthLayout({ children }: { children: ReactNode }) {
+export default function AuthLayout({ children }: { readonly children: ReactNode }) {
     return (
         <div className="flex min-h-screen">
             {/* Banner */}
