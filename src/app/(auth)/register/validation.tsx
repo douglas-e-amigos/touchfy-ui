@@ -13,42 +13,37 @@ export const dependencies: Partial<Record<keyof RegisterForm, (keyof RegisterFor
   senhaNovamente: ["senha"],
 };
 
+type RegisterValidator = (values: Readonly<RegisterForm>) => string | null;
+
+const registerValidators: Partial<Record<keyof RegisterForm, RegisterValidator>> = {
+  nome: (values) => isBlank(values.nome) ? "Nome obrigatório" : null,
+  nomeUsuario: (values) =>
+    isBlank(values.nomeUsuario) ? "Nome de usuário obrigatório" : null,
+  email: (values) => {
+    if (isBlank(values.email)) return "E-mail obrigatório";
+    return isEmail(values.email) ? null : "E-mail inválido";
+  },
+  senha: (values) => {
+    if (!isPassword(values.senha)) return "Senha inválida";
+    return isEqual(values.senha, values.senhaNovamente)
+      ? null
+      : "As senhas precisam ser iguais";
+  },
+  senhaNovamente: (values) => {
+    if (!isPassword(values.senhaNovamente)) return "Senha inválida";
+    return isEqual(values.senha, values.senhaNovamente)
+      ? null
+      : "As senhas precisam ser iguais";
+  },
+  dataNascimento: (values) =>
+    isValidDateString(values.dataNascimento)
+      ? null
+      : "Data de nascimento inválida",
+};
+
 export const validateRegister = (
   field: keyof RegisterForm,
-  values: RegisterForm
+  values: Readonly<RegisterForm>,
 ): string | null => {
-  switch (field) {
-    case "nome":
-      if (isBlank(values.nome)) return "Nome obrigatório";
-      return null;
-
-    case "nomeUsuario":
-      if (isBlank(values.nomeUsuario)) return "Nome de usuário obrigatório";
-      return null;
-
-    case "email":
-      if (isBlank(values.email)) return "E-mail obrigatório";
-      if (!isEmail(values.email)) return "E-mail inválido";
-      return null;
-
-    case "senha":
-      if (!isPassword(values.senha)) return "Senha inválida";
-      if (!isEqual(values.senha, values.senhaNovamente))
-        return "As senhas precisam ser iguais";
-      return null;
-
-    case "senhaNovamente":
-      if (!isPassword(values.senhaNovamente)) return "Senha inválida";
-      if (!isEqual(values.senha, values.senhaNovamente))
-        return "As senhas precisam ser iguais";
-      return null;
-
-    case "dataNascimento":
-      if (!isValidDateString(values.dataNascimento))
-        return "Data de nascimento inválida";
-      return null;
-
-    default:
-      return null;
-  }
+  return registerValidators[field]?.(values) ?? null;
 };

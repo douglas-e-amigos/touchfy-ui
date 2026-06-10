@@ -6,8 +6,7 @@ import { updateUserDependencies, validateUpdate } from "./validation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { authService } from "@/src/features/usuario/services/auth.service";
 import { usuarioService } from "@/src/features/usuario/services/usuario.service";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { AtualizarUsuarioParcialmenteRequest, UsuarioResponse } from "@/src/features/usuario/models/dto.model";
 import { formatDateForInput } from "@/src/shared/utils/date";
 import { notificationService } from "@/src/shared/services/notification.service";
@@ -18,6 +17,12 @@ import EditProfileModal from "./components/EditProfileModal";
 import ProfileHeaderCard from "./components/ProfileHeaderCard";
 import ProfileSettingsSection from "./components/ProfileSettingsSection";
 import UploadPhotoModal from "./components/UploadPhotoModal";
+
+const initialPartialUpdateValues: PartialUserUpdateForm = {
+    nomeUsuario: '',
+    nome: '',
+    dataNascimento: '',
+};
 
 export default function Profile() {
     const [usuario, setUsuario] = useState<UsuarioResponse>({
@@ -35,11 +40,6 @@ export default function Profile() {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const params = useParams();
     const id = params.id as string;
-
-    if (!id) {
-        router.back();
-        return;
-    }
 
     const [modals, setModals] = useState<{
         desativar: boolean;
@@ -72,13 +72,17 @@ export default function Profile() {
         limparUploadDeFoto();
     }
 
-    const forms = {
-        partialUpdate: useForm<PartialUserUpdateForm>({
-            nomeUsuario: '',
-            nome: '',
-            dataNascimento: '',
-        }, validateUpdate, updateUserDependencies),
-    }
+    const {
+        values: partialUpdateValues,
+        errors: partialUpdateErrors,
+        handleChange: handlePartialUpdateChange,
+        reset: resetPartialUpdate,
+        isValid: isPartialUpdateValid,
+    } = useForm<PartialUserUpdateForm>(
+        initialPartialUpdateValues,
+        validateUpdate,
+        updateUserDependencies,
+    );
 
     const fotoPerfilExibida = photoPreviewUrl || photoUrl;
 
@@ -91,7 +95,7 @@ export default function Profile() {
     }
 
     const atualizarUsuarioParcial = async () => {
-        if (!forms.partialUpdate.isValid()) {
+        if (!isPartialUpdateValid()) {
             notificationService.showErrorForSeconds({
                 title: 'Não foi possível salvar as alterações',
                 message: 'Revise os campos destacados e tente novamente.',
@@ -100,9 +104,9 @@ export default function Profile() {
         }
 
         const request: AtualizarUsuarioParcialmenteRequest = {
-            nome: forms.partialUpdate.values.nome,
-            nomeUsuario: forms.partialUpdate.values.nomeUsuario,
-            dataNascimento: forms.partialUpdate.values.dataNascimento,
+            nome: partialUpdateValues.nome,
+            nomeUsuario: partialUpdateValues.nomeUsuario,
+            dataNascimento: partialUpdateValues.dataNascimento,
         };
 
         try {
@@ -189,14 +193,26 @@ export default function Profile() {
     }
 
     useEffect(() => {
+        if (!id) {
+            router.back();
+        }
+    }, [id, router])
+
+    useEffect(() => {
+        if (!id) {
+            return;
+        }
+
         usuarioService.buscarUsuario(id)
             .then((usuario) => {
-                forms.partialUpdate.handleChange('nome', usuario.nome);
-                forms.partialUpdate.handleChange('nomeUsuario', usuario.nomeUsuario);
-                forms.partialUpdate.handleChange('dataNascimento', formatDateForInput(usuario.dataNascimento));
+                resetPartialUpdate({
+                    nome: usuario.nome,
+                    nomeUsuario: usuario.nomeUsuario,
+                    dataNascimento: formatDateForInput(usuario.dataNascimento),
+                });
                 setUsuario(usuario);
             }).catch(console.error);
-    }, [])
+    }, [id, resetPartialUpdate])
 
     useEffect(() => {
         if (!selectedPhotoFile) {
@@ -264,17 +280,17 @@ export default function Profile() {
             />
             <EditProfileModal
                 open={modals.atualizar}
-                nome={forms.partialUpdate.values.nome}
-                nomeUsuario={forms.partialUpdate.values.nomeUsuario}
-                dataNascimento={forms.partialUpdate.values.dataNascimento}
-                nomeError={forms.partialUpdate.errors.nome}
-                nomeUsuarioError={forms.partialUpdate.errors.nomeUsuario}
-                dataNascimentoError={forms.partialUpdate.errors.dataNascimento}
+                nome={partialUpdateValues.nome}
+                nomeUsuario={partialUpdateValues.nomeUsuario}
+                dataNascimento={partialUpdateValues.dataNascimento}
+                nomeError={partialUpdateErrors.nome}
+                nomeUsuarioError={partialUpdateErrors.nomeUsuario}
+                dataNascimentoError={partialUpdateErrors.dataNascimento}
                 onClose={fecharModal}
                 onSalvar={atualizarUsuarioParcial}
-                onNomeChange={(value) => forms.partialUpdate.handleChange("nome", value)}
-                onNomeUsuarioChange={(value) => forms.partialUpdate.handleChange("nomeUsuario", value)}
-                onDataNascimentoChange={(value) => forms.partialUpdate.handleChange("dataNascimento", value)}
+                onNomeChange={(value) => handlePartialUpdateChange("nome", value)}
+                onNomeUsuarioChange={(value) => handlePartialUpdateChange("nomeUsuario", value)}
+                onDataNascimentoChange={(value) => handlePartialUpdateChange("dataNascimento", value)}
             />
             <UploadPhotoModal
                 open={modals.upload}

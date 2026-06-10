@@ -45,10 +45,11 @@ function buildCookieHeader(
     )
     .map((cookie) => `${cookie.name}=${cookie.value}`);
 
-  cookies.push(`access_token=${newAccessToken}`);
-  cookies.push(`refresh_token=${newRefreshToken}`);
-
-  return cookies.join("; ");
+  return [
+    ...cookies,
+    `access_token=${newAccessToken}`,
+    `refresh_token=${newRefreshToken}`,
+  ].join("; ");
 }
 
 export async function proxy(request: NextRequest) {

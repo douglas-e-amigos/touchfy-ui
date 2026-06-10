@@ -38,17 +38,11 @@ export default function PlayFooter({
         className={`${styles.footer} ${className}`}
         {...footerProps}
       >
-        <article
+        <button
+          type="button"
           className={styles.musicInfo}
           aria-label={`Abrir player da música ${musica.nomeMusica}`}
-          role="button"
-          tabIndex={0}
           onClick={abrirModal}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" || event.key === " ") {
-              abrirModal();
-            }
-          }}
         >
           <img
             src={musica.imagemURL}
@@ -60,7 +54,7 @@ export default function PlayFooter({
             <p className={styles.musicName}>{musica.nomeMusica}</p>
             <p className={styles.artistName}>{musica.nomeArtista}</p>
           </div>
-        </article>
+        </button>
 
         <FyPlay />
       </footer>

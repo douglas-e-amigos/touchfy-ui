@@ -6,6 +6,12 @@
   min-height: 100vh;
   width: 100%;
 
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
   background: linear-gradient(
     to bottom,
     rgba(236, 38, 143, 0.18),
@@ -35,7 +41,7 @@
   border: none;
   border-radius: 999px;
 
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: #27272a;
   color: #ffffff;
 
   font-size: 28px;
@@ -46,7 +52,7 @@
 }
 
 .closeButton:hover {
-  background-color: rgba(255, 255, 255, 0.16);
+  background-color: #3f3f46;
 }
 
 .content {

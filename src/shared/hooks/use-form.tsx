@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
-type FormValues = Record<string, any>;
+type FormValues = object;
 type FormErrors<T> = Partial<Record<keyof T, string>>;
 
-type FieldValidator<T> = (field: keyof T, values: T) => string | null;
+type FieldValidator<T> = (field: keyof T, values: Readonly<T>) => string | null;
 
-export type Dependencies<T> = Partial<Record<keyof T, (keyof T)[]>>;
+export type Dependencies<T> = Partial<Record<keyof T, readonly (keyof T)[]>>;
 
 export function useForm<T extends FormValues>(
   initialValues: T,
@@ -15,52 +15,55 @@ export function useForm<T extends FormValues>(
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<FormErrors<T>>({});
 
-  function handleChange(field: keyof T, value: string) {
-    setValues((previousValues) => {
-      const newValues = {
-        ...previousValues,
-        [field]: value,
-      };
+  function getFieldsToValidate(field: keyof T): (keyof T)[] {
+    return [field, ...(dependencies?.[field] ?? [])];
+  }
 
-      if (!validateField) {
-        return newValues;
+  function validateFields(
+    fields: readonly (keyof T)[],
+    nextValues: Readonly<T>,
+    previousErrors: FormErrors<T> = {},
+  ): FormErrors<T> {
+    if (!validateField) return previousErrors;
+
+    const nextErrors = { ...previousErrors };
+
+    fields.forEach((field) => {
+      const error = validateField(field, nextValues);
+
+      if (error) {
+        nextErrors[field] = error;
+        return;
       }
 
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-
-        const fieldsToValidate = new Set<keyof T>();
-        fieldsToValidate.add(field);
-
-        const deps = dependencies?.[field] || [];
-        deps.forEach((dep) => fieldsToValidate.add(dep));
-
-        fieldsToValidate.forEach((f) => {
-          const error = validateField(f, newValues);
-          newErrors[f] = error || undefined;
-        });
-
-        return newErrors;
-      });
-
-      return newValues;
+      delete nextErrors[field];
     });
+
+    return nextErrors;
   }
 
-  function reset() {
-    setValues(initialValues);
-    setErrors({});
+  function handleChange<K extends keyof T>(field: K, value: T[K]) {
+    const nextValues = {
+      ...values,
+      [field]: value,
+    };
+
+    setValues(nextValues);
+
+    if (validateField) {
+      setErrors(validateFields(getFieldsToValidate(field), nextValues, errors));
+    }
   }
+
+  const reset = useCallback((nextValues: T = initialValues) => {
+    setValues(nextValues);
+    setErrors({});
+  }, [initialValues]);
 
   function isValid() {
     if (!validateField) return true;
 
-    const newErrors: FormErrors<T> = {};
-
-    (Object.keys(values) as (keyof T)[]).forEach((field) => {
-      const error = validateField(field, values);
-      if (error) newErrors[field] = error;
-    });
+    const newErrors = validateFields(Object.keys(values) as (keyof T)[], values);
 
     setErrors(newErrors);
 

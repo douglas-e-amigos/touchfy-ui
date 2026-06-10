@@ -22,7 +22,7 @@ export default function FyButton({
     color = "primary",
     className,
     onClick,
-}: FyButtonProps): ReactElement | null {
+}: Readonly<FyButtonProps>): ReactElement | null {
     if (isInvalidChildren(children)) {
         console.error("Texto do botão não pode ser vazio");
         return null;
@@ -46,7 +46,7 @@ export default function FyButton({
     const variantClass = type === "ghost" ? styles.ghost : styles[type][color];
 
     return (
-        <button className={`${base} ${variantClass} ${className || ''}`} onClick={onClick}>
+        <button type="button" className={`${base} ${variantClass} ${className ?? ''}`} onClick={onClick}>
             {children}
         </button>
     );

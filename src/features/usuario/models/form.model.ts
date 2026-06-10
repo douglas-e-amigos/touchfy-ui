@@ -18,6 +18,4 @@ export interface PartialUserUpdateForm {
     dataNascimento: string;
 }
 
-export interface UploadUserPhotoForm {
-    
-}
+export type UploadUserPhotoForm = Record<never, never>;

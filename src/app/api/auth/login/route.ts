@@ -4,7 +4,7 @@ import {
   TokenResponse,
 } from "../../../../features/usuario/models/dto.model";
 import { isBlank, isPassword } from "../../../../shared/utils/validation";
-import httpServer from "../../../../infrastructure/http/http-server";
+import publicHttpServer from "../../../../infrastructure/http/http-server";
 import { cookies } from "next/headers";
 
 export async function POST(request: Request): Promise<Response> {
@@ -15,7 +15,7 @@ export async function POST(request: Request): Promise<Response> {
   if (!isPassword(body.senha))
     return NextResponse.json({ error: "Senha inválida!" }, { status: 400 });
 
-  const response = await httpServer.post<TokenResponse>("/usuarios/auth/login", body);
+  const response = await publicHttpServer.post<TokenResponse>("/usuarios/auth/login", body);
 
   const cookieStore = await cookies();
   

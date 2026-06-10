@@ -22,7 +22,7 @@ export default function FyInput({
   error,
   type = 'text',
   value,
-}: FyInputProps): React.ReactElement {
+}: Readonly<FyInputProps>): React.ReactElement {
   const inputValue = type === 'date' ? formatDateForInput(value) : value;
 
   return (

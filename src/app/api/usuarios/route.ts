@@ -7,7 +7,7 @@ import {
   isPassword,
   isValidDateString,
 } from "../../../shared/utils/validation";
-import httpServer from "../../../infrastructure/http/http-server";
+import publicHttpServer from "../../../infrastructure/http/http-server";
 import { NovoRecursoResponse } from "../../../shared/models/http.model";
 
 export async function POST(request: Request): Promise<Response> {
@@ -43,7 +43,7 @@ export async function POST(request: Request): Promise<Response> {
       { status: 400 },
     );
 
-  const response = await httpServer.post<NovoRecursoResponse>(
+  const response = await publicHttpServer.post<NovoRecursoResponse>(
     "usuarios/auth/register",
     body,
   );

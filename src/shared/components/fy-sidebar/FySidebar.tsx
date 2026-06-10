@@ -44,7 +44,9 @@ export default function FySidebar() {
 
       {/* Overlay */}
       {isSidebarOpen && (
-        <div
+        <button
+          type="button"
+          aria-label="Fechar menu"
           className="fixed inset-0 z-40 bg-black/40 lg:hidden"
           onClick={handleSidebarClose}
         />
@@ -74,6 +76,7 @@ export default function FySidebar() {
 
             {/* Botão usuário */}
             <button
+              type="button"
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
               className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-900 transition-colors cursor-pointer"
             >
@@ -107,6 +110,7 @@ export default function FySidebar() {
 
                 {/* Perfil */}
                 <button
+                  type="button"
                   className="w-full flex items-center gap-2 px-4 py-3 text-sm text-white hover:bg-zinc-800 transition-colors"
                 >
                   <User className="w-4 h-4" />
@@ -115,6 +119,7 @@ export default function FySidebar() {
 
                 {/* Sair */}
                 <button
+                  type="button"
                   className="w-full cursor-pointer flex items-center gap-2 px-4 py-3 text-sm text-red-500 hover:bg-zinc-800 transition-colors"
                   onClick={logout}
                 >

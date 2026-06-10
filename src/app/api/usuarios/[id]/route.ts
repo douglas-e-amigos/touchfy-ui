@@ -7,6 +7,10 @@ import {
   RecursoAtualizadoResponse,
   RecursoDeletadoResponse,
 } from "@/src/shared/models/http.model";
+import {
+  getHttpErrorResponseData,
+  getHttpErrorStatus,
+} from "@/src/shared/utils/http-error";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Params {
@@ -15,8 +19,7 @@ interface Params {
   }>;
 }
 
-export async function GET(request: NextRequest, { params }: Params) {
-  void request;
+export async function GET(_request: NextRequest, { params }: Params) {
   const { id } = await params;
 
   try {
@@ -26,12 +29,12 @@ export async function GET(request: NextRequest, { params }: Params) {
     });
 
     return NextResponse.json(response.data);
-  } catch (error: any) {
-    console.error("ROUTE ERROR:", error?.response?.data || error);
+  } catch (error: unknown) {
+    console.error("ROUTE ERROR:", getHttpErrorResponseData(error) ?? error);
 
     return NextResponse.json(
       { message: "Erro ao buscar usuário" },
-      { status: error?.response?.status || 500 },
+      { status: getHttpErrorStatus(error) },
     );
   }
 }
@@ -51,18 +54,17 @@ export async function PATCH(
     });
 
     return NextResponse.json(response.data);
-  } catch (error: any) {
-    console.error("ROUTE ERROR:", error?.response?.data || error);
+  } catch (error: unknown) {
+    console.error("ROUTE ERROR:", getHttpErrorResponseData(error) ?? error);
 
     return NextResponse.json(
       { message: "Erro ao atualizar usuário" },
-      { status: error?.response?.status || 500 },
+      { status: getHttpErrorStatus(error) },
     );
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: Params) {
-  void request;
+export async function DELETE(_request: NextRequest, { params }: Params) {
   const { id } = await params;
 
   try {
@@ -72,13 +74,12 @@ export async function DELETE(request: NextRequest, { params }: Params) {
     });
 
     return NextResponse.json(response.data);
-  } catch (error: any) {
-    // console.log(error.response, 'erro teste')
-    console.error("ROUTE ERROR:", error?.response?.data || error);
+  } catch (error: unknown) {
+    console.error("ROUTE ERROR:", getHttpErrorResponseData(error) ?? error);
 
     return NextResponse.json(
       { message: "Erro ao desativar usuário" },
-      { status: error?.response?.status || 500 },
+      { status: getHttpErrorStatus(error) },
     );
   }
 }

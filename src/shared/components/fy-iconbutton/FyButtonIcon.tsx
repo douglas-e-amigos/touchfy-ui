@@ -16,7 +16,7 @@ export default function FyButtonIcon({
     variant,
     icon, 
     className,
-}: FyButtonIconProps) {
+}: Readonly<FyButtonIconProps>) {
     return (
         <FyButton
             onClick={onClick}

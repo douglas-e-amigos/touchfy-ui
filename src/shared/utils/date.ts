@@ -1,7 +1,7 @@
 export function parseDate(value: string): Date | null {
   const date = new Date(value);
 
-  if (isNaN(date.getTime())) {
+  if (Number.isNaN(date.getTime())) {
     return null;
   }
 
@@ -45,7 +45,7 @@ export function formatDateForInput(value: string | Date | null | undefined): str
     return normalizedValue.slice(0, 10);
   }
 
-  const brDateMatch = normalizedValue.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  const brDateMatch = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(normalizedValue);
 
   if (brDateMatch) {
     const [, day, month, year] = brDateMatch;
@@ -54,7 +54,7 @@ export function formatDateForInput(value: string | Date | null | undefined): str
 
   const parsedDate = new Date(normalizedValue);
 
-  if (isNaN(parsedDate.getTime())) {
+  if (Number.isNaN(parsedDate.getTime())) {
     return "";
   }
 

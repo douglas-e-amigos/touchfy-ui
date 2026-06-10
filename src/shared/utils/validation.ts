@@ -60,12 +60,12 @@ export function isPassword(value: unknown) {
 }
 
 export function isValidDate(value: unknown): value is Date {
-  return value instanceof Date && !isNaN(value.getTime());
+  return value instanceof Date && !Number.isNaN(value.getTime());
 }
 
 export function isValidDateString(value: unknown): boolean {
   if (typeof value !== "string") return false;
 
   const date = new Date(value);
-  return !isNaN(date.getTime());
+  return !Number.isNaN(date.getTime());
 }

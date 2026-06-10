@@ -17,9 +17,9 @@ type NotificationListener = (notifications: NotificationItem[]) => void;
 class NotificationService {
   private notifications: NotificationItem[] = [];
 
-  private listeners = new Set<NotificationListener>();
+  private readonly listeners = new Set<NotificationListener>();
 
-  private timeouts = new Map<string, ReturnType<typeof setTimeout>>();
+  private readonly timeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
   private nextId = 0;
 

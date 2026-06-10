@@ -15,7 +15,7 @@ export default function ProfileHeaderCard({
     usuario,
     onEditarDados,
     onEditarFoto,
-}: ProfileHeaderCardProps) {
+}: Readonly<ProfileHeaderCardProps>) {
     return (
         <FyArea>
             <div className="flex gap-x-4">

@@ -1,10 +1,12 @@
 import { UsuarioResponse } from "@/src/features/usuario/models/dto.model";
 import { serverApiRequest } from "@/src/infrastructure/http/server-http";
-import { NextRequest, NextResponse } from "next/server";
+import {
+  getHttpErrorResponseData,
+  getHttpErrorStatus,
+} from "@/src/shared/utils/http-error";
+import { NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
-  void request;
-
+export async function GET() {
   try {
     const response = await serverApiRequest<UsuarioResponse>({
       method: "GET",
@@ -12,12 +14,12 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(response.data);
-  } catch (error: any) {
-    console.error("ROUTE ERROR:", error?.response?.data || error);
+  } catch (error: unknown) {
+    console.error("ROUTE ERROR:", getHttpErrorResponseData(error) ?? error);
 
     return NextResponse.json(
       { message: "Erro ao buscar usuário logado" },
-      { status: error?.response?.status || 500 },
+      { status: getHttpErrorStatus(error) },
     );
   }
 }
