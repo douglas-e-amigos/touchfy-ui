@@ -17,7 +17,8 @@ function getResponseMessage(responseData: unknown): string | null {
 
   return (
     getNonEmptyString(Reflect.get(responseData, "error")) ??
-    getNonEmptyString(Reflect.get(responseData, "message"))
+    getNonEmptyString(Reflect.get(responseData, "message")) ??
+    getNonEmptyString(Reflect.get(responseData, "mensagem"))
   );
 }
 
