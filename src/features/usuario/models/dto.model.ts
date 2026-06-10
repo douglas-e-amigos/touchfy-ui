@@ -1,3 +1,5 @@
+export type UsuarioRole = "OUVINTE" | "ARTISTA" | "MODERADOR" | "ADMIN";
+
 export interface CriarUsuarioRequest {
   nome: string;
   nomeUsuario: string;
@@ -5,6 +7,10 @@ export interface CriarUsuarioRequest {
   senha: string;
   senhaNovamente: string;
   dataNascimento: string;
+}
+
+export interface CriarUsuarioComRoleRequest extends CriarUsuarioRequest {
+  role: UsuarioRole;
 }
 
 export interface AtualizarUsuarioParcialmenteRequest {

@@ -23,7 +23,7 @@ export default function UploadPhotoModal({
     onClose,
     onFileChange,
     onSalvarFoto,
-}: UploadPhotoModalProps) {
+}: Readonly<UploadPhotoModalProps>) {
     return (
         <FyModal open={open} onClose={onClose}>
             <div className="flex flex-col gap-y-8">
@@ -57,7 +57,7 @@ export default function UploadPhotoModal({
                     <input
                         ref={fileInputRef}
                         type="file"
-                        accept="image/*"
+                        accept="image/png,image/jpeg,.png,.jpg,.jpeg"
                         className="hidden"
                         onChange={onFileChange}
                     />

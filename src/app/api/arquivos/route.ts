@@ -1,4 +1,8 @@
-import httpServer from "@/src/infrastructure/http/http-server";
+import publicHttpServer from "@/src/infrastructure/http/http-server";
+import {
+  getHttpErrorResponseData,
+  getHttpErrorStatus,
+} from "@/src/shared/utils/http-error";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -12,13 +16,21 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const response = await httpServer.get<ArrayBuffer>("/arquivos", {
+    const response = await publicHttpServer.get<ArrayBuffer>("/arquivos", {
       params: { caminho },
       responseType: "arraybuffer",
     });
 
-    const contentType = response.headers["content-type"] || "application/octet-stream";
-    const contentDisposition = response.headers["content-disposition"];
+    const contentTypeHeader = response.headers["content-type"];
+    const contentDispositionHeader = response.headers["content-disposition"];
+    const contentType =
+      typeof contentTypeHeader === "string"
+        ? contentTypeHeader
+        : "application/octet-stream";
+    const contentDisposition =
+      typeof contentDispositionHeader === "string"
+        ? contentDispositionHeader
+        : undefined;
 
     return new NextResponse(response.data, {
       status: response.status,
@@ -29,12 +41,12 @@ export async function GET(request: NextRequest) {
           : {}),
       },
     });
-  } catch (error: any) {
-    console.error("ROUTE ERROR:", error?.response?.data || error);
+  } catch (error: unknown) {
+    console.error("ROUTE ERROR:", getHttpErrorResponseData(error) ?? error);
 
     return NextResponse.json(
       { message: "Erro ao buscar arquivo" },
-      { status: error?.response?.status || 500 },
+      { status: getHttpErrorStatus(error) },
     );
   }
 }

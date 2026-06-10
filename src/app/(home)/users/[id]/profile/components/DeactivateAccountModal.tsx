@@ -12,7 +12,7 @@ export default function DeactivateAccountModal({
     open,
     onClose,
     onConfirmar,
-}: DeactivateAccountModalProps) {
+}: Readonly<DeactivateAccountModalProps>) {
     return (
         <FyModal open={open} onClose={onClose}>
             <div className="flex flex-col gap-y-8">

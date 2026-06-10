@@ -9,7 +9,7 @@ interface ProfileSettingsSectionProps {
 
 export default function ProfileSettingsSection({
     onDesativarConta,
-}: ProfileSettingsSectionProps) {
+}: Readonly<ProfileSettingsSectionProps>) {
     return (
         <FyArea>
             <div className="flex flex-col gap-y-8">
@@ -22,7 +22,7 @@ export default function ProfileSettingsSection({
                         </div>
                         <div>
                             <FySwitch id="perfil-publico" name="perfilPublico"
-                                checked={false} onChange={(checked) => false} />
+                                checked={false} onChange={() => undefined} />
                         </div>
                     </div>
                     <hr className="bg-[#27272A] border-[#27272A]" />

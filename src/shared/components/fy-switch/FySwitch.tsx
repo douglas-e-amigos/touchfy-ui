@@ -14,7 +14,7 @@ export default function FySwitch({
   onChange,
   label,
   disabled = false,
-}: FySwitchProps): React.ReactElement {
+}: Readonly<FySwitchProps>): React.ReactElement {
   return (
     <div className="flex items-center gap-x-3">
       <button

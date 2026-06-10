@@ -14,10 +14,9 @@ export default function FyPlaymodal({
   musicaAtual,
 }: FyPlaymodalProps) {
   return (
-    <section
+    <dialog
+      open
       className={styles.modal}
-      role="dialog"
-      aria-modal="true"
       aria-label={`Player da música ${musicaAtual.nomeMusica}`}
     >
       <header className={styles.header}>
@@ -58,6 +57,6 @@ export default function FyPlaymodal({
           <FyPlay />
         </div>
       </div>
-    </section>
+    </dialog>
   );
 }

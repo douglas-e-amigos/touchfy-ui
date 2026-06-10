@@ -21,13 +21,14 @@ describe("FyModal", () => {
 
     it("renderiza conteúdo e fecha ao clicar no backdrop", () => {
         const onClose = vi.fn();
-        const { container } = render(
+
+        render(
             <FyModal open={true} onClose={onClose}>
                 <span>Conteúdo</span>
             </FyModal>,
         );
 
-        fireEvent.click(container.firstChild as HTMLElement);
+        fireEvent.click(screen.getByLabelText("Fechar modal"));
 
         expect(screen.getByText("Conteúdo")).toBeInTheDocument();
         expect(onClose).toHaveBeenCalledTimes(1);

@@ -1,23 +1,20 @@
-'use client';
+"use client";
 
-import { Home, Search, Library, Plus } from 'lucide-react';
+import { Home, Search, Library, Plus } from "lucide-react";
 
-import FyButton from '../fy-button/FyButton';
-import FyButtonIcon from '../fy-iconbutton/FyButtonIcon';
+import FyButton from "../../components/fy-button/FyButton";
+import FyButtonIcon from "../../components/fy-iconbutton/FyButtonIcon";
 
 const navigationLinks = [
-  { name: 'Início', icon: Home },
-  { name: 'Buscar', icon: Search },
-  { name: 'Biblioteca', icon: Library },
+  { name: "Início", icon: Home },
+  { name: "Buscar", icon: Search },
+  { name: "Biblioteca", icon: Library },
 ];
 
-const playlistLinks = [
-  'Músicas Curtidas',
-  'Workout Vibes',
-  'Chill Nights',
-];
+const playlistLinks = ["Músicas Curtidas", "Workout Vibes", "Chill Nights"];
 
-export default function NavLinks() {
+export function NavLinks() {
+
   return (
     <div className="flex flex-col h-full">
       {/* Navegação principal */}
@@ -45,10 +42,7 @@ export default function NavLinks() {
             Playlists
           </h2>
 
-          <FyButtonIcon
-            variant='ghost'
-            icon={<Plus size={18} />}
-          />
+          <FyButtonIcon variant="ghost" icon={<Plus size={18} />} />
         </div>
 
         {/* Lista de playlists */}

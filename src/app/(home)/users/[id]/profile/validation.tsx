@@ -6,33 +6,29 @@ export const updateUserDependencies: Partial<Record<keyof PartialUserUpdateForm,
 
 export const validateUpdate = (
     field: keyof PartialUserUpdateForm,
-    values: PartialUserUpdateForm
+    values: Readonly<PartialUserUpdateForm>,
 ): string | null => {
-    switch (field) {
-        case "nomeUsuario":
-            if (isBlank(values.nomeUsuario)) return "Nome de usuário obrigatório";
-            return null;
-        case "nome":
-            if (isBlank(values.nome)) return "Nome obrigatório";
-            return null;
-        case "dataNascimento":
-            if (!isValidDateString(values.dataNascimento))
-                return "Data de nascimento inválida";
-            return null;
-        default:
-            return null;
+    if (field === "nomeUsuario" && isBlank(values.nomeUsuario)) {
+        return "Nome de usuário obrigatório";
     }
+
+    if (field === "nome" && isBlank(values.nome)) {
+        return "Nome obrigatório";
+    }
+
+    if (
+        field === "dataNascimento" &&
+        !isValidDateString(values.dataNascimento)
+    ) {
+        return "Data de nascimento inválida";
+    }
+
+    return null;
 };
 
 
 export const updatePhotoDependencies: Partial<Record<keyof UploadUserPhotoForm, (keyof UploadUserPhotoForm)[]>> = {};
 
-export const validatePhoto = (
-    field: keyof UploadUserPhotoForm,
-    values: UploadUserPhotoForm
-): string | null => {
-    switch (field) {
-        default:
-            return null;
-    }
+export const validatePhoto = (): string | null => {
+    return null;
 };

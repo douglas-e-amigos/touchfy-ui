@@ -1,4 +1,4 @@
-export default function FySaudacao({ hora }: { hora: number }) {
+export default function FySaudacao({ hora }: Readonly<{ hora: number }>) {
     const periodo = definePeriodo(hora);
     return (
         <p className="text-4xl md:text-6xl font-bold text-white mb-4">

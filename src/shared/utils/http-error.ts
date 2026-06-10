@@ -1,30 +1,47 @@
 import axios from "axios";
 
-export function getHttpErrorMessage(error: unknown, fallback: string) {
-  if (axios.isAxiosError(error)) {
-    const responseData = error.response?.data;
+function getNonEmptyString(value: unknown): string | null {
+  return typeof value === "string" && value.trim().length > 0 ? value : null;
+}
 
-    if (typeof responseData === "string" && responseData.trim().length > 0) {
-      return responseData;
-    }
+function getResponseMessage(responseData: unknown): string | null {
+  const textResponse = getNonEmptyString(responseData);
 
-    if (responseData && typeof responseData === "object") {
-      const maybeError = Reflect.get(responseData, "error");
-      const maybeMessage = Reflect.get(responseData, "message");
-
-      if (typeof maybeError === "string" && maybeError.trim().length > 0) {
-        return maybeError;
-      }
-
-      if (typeof maybeMessage === "string" && maybeMessage.trim().length > 0) {
-        return maybeMessage;
-      }
-    }
+  if (textResponse) {
+    return textResponse;
   }
 
-  if (error instanceof Error && error.message.trim().length > 0) {
-    return error.message;
+  if (!responseData || typeof responseData !== "object") {
+    return null;
+  }
+
+  return (
+    getNonEmptyString(Reflect.get(responseData, "error")) ??
+    getNonEmptyString(Reflect.get(responseData, "message")) ??
+    getNonEmptyString(Reflect.get(responseData, "mensagem"))
+  );
+}
+
+export function getHttpErrorMessage(error: unknown, fallback: string) {
+  if (axios.isAxiosError(error)) {
+    return getResponseMessage(error.response?.data) ?? fallback;
+  }
+
+  return getNonEmptyString(error instanceof Error ? error.message : null) ?? fallback;
+}
+
+export function getHttpErrorStatus(error: unknown, fallback = 500): number {
+  if (axios.isAxiosError(error) && typeof error.response?.status === "number") {
+    return error.response.status;
   }
 
   return fallback;
+}
+
+export function getHttpErrorResponseData(error: unknown): unknown {
+  if (axios.isAxiosError(error)) {
+    return error.response?.data;
+  }
+
+  return undefined;
 }

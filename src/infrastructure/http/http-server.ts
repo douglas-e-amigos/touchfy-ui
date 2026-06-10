@@ -1,16 +1,13 @@
 import axios from "axios";
 
-/**
- * @deprecated Use apenas para rotas públicas
- */
-const httpServer = axios.create({
+const publicHttpServer = axios.create({
   baseURL: process.env.BACKEND_API_URL || "http://localhost:8080",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-httpServer.interceptors.response.use(
+publicHttpServer.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) console.log("Não autorizado");
@@ -19,4 +16,4 @@ httpServer.interceptors.response.use(
   },
 );
 
-export default httpServer;
+export default publicHttpServer;

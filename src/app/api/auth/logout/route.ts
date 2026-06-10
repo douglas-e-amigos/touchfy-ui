@@ -1,4 +1,4 @@
-import httpServer from "@/src/infrastructure/http/http-server";
+import publicHttpServer from "@/src/infrastructure/http/http-server";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -12,7 +12,7 @@ export async function POST(): Promise<Response> {
       { status: 401 },
     );
 
-  await httpServer.post("/usuarios/auth/logout", { refreshToken });
+  await publicHttpServer.post("/usuarios/auth/logout", { refreshToken });
 
   cookieStore.delete("refresh_token");
   cookieStore.delete("access_token");

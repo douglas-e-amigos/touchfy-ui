@@ -6,7 +6,10 @@ interface FyAreaProps {
 }
 
 
-export default function FyArea({ children, color = 'gray' }: FyAreaProps): ReactElement {
+export default function FyArea({
+    children,
+    color = 'gray',
+}: Readonly<FyAreaProps>): ReactElement {
     const colorMap = {
         gray: {
             bg: "bg-[#18181B]",

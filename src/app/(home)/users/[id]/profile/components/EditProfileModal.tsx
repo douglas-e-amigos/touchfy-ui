@@ -31,7 +31,7 @@ export default function EditProfileModal({
     onNomeChange,
     onNomeUsuarioChange,
     onDataNascimentoChange,
-}: EditProfileModalProps) {
+}: Readonly<EditProfileModalProps>) {
     return (
         <FyModal open={open} onClose={onClose}>
             <div className="flex flex-col gap-y-8">
