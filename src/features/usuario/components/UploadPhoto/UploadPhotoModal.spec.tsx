@@ -53,6 +53,8 @@ describe("UploadPhotoModal", () => {
             />,
         );
 
+        expect(screen.getByRole("button", { name: /Fechar atualização de foto/i })).toBeInTheDocument();
+
         const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
         ref.current = fileInput;
 

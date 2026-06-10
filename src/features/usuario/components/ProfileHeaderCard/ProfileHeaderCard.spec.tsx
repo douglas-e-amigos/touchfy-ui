@@ -47,7 +47,7 @@ describe("ProfileHeaderCard", () => {
             />,
         );
 
-        await user.click(screen.getByRole("button", { name: /Foto de perfil de Maria/i }));
+        await user.click(screen.getByRole("button", { name: /Alterar foto de perfil de Maria/i }));
         await user.click(screen.getByRole("button", { name: /Editar Dados/i }));
 
         expect(onEditarFoto).toHaveBeenCalledTimes(1);

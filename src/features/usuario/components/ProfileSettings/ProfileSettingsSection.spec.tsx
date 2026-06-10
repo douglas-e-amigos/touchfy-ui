@@ -14,7 +14,7 @@ describe("ProfileSettingsSection", () => {
 
         expect(screen.getByText("Configurações da Conta")).toBeInTheDocument();
         expect(screen.getByText("Zona de Perigo")).toBeInTheDocument();
-        expect(screen.getByRole("switch")).toBeInTheDocument();
+        expect(screen.getByRole("switch")).toBeDisabled();
     });
 
     it("dispara callback ao clicar em desativar conta", async () => {

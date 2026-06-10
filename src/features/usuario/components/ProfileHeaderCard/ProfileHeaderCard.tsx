@@ -21,6 +21,7 @@ export default function ProfileHeaderCard({
             <div className="flex gap-x-4">
                 <button
                     type="button"
+                    aria-label={`Alterar foto de perfil de ${usuario.nome}`}
                     onClick={onEditarFoto}
                     className="group relative h-56 w-56 shrink-0 cursor-pointer"
                 >
