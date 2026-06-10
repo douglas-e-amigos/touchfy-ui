@@ -16,9 +16,31 @@ export function isBlank(value: unknown): boolean {
   return !isString(value) || isEmpty(value);
 }
 
+const MAX_EMAIL_LENGTH = 254;
+
 export function isEmail(value: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(value);
+  if (value.length === 0 || value.length > MAX_EMAIL_LENGTH) return false;
+
+  const atIndex = value.indexOf("@");
+  if (atIndex <= 0 || atIndex !== value.lastIndexOf("@")) return false;
+
+  let hasDomainDot = false;
+
+  for (let index = 0; index < value.length; index += 1) {
+    const character = value[index];
+
+    if (character.trim() === "") return false;
+
+    if (
+      character === "." &&
+      index > atIndex + 1 &&
+      index < value.length - 1
+    ) {
+      hasDomainDot = true;
+    }
+  }
+
+  return hasDomainDot;
 }
 
 export function minLength(value: string, min: number): boolean {
