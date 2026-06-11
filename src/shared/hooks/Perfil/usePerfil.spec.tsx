@@ -1,5 +1,5 @@
 import { describe, it, afterEach, vi, expect } from "vitest";
-import { renderHook, act, cleanup, waitFor } from "@testing-library/react";
+import { renderHook, waitFor } from "@testing-library/react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { usePerfil } from "./usePerfil";
 import { UsuarioResponse } from "@/src/features/usuario/models/dto.model";
