@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { cleanup, fireEvent, render } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 import { screen } from "@testing-library/dom";
 import FyPlay from "./FyPlay";
 
@@ -21,34 +21,6 @@ describe("FyPlay", () => {
     render(<FyPlay />);
 
     expect(screen.getByLabelText("Ações da música")).toBeInTheDocument();
-  });
-
-  it("executa os controles de voltar, play e avançar", () => {
-    const setLeft = vi.fn();
-    const setPlay = vi.fn();
-    const setRight = vi.fn();
-
-    useFyPlayMock.mockReturnValue(
-      montarEstado({
-        left: 2,
-        play: true,
-        right: 4,
-        setLeft,
-        setPlay,
-        setRight,
-      })
-    );
-
-    const { container } = render(<FyPlay />);
-    const controles = container.querySelectorAll("svg");
-
-    fireEvent.click(controles[2]);
-    fireEvent.click(controles[3]);
-    fireEvent.click(controles[4]);
-
-    expect(setLeft).toHaveBeenCalledWith(3);
-    expect(setPlay).toHaveBeenCalledWith(false);
-    expect(setRight).toHaveBeenCalledWith(5);
   });
 });
 

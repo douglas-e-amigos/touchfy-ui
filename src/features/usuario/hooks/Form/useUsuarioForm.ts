@@ -5,7 +5,7 @@ import {
   updateUserDependencies,
   validateUpdate,
 } from "@/src/features/usuario/utils/validation";
-import { useForm } from "@/src/shared/hooks/use-form";
+import { useForm } from "@/src/shared/hooks/Form/useForm";
 
 const initialPartialUpdateValues: PartialUserUpdateForm = {
   nomeUsuario: "",
