@@ -16,6 +16,23 @@ const valoresIniciais: FormularioTeste = {
   aceite: false,
 };
 
+const nomeValido = "Maria Silva";
+
+const valoresComNome: FormularioTeste = {
+  ...valoresIniciais,
+  nome: nomeValido,
+};
+
+const valoresInvalidos: FormularioTeste = {
+  ...valoresIniciais,
+  senha: "",
+};
+
+const valoresResetados: FormularioTeste = {
+  ...valoresComNome,
+  aceite: true,
+};
+
 afterEach(() => {
   cleanup();
 });
@@ -33,17 +50,14 @@ describe("useForm", () => {
     let isValid = false;
 
     act(() => {
-      result.current.handleChange("nome", "Maria Silva");
+      result.current.handleChange("nome", nomeValido);
     });
 
     act(() => {
       isValid = result.current.isValid();
     });
 
-    expect(result.current.values).toEqual({
-      ...valoresIniciais,
-      nome: "Maria Silva",
-    });
+    expect(result.current.values).toEqual(valoresComNome);
     expect(result.current.errors).toEqual({});
     expect(isValid).toBe(true);
   });
@@ -62,10 +76,10 @@ describe("useForm", () => {
     });
 
     act(() => {
-      result.current.handleChange("nome", "Maria Silva");
+      result.current.handleChange("nome", nomeValido);
     });
 
-    expect(result.current.values.nome).toBe("Maria Silva");
+    expect(result.current.values.nome).toBe(nomeValido);
     expect(result.current.errors).toEqual({});
   });
 
@@ -96,12 +110,6 @@ describe("useForm", () => {
   });
 
   it("valida todos os campos ao chamar isValid", () => {
-    const valoresInvalidos: FormularioTeste = {
-      nome: "",
-      senha: "",
-      confirmarSenha: "123456",
-      aceite: false,
-    };
     const { result } = renderHook(() =>
       useForm(valoresInvalidos, validarFormulario),
     );
@@ -121,18 +129,6 @@ describe("useForm", () => {
   });
 
   it("limpa erros e aplica novos valores ao resetar", () => {
-    const valoresInvalidos: FormularioTeste = {
-      nome: "",
-      senha: "",
-      confirmarSenha: "123456",
-      aceite: false,
-    };
-    const novosValores: FormularioTeste = {
-      nome: "Maria Silva",
-      senha: "123456",
-      confirmarSenha: "123456",
-      aceite: true,
-    };
     const { result } = renderHook(() =>
       useForm(valoresInvalidos, validarFormulario),
     );
@@ -144,10 +140,10 @@ describe("useForm", () => {
     expect(result.current.errors).not.toEqual({});
 
     act(() => {
-      result.current.reset(novosValores);
+      result.current.reset(valoresResetados);
     });
 
-    expect(result.current.values).toEqual(novosValores);
+    expect(result.current.values).toEqual(valoresResetados);
     expect(result.current.errors).toEqual({});
   });
 });
