@@ -4,6 +4,7 @@ import { ComponentProps, useState } from "react";
 import FyPlay from "../fy-play/FyPlay";
 import FyPlaymodal from "../fy-playmodal/FyPlaymodal";
 import styles from "./PlayFooter.module.css";
+import FyProgress from "../fy-progress/FyProgress";
 
 export interface PlayFooterMusica {
   readonly id: number;
@@ -55,6 +56,8 @@ export default function PlayFooter({
             <p className={styles.artistName}>{musica.nomeArtista}</p>
           </div>
         </button>
+
+        <FyProgress />
 
         <FyPlay />
       </footer>
