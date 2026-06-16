@@ -3,10 +3,10 @@
 import { Album, Heart, Music, Plus } from "lucide-react";
 import CardBiblioteca from "./components/Card/CardBiblioteca";
 import ButtonBiblioteca from "./components/Button/ButtonBiblioteca";
-import { itensMediaCard } from "../dashboard/constants/default-card";
 import ImageCard, {
   Variantes,
 } from "@/src/shared/components/fy-imagecard/ImageCard";
+import { itensMediaCard } from "@/src/shared/mocks/media-card.mock";
 
 export default function Biblioteca({
   usuario,

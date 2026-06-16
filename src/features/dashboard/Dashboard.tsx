@@ -6,11 +6,11 @@ import ImageCard, {
 // Módulo
 import DashboardHeader from "./components/DashboardHeader/DashboardHeader";
 import SecaoHome from "./components/DashboardSection/DashboardSection";
-import { itensMediaCard } from "./constants/default-card";
 import styles from "./Dashboard.module.css";
 
 // Componentes compartilhados
 import { MediaCard } from "@/src/shared/components/fy-mediacard/MediaCard";
+import { itensMediaCard } from "@/src/shared/mocks/media-card.mock";
 
 // Estados
 import { useMusicaAtualContext } from "@/src/shared/providers/MusicaAtual.Provider";
