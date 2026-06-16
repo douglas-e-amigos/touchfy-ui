@@ -12,11 +12,10 @@ function IconeTeste({
   readonly color?: string;
 }) {
   return (
-    <svg
+    <img
       aria-label="Icone da biblioteca"
       data-color={color}
       data-size={size}
-      role="img"
     />
   );
 }

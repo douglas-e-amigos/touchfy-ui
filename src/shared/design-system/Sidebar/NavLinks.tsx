@@ -8,7 +8,7 @@ import FyButtonIcon from "../../components/fy-iconbutton/FyButtonIcon";
 
 const navigationLinks = [
   { name: "Início", icon: Home, href: "/dashboard" },
-  { name: "Buscar", icon: Search },
+  { name: "Buscar", icon: Search, href: "/busca" },
   { name: "Biblioteca", icon: Library, href: "/biblioteca" },
 ];
 
