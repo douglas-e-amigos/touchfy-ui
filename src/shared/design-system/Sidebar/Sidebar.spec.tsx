@@ -22,6 +22,7 @@ const perfilMock = vi.hoisted(() => ({
 const logoutMock = vi.hoisted(() => vi.fn());
 
 vi.mock("next/navigation", () => ({
+  usePathname: () => "/dashboard",
   useRouter: () => routerMock,
 }));
 

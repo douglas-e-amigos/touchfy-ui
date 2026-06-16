@@ -2,6 +2,7 @@
 
 import { MusicaAtual } from "../../types/MusicaAtual.types";
 import FyPlay from "../fy-play/FyPlay";
+import FyProgress from "../fy-progress/FyProgress";
 import styles from "./FyPlaymodal.module.css";
 
 interface FyPlaymodalProps {
@@ -42,16 +43,7 @@ export default function FyPlaymodal({
           <p className={styles.artist}>{musicaAtual.nomeArtista}</p>
         </div>
 
-        <div className={styles.progressArea}>
-          <div className={styles.progressBar}>
-            <span className={styles.progressThumb} />
-          </div>
-
-          <div className={styles.timeWrapper}>
-            <span>0:00</span>
-            <span>5:24</span>
-          </div>
-        </div>
+        <FyProgress />
 
         <div className={styles.controls}>
           <FyPlay />

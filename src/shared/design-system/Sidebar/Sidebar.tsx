@@ -28,7 +28,7 @@ export default function Sidebar() {
   return (
     <>
       {/* Botão menu */}
-      <div className="fixed top-4 left-4 z-[60] lg:hidden">
+      <div className="fixed top-4 left-4 z-60 lg:hidden">
         <FyButtonIcon
           variant="outline"
           icon={<Menu size={20} />}

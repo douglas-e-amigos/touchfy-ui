@@ -6,6 +6,8 @@ interface FyButtonProps {
     color?: 'primary' | 'red';
     className?: string;
     onClick?: () => void;
+    ariaLabel?: string;
+    disabled?: boolean;
 }
 
 type ButtonColor = NonNullable<FyButtonProps["color"]>;
@@ -22,6 +24,8 @@ export default function FyButton({
     color = "primary",
     className,
     onClick,
+    ariaLabel,
+    disabled = false,
 }: Readonly<FyButtonProps>): ReactElement | null {
     if (isInvalidChildren(children)) {
         console.error("Texto do botão não pode ser vazio");
@@ -46,7 +50,13 @@ export default function FyButton({
     const variantClass = type === "ghost" ? styles.ghost : styles[type][color];
 
     return (
-        <button type="button" className={`${base} ${variantClass} ${className ?? ''}`} onClick={onClick}>
+        <button
+            type="button"
+            aria-label={ariaLabel}
+            className={`${base} ${variantClass} ${disabled ? "opacity-50 cursor-not-allowed" : ""} ${className ?? ''}`}
+            onClick={onClick}
+            disabled={disabled}
+        >
             {children}
         </button>
     );

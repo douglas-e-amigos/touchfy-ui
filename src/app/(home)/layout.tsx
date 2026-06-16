@@ -6,8 +6,8 @@ import PlayFooter from "@/src/shared/components/fy-playfooter/PlayFooter";
 import Sidebar from "@/src/shared/design-system/Sidebar/Sidebar";
 
 import {
-  useMusicaAtualContext,
   MusicaAtualProvider,
+  useMusicaAtualContext,
 } from "@/src/shared/providers/MusicaAtual.Provider";
 
 export default function HomeLayout({
@@ -17,12 +17,12 @@ export default function HomeLayout({
 }) {
   return (
     <MusicaAtualProvider>
-      <DashboardShell>{children}</DashboardShell>
+      <HomeShell>{children}</HomeShell>
     </MusicaAtualProvider>
   );
 }
 
-function DashboardShell({ children }: Readonly<{ children: ReactNode }>) {
+function HomeShell({ children }: Readonly<{ children: ReactNode }>) {
   const { musicaAtual } = useMusicaAtualContext();
 
   return (
