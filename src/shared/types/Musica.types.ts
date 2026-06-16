@@ -1,16 +1,16 @@
-export interface MusicaAtual {
+export interface MusicaAtualType {
   id: number;
   imagemURL: string;
   nomeMusica: string;
   nomeArtista: string;
 }
 
-export interface Musica extends MusicaAtual {
+export interface MusicaType extends MusicaAtualType {
   album: string;
   duracao: string;
 }
 
 export interface MusicaAtualContextType {
-  musicaAtual: MusicaAtual | null;
-  setMusicaAtual: (musica: MusicaAtual | null) => void;
+  musicaAtual: MusicaAtualType | null;
+  setMusicaAtual: (musica: MusicaAtualType | null) => void;
 }
