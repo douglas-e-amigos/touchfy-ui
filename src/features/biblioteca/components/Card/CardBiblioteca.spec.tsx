@@ -12,11 +12,10 @@ function IconeTeste({
   readonly color?: string;
 }) {
   return (
-    <svg
+    <img
       aria-label="Icone do card"
       data-color={color}
       data-size={size}
-      role="img"
     />
   );
 }
