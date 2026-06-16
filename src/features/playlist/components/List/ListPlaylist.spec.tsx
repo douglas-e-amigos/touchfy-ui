@@ -55,4 +55,25 @@ describe("ListPlaylist", () => {
     expect(onClick).toHaveBeenCalledTimes(1);
     expect(onClick).toHaveBeenCalledWith(musicas[0]);
   });
+
+  it("marca a música atual como selecionada", () => {
+    render(
+      <ListPlaylist
+        musicas={musicas}
+        onClick={() => undefined}
+        musicaAtualId={musicas[0].id}
+      />
+    );
+
+    const musicaSelecionada = screen.getByRole("button", {
+      name: "Tocar Midnight Dreams de Luna Sky",
+    });
+
+    expect(musicaSelecionada).toHaveAttribute("aria-current", "true");
+    expect(musicaSelecionada).toHaveClass("bg-white/10");
+    expect(musicaSelecionada.firstElementChild).toHaveClass(
+      "font-semibold",
+      "text-primary"
+    );
+  });
 });
