@@ -7,7 +7,7 @@ import { useMusicaAtualContext } from "@/src/shared/providers/MusicaAtual.Provid
 import ActionsPlaylist from "./components/Actions/ActionsPlaylist";
 import HeaderPlaylist from "./components/Header/HeaderPlaylist";
 import ListPlaylist from "./components/List/ListPlaylist";
-import { defaultPlaylist } from "./constants/default-playlist";
+import { defaultPlaylist } from "@/src/shared/mocks/default-playlist.mock";
 import { MusicaType } from "@/src/shared/types/Musica.types";
 
 export default function Playlist() {
