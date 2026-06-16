@@ -5,17 +5,12 @@ import { usePathname, useRouter } from "next/navigation";
 
 import FyButton from "../../components/fy-button/FyButton";
 import FyButtonIcon from "../../components/fy-iconbutton/FyButtonIcon";
+import { sidebarPlaylistLinks } from "../../mocks/sidebar-playlists.mock";
 
 const navigationLinks = [
   { name: "Início", icon: Home, href: "/dashboard" },
   { name: "Buscar", icon: Search, href: "/busca" },
   { name: "Biblioteca", icon: Library, href: "/biblioteca" },
-];
-
-const playlistLinks = [
-  { name: "Músicas Curtidas" },
-  { name: "Workout Vibes", href: "/playlists/workout-vibes" },
-  { name: "Chill Nights", href: "/playlists/chill-nights" },
 ];
 
 export function NavLinks() {
@@ -63,7 +58,7 @@ export function NavLinks() {
 
         {/* Lista de playlists */}
         <div className="flex flex-col gap-2">
-          {playlistLinks.map((playlist) => (
+          {sidebarPlaylistLinks.map((playlist) => (
             <FyButton
               key={playlist.name}
               type="ghost"
