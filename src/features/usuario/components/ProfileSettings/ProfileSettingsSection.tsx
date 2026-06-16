@@ -22,7 +22,7 @@ export default function ProfileSettingsSection({
                         </div>
                         <div>
                             <FySwitch id="perfil-publico" name="perfilPublico"
-                                checked={false} onChange={() => undefined} />
+                                checked={false} onChange={() => undefined} disabled={true} />
                         </div>
                     </div>
                     <hr className="bg-[#27272A] border-[#27272A]" />

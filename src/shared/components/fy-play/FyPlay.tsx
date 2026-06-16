@@ -6,7 +6,7 @@ import {
   Repeat,
   Heart,
 } from "lucide-react";
-import useFyPlay from "../../hooks/use-fyplay";
+import useFyPlay from "../../hooks/FyPlay/useFyPlay";
 
 export default function FyPlay() {
   const {

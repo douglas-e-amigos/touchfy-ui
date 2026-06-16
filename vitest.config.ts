@@ -33,7 +33,8 @@ export default defineConfig({
                 "**/*.d.ts",
                 "**/types/**",
                 "**/interfaces/**",
-                "**/dtos/**"
+                "**/dtos/**",
+                "**/*.css"
             ]
         }
     }

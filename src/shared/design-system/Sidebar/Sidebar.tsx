@@ -6,8 +6,8 @@ import { NavLinks } from "./NavLinks";
 import FyButtonIcon from "../../components/fy-iconbutton/FyButtonIcon";
 import { authService } from "@/src/features/usuario/services/auth.service";
 import { useRouter } from "next/navigation";
-import { usePerfil } from "../../hooks/use-perfil";
-import { useSiderbar } from "../../hooks/use-sidebar";
+import { usePerfil } from "../../hooks/Perfil/usePerfil";
+import { useSiderbar } from "../../hooks/Sidebar/useSidebar";
 
 export default function Sidebar() {
   const router = useRouter();

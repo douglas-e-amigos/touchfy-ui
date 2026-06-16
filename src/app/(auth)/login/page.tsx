@@ -7,7 +7,7 @@ import { LoginForm } from "../../../features/usuario/models/form.model";
 import { authService } from "../../../features/usuario/services/auth.service";
 import FyButton from "../../../shared/components/fy-button/FyButton";
 import FyInput from "../../../shared/components/fy-input/FyInput";
-import { useForm } from "../../../shared/hooks/use-form";
+import { useForm } from "../../../shared/hooks/Form/useForm";
 import { dependencies, validateLogin } from "./validation";
 import { useRouter } from "next/navigation";
 import { notificationService } from "../../../shared/services/notification.service";

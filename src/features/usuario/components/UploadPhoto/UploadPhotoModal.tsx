@@ -34,6 +34,7 @@ export default function UploadPhotoModal({
                     </div>
                     <button
                         type="button"
+                        aria-label="Fechar atualização de foto"
                         onClick={onClose}
                         className="rounded-full p-1 text-gray-400 transition hover:bg-white/5 hover:text-white"
                     >
