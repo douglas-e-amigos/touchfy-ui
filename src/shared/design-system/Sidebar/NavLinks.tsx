@@ -1,7 +1,7 @@
 "use client";
 
 import { Home, Search, Library, Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import FyButton from "../../components/fy-button/FyButton";
 import FyButtonIcon from "../../components/fy-iconbutton/FyButtonIcon";
@@ -15,11 +15,12 @@ const navigationLinks = [
 const playlistLinks = [
   { name: "Músicas Curtidas" },
   { name: "Workout Vibes", href: "/playlists/workout-vibes" },
-  { name: "Chill Nights" },
+  { name: "Chill Nights", href: "/playlists/chill-nights" },
 ];
 
 export function NavLinks() {
   const router = useRouter();
+  const pathname = usePathname();
 
   function navigateTo(href?: string) {
     if (href) {
@@ -38,7 +39,9 @@ export function NavLinks() {
             <FyButton
               key={link.name}
               type="ghost"
-              className="w-full flex items-center gap-4 justify-start"
+              className={`w-full flex items-center gap-4 justify-start ${
+                link.href === pathname ? "text-white" : ""
+              }`}
               onClick={() => navigateTo(link.href)}
             >
               <Icon size={22} />
@@ -64,7 +67,9 @@ export function NavLinks() {
             <FyButton
               key={playlist.name}
               type="ghost"
-              className="w-full flex items-center gap-4 justify-start font-light text-sm"
+              className={`w-full flex items-center gap-4 justify-start font-light text-sm ${
+                playlist.href === pathname ? "text-white" : ""
+              }`}
               onClick={() => navigateTo(playlist.href)}
             >
               {playlist.name}
