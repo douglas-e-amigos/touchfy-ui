@@ -5,12 +5,15 @@ import {
 } from "@/src/shared/utils/http-error";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
-  const caminho = request.nextUrl.searchParams.get("caminho");
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
 
-  if (!caminho) {
+  if (!id) {
     return NextResponse.json(
-      { message: "Caminho do arquivo não informado" },
+      { message: "ID da música não informado" },
       { status: 400 },
     );
   }
@@ -18,20 +21,17 @@ export async function GET(request: NextRequest) {
   try {
     const response = await serverApiRequest<ArrayBuffer>({
       method: "GET",
-      url: "/arquivos",
-      params: { caminho },
+      url: `/musicas/stream/${id}`,
       responseType: "arraybuffer",
     });
 
-    const contentTypeHeader = response.headers["content-type"];
-    const contentDispositionHeader = response.headers["content-disposition"];
     const contentType =
-      typeof contentTypeHeader === "string"
-        ? contentTypeHeader
-        : "application/octet-stream";
+      typeof response.headers["content-type"] === "string"
+        ? response.headers["content-type"]
+        : "audio/mpeg";
     const contentDisposition =
-      typeof contentDispositionHeader === "string"
-        ? contentDispositionHeader
+      typeof response.headers["content-disposition"] === "string"
+        ? response.headers["content-disposition"]
         : undefined;
 
     return new NextResponse(response.data, {
@@ -44,10 +44,10 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error: unknown) {
-    console.error("ROUTE ERROR:", getHttpErrorResponseData(error) ?? error);
+    console.error("STREAM ERROR:", getHttpErrorResponseData(error) ?? error);
 
     return NextResponse.json(
-      { message: "Erro ao buscar arquivo" },
+      { message: "Erro ao reproduzir música" },
       { status: getHttpErrorStatus(error) },
     );
   }

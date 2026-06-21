@@ -156,14 +156,15 @@ export async function serverApiRequest<T>(
   } catch (error) {
     const axiosError = error as AxiosError;
 
-    if (axiosError.response?.status !== 401) {
+    if (axiosError.response?.status !== 401 && axiosError.response?.status !== 403) {
       throw error;
     }
 
     if (!authState.refreshToken) {
-      console.warn("serverApiRequest missing refresh token after 401", {
+      console.warn("serverApiRequest missing refresh token after auth error", {
         method: config.method,
         url: config.url,
+        status: axiosError.response?.status,
       });
       throw error;
     }
