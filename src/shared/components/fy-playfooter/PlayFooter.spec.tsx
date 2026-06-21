@@ -1,10 +1,11 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, waitFor } from "@testing-library/react";
 import { screen } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import PlayFooter, { PlayFooterMusica } from "./PlayFooter";
 
 const useAudioMock = vi.hoisted(() => vi.fn());
+const fyProgressMock = vi.hoisted(() => vi.fn());
 
 vi.mock("../fy-play/FyPlay", () => ({
   default: ({ onNext, onPrevious }: FyPlayMockProps) => (
@@ -29,9 +30,28 @@ vi.mock("../fy-playmodal/FyPlaymodal", () => ({
   ),
 }));
 
+vi.mock("../fy-progress/FyProgress", () => ({
+  default: (props: FyProgressMockProps) => {
+    fyProgressMock(props);
+    return (
+      <div aria-label="Progresso renderizado">
+        {props.currentTime}/{props.duration}
+      </div>
+    );
+  },
+}));
+
 vi.mock("../../hooks/Audio/useAudio", () => ({
   default: useAudioMock,
 }));
+
+beforeEach(() => {
+  useAudioMock.mockReturnValue({
+    isPlaying: false,
+    duration: 0,
+    currentTime: 0,
+  });
+});
 
 afterEach(() => {
   cleanup();
@@ -66,6 +86,22 @@ describe("PlayFooter", () => {
         name: `Abrir player da música ${musica.nomeMusica}`,
       })
     ).toBeInTheDocument();
+  });
+
+  it("repassa o tempo da música para o progresso", () => {
+    const musica = montarMusica();
+    useAudioMock.mockReturnValue({
+      isPlaying: true,
+      duration: 240,
+      currentTime: 60,
+    });
+
+    render(<PlayFooter musica={musica} />);
+
+    expect(fyProgressMock).toHaveBeenCalledWith({
+      currentTime: 60,
+      duration: 240,
+    });
   });
 
   it("abre e fecha o modal da música", async () => {
@@ -125,6 +161,11 @@ interface FyPlayMockProps {
 interface FyPlaymodalMockProps {
   readonly setAltera: () => void;
   readonly musicaAtual: PlayFooterMusica;
+}
+
+interface FyProgressMockProps {
+  readonly currentTime: number;
+  readonly duration: number;
 }
 
 function montarMusica(): PlayFooterMusica {

@@ -37,7 +37,7 @@ export default function PlayFooter({
     : null;
 
   const onEnded = () => setPlay(false);
-  useAudio(src, play, onEnded);
+  const { currentTime, duration } = useAudio(src, play, onEnded);
 
   useEffect(() => {
     setPlay(Boolean(musica.id));
@@ -76,7 +76,7 @@ export default function PlayFooter({
           </div>
         </button>
 
-        <FyProgress />
+        <FyProgress currentTime={currentTime} duration={duration} />
 
         <FyPlay
           play={play}
@@ -94,6 +94,8 @@ export default function PlayFooter({
           setPlay={setPlay}
           onNext={onNext}
           onPrevious={onPrevious}
+          currentTime={currentTime}
+          duration={duration}
         />
       ) : null}
     </>

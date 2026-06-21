@@ -12,6 +12,8 @@ interface FyPlaymodalProps {
   readonly setPlay?: (play: boolean) => void;
   readonly onNext?: () => void;
   readonly onPrevious?: () => void;
+  readonly currentTime?: number;
+  readonly duration?: number;
 }
 
 export default function FyPlaymodal({
@@ -21,6 +23,8 @@ export default function FyPlaymodal({
   setPlay,
   onNext,
   onPrevious,
+  currentTime,
+  duration,
 }: FyPlaymodalProps) {
   return (
     <dialog
@@ -51,7 +55,7 @@ export default function FyPlaymodal({
           <p className={styles.artist}>{musicaAtual.nomeArtista}</p>
         </div>
 
-        <FyProgress />
+        <FyProgress currentTime={currentTime} duration={duration} />
 
         <div className={styles.controls}>
           <FyPlay
