@@ -7,7 +7,16 @@ import PlayFooter, { PlayFooterMusica } from "./PlayFooter";
 const useAudioMock = vi.hoisted(() => vi.fn());
 
 vi.mock("../fy-play/FyPlay", () => ({
-  default: () => <section aria-label="Ações da música" />,
+  default: ({ onNext, onPrevious }: FyPlayMockProps) => (
+    <section aria-label="Ações da música">
+      <button type="button" onClick={onNext}>
+        Avançar música
+      </button>
+      <button type="button" onClick={onPrevious}>
+        Voltar música
+      </button>
+    </section>
+  ),
 }));
 
 vi.mock("../fy-playmodal/FyPlaymodal", () => ({
@@ -85,7 +94,33 @@ describe("PlayFooter", () => {
       })
     ).not.toBeInTheDocument();
   });
+
+  it("encaminha ações de próxima e anterior para os controles", async () => {
+    const user = userEvent.setup();
+    const onNext = vi.fn();
+    const onPrevious = vi.fn();
+    const musica = montarMusica();
+
+    render(
+      <PlayFooter
+        musica={musica}
+        onNext={onNext}
+        onPrevious={onPrevious}
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Avançar música" }));
+    await user.click(screen.getByRole("button", { name: "Voltar música" }));
+
+    expect(onNext).toHaveBeenCalledTimes(1);
+    expect(onPrevious).toHaveBeenCalledTimes(1);
+  });
 });
+
+interface FyPlayMockProps {
+  readonly onNext?: () => void;
+  readonly onPrevious?: () => void;
+}
 
 interface FyPlaymodalMockProps {
   readonly setAltera: () => void;

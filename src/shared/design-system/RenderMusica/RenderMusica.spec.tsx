@@ -41,7 +41,7 @@ describe("RenderMusica", () => {
     expect(screen.getByText("Artista Desconhecido")).toBeInTheDocument();
   });
 
-  it("chama aoSelecionarMusica com a música ao clicar no card", () => {
+  it("chama aoSelecionarMusica com a música e a fila ao clicar no card", () => {
     const fn = vi.fn();
 
     render(<RenderMusica aoSelecionarMusica={fn} />);
@@ -49,6 +49,6 @@ describe("RenderMusica", () => {
     fireEvent.click(screen.getByText("Musica 1"));
 
     expect(fn).toHaveBeenCalledTimes(1);
-    expect(fn).toHaveBeenCalledWith(mockMusicas[0]);
+    expect(fn).toHaveBeenCalledWith(mockMusicas[0], mockMusicas);
   });
 });

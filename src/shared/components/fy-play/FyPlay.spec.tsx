@@ -47,6 +47,21 @@ describe("FyPlay", () => {
 
     expect(setPlay).toHaveBeenCalledWith(false);
   });
+
+  it("aciona próxima e anterior quando os controles são clicados", async () => {
+    const user = userEvent.setup();
+    const onNext = vi.fn();
+    const onPrevious = vi.fn();
+    useFyPlayMock.mockReturnValue(montarEstado());
+
+    render(<FyPlay onNext={onNext} onPrevious={onPrevious} />);
+
+    await user.click(screen.getByRole("button", { name: "Avançar música" }));
+    await user.click(screen.getByRole("button", { name: "Voltar música" }));
+
+    expect(onNext).toHaveBeenCalledTimes(1);
+    expect(onPrevious).toHaveBeenCalledTimes(1);
+  });
 });
 
 interface EstadoFyPlay {

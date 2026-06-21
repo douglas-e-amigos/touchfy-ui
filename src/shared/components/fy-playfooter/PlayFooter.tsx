@@ -18,10 +18,14 @@ export interface PlayFooterMusica {
 
 interface PlayFooterProps extends Readonly<ComponentProps<"footer">> {
   readonly musica: PlayFooterMusica;
+  readonly onNext?: () => void;
+  readonly onPrevious?: () => void;
 }
 
 export default function PlayFooter({
   musica,
+  onNext,
+  onPrevious,
   className = "",
   ...footerProps
 }: PlayFooterProps) {
@@ -74,7 +78,12 @@ export default function PlayFooter({
 
         <FyProgress />
 
-        <FyPlay play={play} setPlay={setPlay} />
+        <FyPlay
+          play={play}
+          setPlay={setPlay}
+          onNext={onNext}
+          onPrevious={onPrevious}
+        />
       </footer>
 
       {modalAberto ? (
@@ -83,6 +92,8 @@ export default function PlayFooter({
           musicaAtual={musica}
           play={play}
           setPlay={setPlay}
+          onNext={onNext}
+          onPrevious={onPrevious}
         />
       ) : null}
     </>

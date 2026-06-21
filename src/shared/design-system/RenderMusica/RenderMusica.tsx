@@ -15,7 +15,10 @@ export function extrairArtista(musica: MusicaBackend): string {
 export { DEFAULT_IMAGE };
 
 interface RenderMusicaProps {
-  readonly aoSelecionarMusica: (musica: MusicaBackend) => void;
+  readonly aoSelecionarMusica: (
+    musica: MusicaBackend,
+    fila: MusicaBackend[]
+  ) => void;
 }
 
 export default function RenderMusica({
@@ -29,7 +32,7 @@ export default function RenderMusica({
         <MediaCard
           key={musica.id}
           imagemURL={DEFAULT_IMAGE}
-          rodarMusica={() => aoSelecionarMusica(musica)}
+          rodarMusica={() => aoSelecionarMusica(musica, musicasAleatorias)}
           nomeArtista={extrairArtista(musica)}
           nomeMusica={musica.nome}
           className={styles.card}

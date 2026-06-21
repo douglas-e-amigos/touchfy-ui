@@ -12,11 +12,15 @@ import useFyPlay from "../../hooks/FyPlay/useFyPlay";
 interface FyPlayProps {
   readonly play?: boolean;
   readonly setPlay?: (play: boolean) => void;
+  readonly onNext?: () => void;
+  readonly onPrevious?: () => void;
 }
 
 export default function FyPlay({
   play: externalPlay,
   setPlay: externalSetPlay,
+  onNext,
+  onPrevious,
 }: FyPlayProps = {}) {
   const {
     right,
@@ -67,7 +71,10 @@ export default function FyPlay({
           type="button"
           aria-label="Voltar música"
           className={buttonClassName}
-          onClick={() => setLeft(left + 1)}
+          onClick={() => {
+            setLeft(left + 1);
+            onPrevious?.();
+          }}
         >
           <ArrowLeftToLine aria-hidden="true" />
         </button>
@@ -84,7 +91,10 @@ export default function FyPlay({
           type="button"
           aria-label="Avançar música"
           className={buttonClassName}
-          onClick={() => setRight(right + 1)}
+          onClick={() => {
+            setRight(right + 1);
+            onNext?.();
+          }}
         >
           <ArrowRightToLine aria-hidden="true" />
         </button>
