@@ -6,7 +6,7 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
@@ -19,29 +19,38 @@ export async function GET(
   }
 
   try {
+    const range = request.headers.get("range");
     const response = await serverApiRequest<ArrayBuffer>({
       method: "GET",
       url: `/musicas/stream/${id}`,
       responseType: "arraybuffer",
+      ...(range ? { headers: { Range: range } } : {}),
     });
 
-    const contentType =
-      typeof response.headers["content-type"] === "string"
-        ? response.headers["content-type"]
-        : "audio/mpeg";
-    const contentDisposition =
-      typeof response.headers["content-disposition"] === "string"
-        ? response.headers["content-disposition"]
-        : undefined;
+    const headers = new Headers();
+    headers.set(
+      "Content-Type",
+      getStringHeader(response.headers["content-type"]) ?? "audio/mpeg",
+    );
+    headers.set(
+      "Accept-Ranges",
+      getStringHeader(response.headers["accept-ranges"]) ?? "bytes",
+    );
+    setOptionalHeader(
+      headers,
+      "Content-Disposition",
+      response.headers["content-disposition"],
+    );
+    setOptionalHeader(
+      headers,
+      "Content-Length",
+      response.headers["content-length"],
+    );
+    setOptionalHeader(headers, "Content-Range", response.headers["content-range"]);
 
     return new NextResponse(response.data, {
       status: response.status,
-      headers: {
-        "Content-Type": contentType,
-        ...(contentDisposition
-          ? { "Content-Disposition": contentDisposition }
-          : {}),
-      },
+      headers,
     });
   } catch (error: unknown) {
     console.error("STREAM ERROR:", getHttpErrorResponseData(error) ?? error);
@@ -50,5 +59,25 @@ export async function GET(
       { message: "Erro ao reproduzir música" },
       { status: getHttpErrorStatus(error) },
     );
+  }
+}
+
+function getStringHeader(value: unknown): string | undefined {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (Array.isArray(value) && typeof value[0] === "string") {
+    return value[0];
+  }
+
+  return undefined;
+}
+
+function setOptionalHeader(headers: Headers, name: string, value: unknown) {
+  const stringValue = getStringHeader(value);
+
+  if (stringValue) {
+    headers.set(name, stringValue);
   }
 }
