@@ -6,20 +6,20 @@ import RenderMusica, {
   extrairArtista,
   DEFAULT_IMAGE,
 } from "@/src/shared/design-system/RenderMusica/RenderMusica";
-import { useMusicaAtualContext } from "@/src/shared/providers/MusicaAtual.Provider";
+import {
+  useMusicaAtualContext,
+  type MusicaAtual,
+} from "@/src/shared/providers/MusicaAtual.Provider";
 import type { MusicaBackend } from "@/src/shared/types/musica.types";
 
 export default function Dashboard() {
-  const { setMusicaAtual } = useMusicaAtualContext();
+  const { selecionarMusica } = useMusicaAtualContext();
 
-  function handleSelecionarMusica(musica: MusicaBackend) {
-    setMusicaAtual({
-      id: musica.id,
-      nomeMusica: musica.nome,
-      nomeArtista: extrairArtista(musica),
-      imagemURL: DEFAULT_IMAGE,
-      caminhoDoArquivo: musica.caminhoDoArquivo,
-    });
+  function handleSelecionarMusica(
+    musica: MusicaBackend,
+    fila: MusicaBackend[]
+  ) {
+    selecionarMusica(toMusicaAtual(musica), fila.map(toMusicaAtual));
   }
 
   return (
@@ -28,4 +28,14 @@ export default function Dashboard() {
       <RenderMusica aoSelecionarMusica={handleSelecionarMusica} />
     </main>
   );
+}
+
+function toMusicaAtual(musica: MusicaBackend): MusicaAtual {
+  return {
+    id: musica.id,
+    nomeMusica: musica.nome,
+    nomeArtista: extrairArtista(musica),
+    imagemURL: DEFAULT_IMAGE,
+    caminhoDoArquivo: musica.caminhoDoArquivo,
+  };
 }
