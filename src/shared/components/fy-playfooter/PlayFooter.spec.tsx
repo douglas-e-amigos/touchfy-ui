@@ -74,7 +74,7 @@ interface FyPlaymodalMockProps {
 
 function montarMusica(): PlayFooterMusica {
   return {
-    id: 1,
+    id: "1",
     imagemURL: "/musica.png",
     nomeMusica: "Nova faixa",
     nomeArtista: "Artista teste",

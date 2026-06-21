@@ -7,7 +7,7 @@ import styles from "./PlayFooter.module.css";
 import FyProgress from "../fy-progress/FyProgress";
 
 export interface PlayFooterMusica {
-  readonly id: number;
+  readonly id: string;
   readonly imagemURL: string;
   readonly nomeMusica: string;
   readonly nomeArtista: string;

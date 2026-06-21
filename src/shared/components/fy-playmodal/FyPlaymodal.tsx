@@ -1,6 +1,6 @@
 "use client";
 
-import { MusicaAtual } from "../../types/MusicaAtual.types";
+import { MusicaAtual } from "@/src/shared/types/musica.types";
 import FyPlay from "../fy-play/FyPlay";
 import FyProgress from "../fy-progress/FyProgress";
 import styles from "./FyPlaymodal.module.css";
