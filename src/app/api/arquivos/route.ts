@@ -1,4 +1,4 @@
-import publicHttpServer from "@/src/infrastructure/http/http-server";
+import { serverApiRequest } from "@/src/infrastructure/http/server-http";
 import {
   getHttpErrorResponseData,
   getHttpErrorStatus,
@@ -16,7 +16,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const response = await publicHttpServer.get<ArrayBuffer>("/arquivos", {
+    const response = await serverApiRequest<ArrayBuffer>({
+      method: "GET",
+      url: "/arquivos",
       params: { caminho },
       responseType: "arraybuffer",
     });

@@ -23,7 +23,7 @@ export default function HomeLayout({
 }
 
 function HomeShell({ children }: Readonly<{ children: ReactNode }>) {
-  const { musicaAtual } = useMusicaAtualContext();
+  const { musicaAtual, tocarProxima, tocarAnterior } = useMusicaAtualContext();
 
   return (
     <div className="h-full w-full bg-black lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
@@ -31,7 +31,13 @@ function HomeShell({ children }: Readonly<{ children: ReactNode }>) {
         <Sidebar />
       </div>
       {children}
-      {musicaAtual ? <PlayFooter musica={musicaAtual} /> : null}
+      {musicaAtual ? (
+        <PlayFooter
+          musica={musicaAtual}
+          onNext={tocarProxima}
+          onPrevious={tocarAnterior}
+        />
+      ) : null}
     </div>
   );
 }

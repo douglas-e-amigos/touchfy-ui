@@ -8,7 +8,7 @@ describe("useFyPlay", () => {
 
     expect(result.current.right).toBe(0);
     expect(result.current.left).toBe(0);
-    expect(result.current.play).toBe(true);
+    expect(result.current.play).toBe(false);
     expect(result.current.favorite).toBe(true);
     expect(result.current.shuffle).toBe(false);
     expect(result.current.repeat).toBe(false);

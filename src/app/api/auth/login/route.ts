@@ -19,9 +19,11 @@ export async function POST(request: Request): Promise<Response> {
 
   const cookieStore = await cookies();
   
+  const isSecure = process.env.NODE_ENV === "production";
+
   cookieStore.set("refresh_token", response.data.refreshToken, {
     httpOnly: true,
-    secure: true,
+    secure: isSecure,
     sameSite: "strict",
     path: "/",
     maxAge: 60 * 168 // 7 dias
@@ -29,7 +31,7 @@ export async function POST(request: Request): Promise<Response> {
 
   cookieStore.set("access_token", response.data.accessToken, {
     httpOnly: true,
-    secure: true,
+    secure: isSecure,
     sameSite: "strict",
     path: "/",
     maxAge: 60 * 5 // 5 minutos

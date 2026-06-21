@@ -1,4 +1,4 @@
-import { PlaylistType } from "@/src/shared/types/Playlist.types";
+import { PlaylistType } from "@/src/shared/types/musica.types";
 
 const jazzCover =
   "https://cdn.dribbble.com/userupload/42879218/file/original-01a3e9162fba7773ab2dc7909f1b3b23.png?resize=1024x768&vertical=center";
@@ -13,36 +13,40 @@ export const defaultPlaylist: PlaylistType = {
   imagem: jazzCover,
   musicas: [
     {
-      id: 1,
+      id: "1",
       nomeMusica: "Midnight Dreams",
       nomeArtista: "Luna Sky",
       album: "Neon Nights",
       duracao: "3:55",
       imagemURL: neonCover,
+      caminhoDoArquivo: "/audios/midnight-dreams.mp3",
     },
     {
-      id: 2,
+      id: "2",
       nomeMusica: "Heartbeat",
       nomeArtista: "Luna Sky",
       album: "Neon Nights",
       duracao: "3:32",
       imagemURL: neonCover,
+      caminhoDoArquivo: "/audios/heartbeat.mp3",
     },
     {
-      id: 3,
+      id: "3",
       nomeMusica: "Smooth Jazz",
       nomeArtista: "Marcus Blue",
       album: "Late Night Sessions",
       duracao: "5:24",
       imagemURL: jazzCover,
+      caminhoDoArquivo: "/audios/smooth-jazz.mp3",
     },
     {
-      id: 4,
+      id: "4",
       nomeMusica: "Memories",
       nomeArtista: "Marcus Blue",
       album: "Late Night Sessions",
       duracao: "4:49",
       imagemURL: jazzCover,
+      caminhoDoArquivo: "/audios/memories.mp3",
     },
   ],
 };
