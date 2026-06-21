@@ -9,7 +9,7 @@ import {
 } from "react";
 
 export interface MusicaAtual {
-  id: number;
+  id: string;
   imagemURL: string;
   nomeMusica: string;
   nomeArtista: string;
