@@ -18,6 +18,7 @@ export default function Dashboard() {
       nomeMusica: musica.nome,
       nomeArtista: extrairArtista(musica),
       imagemURL: DEFAULT_IMAGE,
+      caminhoDoArquivo: musica.caminhoDoArquivo,
     });
   }
 

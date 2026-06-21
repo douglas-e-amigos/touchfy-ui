@@ -19,6 +19,7 @@ export const defaultPlaylist: PlaylistType = {
       album: "Neon Nights",
       duracao: "3:55",
       imagemURL: neonCover,
+      caminhoDoArquivo: "/audios/midnight-dreams.mp3",
     },
     {
       id: "2",
@@ -27,6 +28,7 @@ export const defaultPlaylist: PlaylistType = {
       album: "Neon Nights",
       duracao: "3:32",
       imagemURL: neonCover,
+      caminhoDoArquivo: "/audios/heartbeat.mp3",
     },
     {
       id: "3",
@@ -35,6 +37,7 @@ export const defaultPlaylist: PlaylistType = {
       album: "Late Night Sessions",
       duracao: "5:24",
       imagemURL: jazzCover,
+      caminhoDoArquivo: "/audios/smooth-jazz.mp3",
     },
     {
       id: "4",
@@ -43,6 +46,7 @@ export const defaultPlaylist: PlaylistType = {
       album: "Late Night Sessions",
       duracao: "4:49",
       imagemURL: jazzCover,
+      caminhoDoArquivo: "/audios/memories.mp3",
     },
   ],
 };

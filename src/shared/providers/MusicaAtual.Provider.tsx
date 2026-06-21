@@ -13,6 +13,7 @@ export interface MusicaAtual {
   imagemURL: string;
   nomeMusica: string;
   nomeArtista: string;
+  caminhoDoArquivo: string;
 }
 
 interface MusicaAtualContextType {

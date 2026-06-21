@@ -19,6 +19,7 @@ export default function Playlist() {
       nomeMusica: musica.nomeMusica,
       nomeArtista: musica.nomeArtista,
       imagemURL: musica.imagemURL,
+      caminhoDoArquivo: musica.caminhoDoArquivo,
     });
   }
 

@@ -19,6 +19,7 @@ const musicas: MusicaType[] = [
     album: "Neon Nights",
     duracao: "3:55",
     imagemURL: "/midnight-dreams.png",
+    caminhoDoArquivo: "/audios/midnight-dreams.mp3",
   },
   {
     id: "2",
@@ -27,6 +28,7 @@ const musicas: MusicaType[] = [
     album: "Late Night Sessions",
     duracao: "5:24",
     imagemURL: "/smooth-jazz.png",
+    caminhoDoArquivo: "/audios/smooth-jazz.mp3",
   },
 ];
 
