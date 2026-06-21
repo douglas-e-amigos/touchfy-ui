@@ -1,16 +1,19 @@
 "use client";
 
-import { ComponentProps, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 import FyPlay from "../fy-play/FyPlay";
 import FyPlaymodal from "../fy-playmodal/FyPlaymodal";
 import styles from "./PlayFooter.module.css";
 import FyProgress from "../fy-progress/FyProgress";
+import useFyPlay from "../../hooks/FyPlay/useFyPlay";
+import useAudio from "../../hooks/Audio/useAudio";
 
 export interface PlayFooterMusica {
   readonly id: string;
   readonly imagemURL: string;
   readonly nomeMusica: string;
   readonly nomeArtista: string;
+  readonly caminhoDoArquivo: string;
 }
 
 interface PlayFooterProps extends Readonly<ComponentProps<"footer">> {
@@ -23,6 +26,18 @@ export default function PlayFooter({
   ...footerProps
 }: PlayFooterProps) {
   const [modalAberto, setModalAberto] = useState(false);
+  const { play, setPlay } = useFyPlay();
+
+  const src = musica.id
+    ? `/api/musicas/stream/${musica.id}`
+    : null;
+
+  const onEnded = () => setPlay(false);
+  useAudio(src, play, onEnded);
+
+  useEffect(() => {
+    setPlay(Boolean(musica.id));
+  }, [musica.id, setPlay]);
 
   function abrirModal() {
     setModalAberto(true);
@@ -59,11 +74,16 @@ export default function PlayFooter({
 
         <FyProgress />
 
-        <FyPlay />
+        <FyPlay play={play} setPlay={setPlay} />
       </footer>
 
       {modalAberto ? (
-        <FyPlaymodal setAltera={fecharModal} musicaAtual={musica} />
+        <FyPlaymodal
+          setAltera={fecharModal}
+          musicaAtual={musica}
+          play={play}
+          setPlay={setPlay}
+        />
       ) : null}
     </>
   );

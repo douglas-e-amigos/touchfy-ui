@@ -8,11 +8,15 @@ import styles from "./FyPlaymodal.module.css";
 interface FyPlaymodalProps {
   readonly setAltera: () => void;
   readonly musicaAtual: MusicaAtual;
+  readonly play?: boolean;
+  readonly setPlay?: (play: boolean) => void;
 }
 
 export default function FyPlaymodal({
   setAltera,
   musicaAtual,
+  play,
+  setPlay,
 }: FyPlaymodalProps) {
   return (
     <dialog
@@ -46,7 +50,7 @@ export default function FyPlaymodal({
         <FyProgress />
 
         <div className={styles.controls}>
-          <FyPlay />
+          <FyPlay play={play} setPlay={setPlay} />
         </div>
       </div>
     </dialog>

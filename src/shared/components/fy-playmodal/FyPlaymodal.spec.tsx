@@ -47,5 +47,6 @@ function montarMusicaAtual(): MusicaAtual {
     imagemURL: "/capa.png",
     nomeMusica: "Música atual",
     nomeArtista: "Artista atual",
+    caminhoDoArquivo: "/audios/musica.mp3",
   };
 }
