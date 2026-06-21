@@ -8,7 +8,7 @@ import ActionsPlaylist from "./components/Actions/ActionsPlaylist";
 import HeaderPlaylist from "./components/Header/HeaderPlaylist";
 import ListPlaylist from "./components/List/ListPlaylist";
 import { defaultPlaylist } from "./constants/default-playlist";
-import { MusicaType } from "@/src/shared/types/Musica.types";
+import { MusicaType } from "@/src/shared/types/musica.types";
 
 export default function Playlist() {
   const { musicaAtual, setMusicaAtual } = useMusicaAtualContext();
