@@ -1,3 +1,5 @@
+import type { Pessoa } from "@/src/shared/types/pessoa.types";
+
 export type UsuarioRole = "OUVINTE" | "ARTISTA" | "MODERADOR" | "ADMIN";
 
 export interface CriarUsuarioRequest {
@@ -33,11 +35,4 @@ export interface RefreshTokenRequest {
   refreshToken: string;
 }
 
-export interface UsuarioResponse {
-  id?: string;
-  nome: string;
-  nomeUsuario: string;
-  dataNascimento: string;
-  fotoPerfil: string | null;
-  email: string;
-}
+export interface UsuarioResponse extends Pessoa {}

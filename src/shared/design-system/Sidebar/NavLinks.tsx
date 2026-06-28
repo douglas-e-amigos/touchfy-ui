@@ -1,15 +1,23 @@
 "use client";
 
-import { Home, Search, Library, Plus } from "lucide-react";
+import { Home, Search, Library, Music, Plus } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 import FyButton from "../../components/fy-button/FyButton";
 import FyButtonIcon from "../../components/fy-iconbutton/FyButtonIcon";
 
+type NavLinksProps = {
+  isArtista?: boolean;
+};
+
 const navigationLinks = [
   { name: "Início", icon: Home, href: "/dashboard" },
   { name: "Buscar", icon: Search, href: "/busca" },
   { name: "Biblioteca", icon: Library, href: "/biblioteca" },
+];
+
+const artistaLinks = [
+  { name: "Músicas", icon: Music, href: "/musicas" },
 ];
 
 const playlistLinks = [
@@ -18,9 +26,10 @@ const playlistLinks = [
   { name: "Chill Nights", href: "/playlists/chill-nights" },
 ];
 
-export function NavLinks() {
+export function NavLinks({ isArtista = false }: Readonly<NavLinksProps>) {
   const router = useRouter();
   const pathname = usePathname();
+  const links = isArtista ? [...navigationLinks, ...artistaLinks] : navigationLinks;
 
   function navigateTo(href?: string) {
     if (href) {
@@ -32,7 +41,7 @@ export function NavLinks() {
     <div className="flex flex-col h-full">
       {/* Navegação principal */}
       <div className="flex flex-col gap-2">
-        {navigationLinks.map((link) => {
+        {links.map((link) => {
           const Icon = link.icon;
 
           return (

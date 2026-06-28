@@ -19,6 +19,14 @@ export interface MusicaBackend {
   generosMusicais: GeneroMusical[];
 }
 
+export interface CriarMusicaRequest {
+  nome: string;
+  letra: string;
+  tagIds: string[];
+  generoMusicalIds: string[];
+  arquivo: File;
+}
+
 // ---- Frontend / Provider ----
 
 export interface MusicaAtual {

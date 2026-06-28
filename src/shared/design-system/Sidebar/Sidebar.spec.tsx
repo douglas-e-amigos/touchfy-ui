@@ -55,7 +55,10 @@ beforeEach(() => {
     usuario: {
       id: "usuario-1",
       nome: "Maria Silva",
+      nomeUsuario: "maria",
       email: "maria@email.com",
+      dataNascimento: "2000-01-01",
+      fotoPerfil: null,
     },
   });
 });
@@ -79,6 +82,46 @@ describe("Design-System: Sidebar", () => {
     expect(screen.getByRole("button", { name: /Chill Nights/i })).toBeInTheDocument();
     expect(screen.getByText("Maria Silva")).toBeInTheDocument();
     expect(screen.getByText("maria@email.com")).toBeInTheDocument();
+  });
+
+  it("renderiza o botão Músicas quando o usuário é artista", () => {
+    perfilMock.usePerfil.mockReturnValue({
+      abrirPerfil: perfilMock.abrirPerfil,
+      isLoadingUsuario: false,
+      usuario: {
+        id: "usuario-1",
+        nome: "Maria Silva",
+        nomeUsuario: "artista",
+        email: "maria@email.com",
+        dataNascimento: "2000-01-01",
+        fotoPerfil: null,
+        role: "artista",
+      },
+    });
+
+    render(<Sidebar />);
+
+    expect(screen.getByRole("button", { name: /^Músicas$/i })).toBeInTheDocument();
+  });
+
+  it("não renderiza o botão Músicas quando o usuário não é artista", () => {
+    perfilMock.usePerfil.mockReturnValue({
+      abrirPerfil: perfilMock.abrirPerfil,
+      isLoadingUsuario: false,
+      usuario: {
+        id: "usuario-1",
+        nome: "Maria Silva",
+        nomeUsuario: "maria",
+        email: "maria@email.com",
+        dataNascimento: "2000-01-01",
+        fotoPerfil: null,
+        role: "ouvinte",
+      },
+    });
+
+    render(<Sidebar />);
+
+    expect(screen.queryByRole("button", { name: /^Músicas$/i })).not.toBeInTheDocument();
   });
 
   it("chama os hooks usados pela Sidebar", () => {

@@ -38,6 +38,26 @@ describe("usePerfil", () => {
     );
   });
 
+  it("define role artista para o usuário artista enquanto o backend não envia role", async () => {
+    const usuarioArtistaMock: UsuarioResponse = {
+      ...usuarioMock,
+      nomeUsuario: "artista",
+    };
+
+    vi.spyOn(usuarioService, "buscarUsuarioLogado").mockResolvedValue(
+      usuarioArtistaMock,
+    );
+
+    const { result } = renderHook(() => usePerfil({ router: routerMock }));
+
+    await waitFor(() =>
+      expect(result.current.usuario).toEqual({
+        ...usuarioArtistaMock,
+        role: "artista",
+      }),
+    );
+  });
+
   it("se usuário não logado, deve ir para o login", async () => {
     const error = new Error("Não autenticado");
     vi.spyOn(console, "error").mockImplementation(() => {});

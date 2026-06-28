@@ -9,41 +9,27 @@ export async function GET() {
   try {
     const response = await serverApiRequest({
       method: "GET",
-      url: "/musicas",
+      url: "/musicas/tags",
     });
 
     return NextResponse.json(response.data);
   } catch (error: unknown) {
     console.error("ROUTE ERROR:", getHttpErrorResponseData(error) ?? error);
     return NextResponse.json(
-      { message: "Erro ao buscar músicas" },
+      { message: "Erro ao buscar tags" },
       { status: getHttpErrorStatus(error) },
     );
   }
 }
 
 export async function POST(request: NextRequest) {
-  const formData = await request.formData();
-
-  if (!formData.get("nome")) {
-    return NextResponse.json(
-      { message: "Nome da música não informado" },
-      { status: 400 },
-    );
-  }
-
-  if (!formData.get("arquivo")) {
-    return NextResponse.json(
-      { message: "Arquivo da música não informado" },
-      { status: 400 },
-    );
-  }
+  const body = await request.json();
 
   try {
     const response = await serverApiRequest({
       method: "POST",
-      url: "/musicas",
-      data: formData,
+      url: "/musicas/tags",
+      data: body,
     });
 
     return NextResponse.json(response.data);
@@ -53,7 +39,7 @@ export async function POST(request: NextRequest) {
     console.error("ROUTE ERROR:", errorResponseData ?? error);
 
     return NextResponse.json(
-      errorResponseData ?? { message: "Erro ao criar música" },
+      errorResponseData ?? { message: "Erro ao criar tag" },
       { status: getHttpErrorStatus(error) },
     );
   }

@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { usePerfil } from "../../hooks/Perfil/usePerfil";
 import { useSiderbar } from "../../hooks/Sidebar/useSidebar";
 
+const ARTISTA_ROLE = "artista";
+
 export default function Sidebar() {
   const router = useRouter();
   const {
@@ -19,6 +21,7 @@ export default function Sidebar() {
     isSidebarOpen,
   } = useSiderbar();
   const { abrirPerfil, isLoadingUsuario, usuario } = usePerfil({ router });
+  const isArtista = usuario?.role?.toLowerCase() === ARTISTA_ROLE;
 
   const logout = async () => {
     await authService.logout();
@@ -61,7 +64,7 @@ export default function Sidebar() {
           <h1 className="text-3xl font-bold text-pink-500 mb-8">Melody</h1>
 
           {/* Navegação */}
-          <NavLinks />
+          <NavLinks isArtista={isArtista} />
 
           {/* Usuário */}
           <div className="mt-auto pt-4 border-t border-zinc-800 relative">
