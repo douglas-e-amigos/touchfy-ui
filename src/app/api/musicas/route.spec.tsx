@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AxiosResponse } from "axios";
 import type { NextRequest } from "next/server";
 import { serverApiRequest } from "@/src/infrastructure/http/server-http";
-import { GET, POST } from "./route";
+import { GET, POST, limparCacheMusicas } from "./route";
 
 vi.mock("@/src/infrastructure/http/server-http", () => ({
   serverApiRequest: vi.fn(),
@@ -27,9 +27,16 @@ function createPostRequest(formData: FormData): NextRequest {
   }) as unknown as NextRequest;
 }
 
+function createGetRequest(nome: string): NextRequest {
+  return new Request(
+    `http://localhost/api/musicas?nome=${encodeURIComponent(nome)}`,
+  ) as unknown as NextRequest;
+}
+
 describe("GET /api/musicas", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    limparCacheMusicas();
   });
 
   it("retorna a lista de músicas do backend", async () => {
@@ -77,11 +84,64 @@ describe("GET /api/musicas", () => {
       consoleError.mockRestore();
     }
   });
+
+  it("mantém todas as músicas em cache na rota Next", async () => {
+    const mockMusicas = [
+      {
+        id: "1",
+        nome: "Musica 1",
+        caminhoDoArquivo: "/path/1",
+        letra: "",
+        tags: [],
+        generosMusicais: [],
+      },
+    ];
+
+    serverApiRequestMock.mockResolvedValueOnce(createAxiosResponse(mockMusicas));
+
+    const firstResponse = await GET();
+    const secondResponse = await GET();
+
+    expect(serverApiRequestMock).toHaveBeenCalledTimes(1);
+    await expect(firstResponse.json()).resolves.toEqual(mockMusicas);
+    await expect(secondResponse.json()).resolves.toEqual(mockMusicas);
+  });
+
+  it("busca música por nome usando o cache da rota Next", async () => {
+    const mockMusicas = [
+      {
+        id: "1",
+        nome: "Around the World",
+        caminhoDoArquivo: "/path/1",
+        letra: "",
+        tags: [],
+        generosMusicais: [],
+      },
+      {
+        id: "2",
+        nome: "One More Time",
+        caminhoDoArquivo: "/path/2",
+        letra: "",
+        tags: [],
+        generosMusicais: [],
+      },
+    ];
+
+    serverApiRequestMock.mockResolvedValueOnce(createAxiosResponse(mockMusicas));
+
+    const firstResponse = await GET(createGetRequest("around"));
+    const secondResponse = await GET(createGetRequest("one"));
+
+    expect(serverApiRequestMock).toHaveBeenCalledTimes(1);
+    await expect(firstResponse.json()).resolves.toEqual(mockMusicas[0]);
+    await expect(secondResponse.json()).resolves.toEqual(mockMusicas[1]);
+  });
 });
 
 describe("POST /api/musicas", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    limparCacheMusicas();
   });
 
   it("repassa o cadastro de música para o backend", async () => {
@@ -115,5 +175,46 @@ describe("POST /api/musicas", () => {
       message: "Nome da música não informado",
     });
     expect(serverApiRequestMock).not.toHaveBeenCalled();
+  });
+
+  it("limpa o cache de músicas após cadastrar uma música", async () => {
+    const musicasAntes = [
+      {
+        id: "1",
+        nome: "Musica 1",
+        caminhoDoArquivo: "/path/1",
+        letra: "",
+        tags: [],
+        generosMusicais: [],
+      },
+    ];
+    const musicasDepois = [
+      ...musicasAntes,
+      {
+        id: "2",
+        nome: "Musica 2",
+        caminhoDoArquivo: "/path/2",
+        letra: "",
+        tags: [],
+        generosMusicais: [],
+      },
+    ];
+    const formData = new FormData();
+    formData.append("nome", "Musica 2");
+    formData.append("arquivo", "musica.mp3");
+
+    serverApiRequestMock
+      .mockResolvedValueOnce(createAxiosResponse(musicasAntes))
+      .mockResolvedValueOnce(
+        createAxiosResponse({ mensagem: "Música criada", criado: true }),
+      )
+      .mockResolvedValueOnce(createAxiosResponse(musicasDepois));
+
+    await GET();
+    await POST(createPostRequest(formData));
+    const response = await GET();
+
+    expect(serverApiRequestMock).toHaveBeenCalledTimes(3);
+    await expect(response.json()).resolves.toEqual(musicasDepois);
   });
 });
