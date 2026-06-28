@@ -3,16 +3,63 @@ import {
   getHttpErrorResponseData,
   getHttpErrorStatus,
 } from "@/src/shared/utils/http-error";
+import type { MusicaBackend } from "@/src/shared/types/musica.types";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-  try {
-    const response = await serverApiRequest({
-      method: "GET",
-      url: "/musicas",
-    });
+const CACHE_TTL_MS = 5 * 60 * 1000;
 
-    return NextResponse.json(response.data);
+let musicasCache: {
+  data: MusicaBackend[];
+  expiresAt: number;
+} | null = null;
+
+export function limparCacheMusicas() {
+  musicasCache = null;
+}
+
+async function buscarMusicasComCache(): Promise<MusicaBackend[]> {
+  if (musicasCache && musicasCache.expiresAt > Date.now()) {
+    return musicasCache.data;
+  }
+
+  const response = await serverApiRequest<MusicaBackend[]>({
+    method: "GET",
+    url: "/musicas",
+  });
+
+  musicasCache = {
+    data: response.data,
+    expiresAt: Date.now() + CACHE_TTL_MS,
+  };
+
+  return response.data;
+}
+
+function buscarMusicaPorNome(musicas: MusicaBackend[], nome: string) {
+  const termoBusca = nome.trim().toLowerCase();
+
+  if (!termoBusca) {
+    return null;
+  }
+
+  return (
+    musicas.find((musica) => musica.nome.toLowerCase().includes(termoBusca)) ??
+    null
+  );
+}
+
+export async function GET(request?: NextRequest) {
+  try {
+    const musicas = await buscarMusicasComCache();
+    const nome = request
+      ? new URL(request.url).searchParams.get("nome")
+      : null;
+
+    if (nome) {
+      return NextResponse.json(buscarMusicaPorNome(musicas, nome));
+    }
+
+    return NextResponse.json(musicas);
   } catch (error: unknown) {
     console.error("ROUTE ERROR:", getHttpErrorResponseData(error) ?? error);
     return NextResponse.json(
@@ -45,6 +92,8 @@ export async function POST(request: NextRequest) {
       url: "/musicas",
       data: formData,
     });
+
+    limparCacheMusicas();
 
     return NextResponse.json(response.data);
   } catch (error: unknown) {

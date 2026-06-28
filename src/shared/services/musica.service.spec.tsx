@@ -16,7 +16,6 @@ const postMock = vi.mocked(httpClient.post);
 describe("MusicaService", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    musicaService.limparCache();
   });
 
   it("busca músicas da API", async () => {
@@ -39,46 +38,35 @@ describe("MusicaService", () => {
     expect(result).toEqual(mockMusicas);
   });
 
-  it("usa o cache na segunda chamada", async () => {
-    const mockMusicas: MusicaBackend[] = [
-      {
-        id: "1",
-        nome: "Musica 1",
-        caminhoDoArquivo: "/path/1",
-        letra: "",
-        tags: [],
-        generosMusicais: [],
-      },
-    ];
+  it("busca música por nome na rota de músicas", async () => {
+    const mockMusica: MusicaBackend = {
+      id: "1",
+      nome: "Around the World",
+      caminhoDoArquivo: "/path/1",
+      letra: "",
+      tags: [],
+      generosMusicais: [],
+    };
 
-    getMock.mockResolvedValueOnce({ data: mockMusicas });
+    getMock.mockResolvedValueOnce({ data: mockMusica });
 
-    await musicaService.buscarTodas();
-    const result = await musicaService.buscarTodas();
+    const result = await musicaService.buscarPorNome("around");
 
-    expect(getMock).toHaveBeenCalledTimes(1);
-    expect(result).toEqual(mockMusicas);
+    expect(getMock).toHaveBeenCalledWith("/musicas", {
+      params: { nome: "around" },
+    });
+    expect(result).toEqual(mockMusica);
   });
 
-  it("recarrega após limpar cache", async () => {
-    const mockMusicas: MusicaBackend[] = [
-      {
-        id: "1",
-        nome: "Musica 1",
-        caminhoDoArquivo: "/path/1",
-        letra: "",
-        tags: [],
-        generosMusicais: [],
-      },
-    ];
+  it("retorna null quando a música não é encontrada por nome", async () => {
+    getMock.mockResolvedValue({ data: null });
 
-    getMock.mockResolvedValue({ data: mockMusicas });
+    const result = await musicaService.buscarPorNome("Something About Us");
 
-    await musicaService.buscarTodas();
-    musicaService.limparCache();
-    await musicaService.buscarTodas();
-
-    expect(getMock).toHaveBeenCalledTimes(2);
+    expect(getMock).toHaveBeenCalledWith("/musicas", {
+      params: { nome: "Something About Us" },
+    });
+    expect(result).toBeNull();
   });
 
   it("cria música com multipart form data", async () => {

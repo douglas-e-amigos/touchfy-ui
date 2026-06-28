@@ -7,11 +7,6 @@ import type {
   Tag,
 } from "@/src/shared/types/musica.types";
 
-const CACHE_TTL = 5 * 60 * 1000;
-
-let cache: MusicaBackend[] | null = null;
-let cacheTimestamp = 0;
-
 class MusicaService {
   async criar(request: CriarMusicaRequest): Promise<NovoRecursoResponse> {
     const formData = new FormData();
@@ -37,19 +32,24 @@ class MusicaService {
       },
     );
 
-    this.limparCache();
-
     return response.data;
   }
 
   async buscarTodas(): Promise<MusicaBackend[]> {
-    if (cache && Date.now() - cacheTimestamp < CACHE_TTL) {
-      return cache;
+    const response = await httpClient.get<MusicaBackend[]>("/musicas");
+    return response.data;
+  }
+
+  async buscarPorNome(nome: string): Promise<MusicaBackend | null> {
+    const termoBusca = nome.trim();
+
+    if (!termoBusca) {
+      return null;
     }
 
-    const response = await httpClient.get<MusicaBackend[]>("/musicas");
-    cache = response.data;
-    cacheTimestamp = Date.now();
+    const response = await httpClient.get<MusicaBackend | null>("/musicas", {
+      params: { nome: termoBusca },
+    });
     return response.data;
   }
 
@@ -81,10 +81,6 @@ class MusicaService {
     return response.data;
   }
 
-  limparCache(): void {
-    cache = null;
-    cacheTimestamp = 0;
-  }
 }
 
 export const musicaService = new MusicaService();
