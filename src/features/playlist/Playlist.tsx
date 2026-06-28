@@ -2,31 +2,32 @@
 
 import { Lock } from "lucide-react";
 
-import { useMusicaAtualContext } from "@/src/shared/providers/MusicaAtual.Provider";
+import {
+  useMusicaAtualContext,
+  type MusicaAtual,
+} from "@/src/shared/providers/MusicaAtual.Provider";
 
 import ActionsPlaylist from "./components/Actions/ActionsPlaylist";
 import HeaderPlaylist from "./components/Header/HeaderPlaylist";
 import ListPlaylist from "./components/List/ListPlaylist";
 import { defaultPlaylist } from "./constants/default-playlist";
-import { MusicaType } from "@/src/shared/types/Musica.types";
+import { MusicaType } from "@/src/shared/types/musica.types";
 
 export default function Playlist() {
-  const { musicaAtual, setMusicaAtual } = useMusicaAtualContext();
+  const { musicaAtual, selecionarMusica } = useMusicaAtualContext();
 
-  function selecionarMusica(musica: MusicaType) {
-    setMusicaAtual({
-      id: musica.id,
-      nomeMusica: musica.nomeMusica,
-      nomeArtista: musica.nomeArtista,
-      imagemURL: musica.imagemURL,
-    });
+  function selecionarMusicaDaPlaylist(musica: MusicaType) {
+    selecionarMusica(
+      toMusicaAtual(musica),
+      defaultPlaylist.musicas.map(toMusicaAtual)
+    );
   }
 
   function tocarPlaylist() {
     const primeiraMusica = defaultPlaylist.musicas[0];
 
     if (primeiraMusica) {
-      selecionarMusica(primeiraMusica);
+      selecionarMusicaDaPlaylist(primeiraMusica);
     }
   }
 
@@ -50,10 +51,20 @@ export default function Playlist() {
       <section className="px-3 lg:px-9" aria-label="Faixas da playlist">
         <ListPlaylist
           musicas={defaultPlaylist.musicas}
-          onClick={selecionarMusica}
+          onClick={selecionarMusicaDaPlaylist}
           musicaAtualId={musicaAtual?.id}
         />
       </section>
     </main>
   );
+}
+
+function toMusicaAtual(musica: MusicaType): MusicaAtual {
+  return {
+    id: musica.id,
+    nomeMusica: musica.nomeMusica,
+    nomeArtista: musica.nomeArtista,
+    imagemURL: musica.imagemURL,
+    caminhoDoArquivo: musica.caminhoDoArquivo,
+  };
 }

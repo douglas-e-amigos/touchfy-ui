@@ -1,28 +1,47 @@
 "use client";
 
-import { ComponentProps, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 import FyPlay from "../fy-play/FyPlay";
 import FyPlaymodal from "../fy-playmodal/FyPlaymodal";
 import styles from "./PlayFooter.module.css";
 import FyProgress from "../fy-progress/FyProgress";
+import useFyPlay from "../../hooks/FyPlay/useFyPlay";
+import useAudio from "../../hooks/Audio/useAudio";
 
 export interface PlayFooterMusica {
-  readonly id: number;
+  readonly id: string;
   readonly imagemURL: string;
   readonly nomeMusica: string;
   readonly nomeArtista: string;
+  readonly caminhoDoArquivo: string;
 }
 
 interface PlayFooterProps extends Readonly<ComponentProps<"footer">> {
   readonly musica: PlayFooterMusica;
+  readonly onNext?: () => void;
+  readonly onPrevious?: () => void;
 }
 
 export default function PlayFooter({
   musica,
+  onNext,
+  onPrevious,
   className = "",
   ...footerProps
 }: PlayFooterProps) {
   const [modalAberto, setModalAberto] = useState(false);
+  const { play, setPlay } = useFyPlay();
+
+  const src = musica.id
+    ? `/api/musicas/stream/${musica.id}`
+    : null;
+
+  const onEnded = () => setPlay(false);
+  const { currentTime, duration } = useAudio(src, play, onEnded);
+
+  useEffect(() => {
+    setPlay(Boolean(musica.id));
+  }, [musica.id, setPlay]);
 
   function abrirModal() {
     setModalAberto(true);
@@ -57,13 +76,27 @@ export default function PlayFooter({
           </div>
         </button>
 
-        <FyProgress />
+        <FyProgress currentTime={currentTime} duration={duration} />
 
-        <FyPlay />
+        <FyPlay
+          play={play}
+          setPlay={setPlay}
+          onNext={onNext}
+          onPrevious={onPrevious}
+        />
       </footer>
 
       {modalAberto ? (
-        <FyPlaymodal setAltera={fecharModal} musicaAtual={musica} />
+        <FyPlaymodal
+          setAltera={fecharModal}
+          musicaAtual={musica}
+          play={play}
+          setPlay={setPlay}
+          onNext={onNext}
+          onPrevious={onPrevious}
+          currentTime={currentTime}
+          duration={duration}
+        />
       ) : null}
     </>
   );

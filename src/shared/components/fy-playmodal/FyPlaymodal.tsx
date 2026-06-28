@@ -1,6 +1,6 @@
 "use client";
 
-import { MusicaAtual } from "../../types/MusicaAtual.types";
+import { MusicaAtual } from "@/src/shared/types/musica.types";
 import FyPlay from "../fy-play/FyPlay";
 import FyProgress from "../fy-progress/FyProgress";
 import styles from "./FyPlaymodal.module.css";
@@ -8,11 +8,23 @@ import styles from "./FyPlaymodal.module.css";
 interface FyPlaymodalProps {
   readonly setAltera: () => void;
   readonly musicaAtual: MusicaAtual;
+  readonly play?: boolean;
+  readonly setPlay?: (play: boolean) => void;
+  readonly onNext?: () => void;
+  readonly onPrevious?: () => void;
+  readonly currentTime?: number;
+  readonly duration?: number;
 }
 
 export default function FyPlaymodal({
   setAltera,
   musicaAtual,
+  play,
+  setPlay,
+  onNext,
+  onPrevious,
+  currentTime,
+  duration,
 }: FyPlaymodalProps) {
   return (
     <dialog
@@ -43,10 +55,15 @@ export default function FyPlaymodal({
           <p className={styles.artist}>{musicaAtual.nomeArtista}</p>
         </div>
 
-        <FyProgress />
+        <FyProgress currentTime={currentTime} duration={duration} />
 
         <div className={styles.controls}>
-          <FyPlay />
+          <FyPlay
+            play={play}
+            setPlay={setPlay}
+            onNext={onNext}
+            onPrevious={onPrevious}
+          />
         </div>
       </div>
     </dialog>

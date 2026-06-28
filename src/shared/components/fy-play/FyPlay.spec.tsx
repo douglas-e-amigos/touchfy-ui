@@ -1,11 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render } from "@testing-library/react";
 import { screen } from "@testing-library/dom";
+import userEvent from "@testing-library/user-event";
 import FyPlay from "./FyPlay";
 
 const useFyPlayMock = vi.hoisted(() => vi.fn());
 
-vi.mock("../../hooks/use-fyplay", () => ({
+vi.mock("../../hooks/FyPlay/useFyPlay", () => ({
   default: useFyPlayMock,
 }));
 
@@ -21,6 +22,45 @@ describe("FyPlay", () => {
     render(<FyPlay />);
 
     expect(screen.getByLabelText("Ações da música")).toBeInTheDocument();
+  });
+
+  it("aciona a reprodução ao clicar em tocar", async () => {
+    const user = userEvent.setup();
+    const setPlay = vi.fn();
+    useFyPlayMock.mockReturnValue(montarEstado({ play: false, setPlay }));
+
+    render(<FyPlay />);
+
+    await user.click(screen.getByRole("button", { name: "Tocar música" }));
+
+    expect(setPlay).toHaveBeenCalledWith(true);
+  });
+
+  it("pausa a reprodução ao clicar em pausar", async () => {
+    const user = userEvent.setup();
+    const setPlay = vi.fn();
+    useFyPlayMock.mockReturnValue(montarEstado({ play: true, setPlay }));
+
+    render(<FyPlay />);
+
+    await user.click(screen.getByRole("button", { name: "Pausar música" }));
+
+    expect(setPlay).toHaveBeenCalledWith(false);
+  });
+
+  it("aciona próxima e anterior quando os controles são clicados", async () => {
+    const user = userEvent.setup();
+    const onNext = vi.fn();
+    const onPrevious = vi.fn();
+    useFyPlayMock.mockReturnValue(montarEstado());
+
+    render(<FyPlay onNext={onNext} onPrevious={onPrevious} />);
+
+    await user.click(screen.getByRole("button", { name: "Avançar música" }));
+    await user.click(screen.getByRole("button", { name: "Voltar música" }));
+
+    expect(onNext).toHaveBeenCalledTimes(1);
+    expect(onPrevious).toHaveBeenCalledTimes(1);
   });
 });
 

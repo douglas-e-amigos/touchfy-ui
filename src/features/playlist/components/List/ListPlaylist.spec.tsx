@@ -3,7 +3,7 @@ import { cleanup, render } from "@testing-library/react";
 import { screen } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 
-import { MusicaType } from "@/src/shared/types/Musica.types";
+import { MusicaType } from "@/src/shared/types/musica.types";
 import ListPlaylist from "./ListPlaylist";
 
 afterEach(() => {
@@ -13,20 +13,22 @@ afterEach(() => {
 
 const musicas: MusicaType[] = [
   {
-    id: 1,
+    id: "1",
     nomeMusica: "Midnight Dreams",
     nomeArtista: "Luna Sky",
     album: "Neon Nights",
     duracao: "3:55",
     imagemURL: "/midnight-dreams.png",
+    caminhoDoArquivo: "/audios/midnight-dreams.mp3",
   },
   {
-    id: 2,
+    id: "2",
     nomeMusica: "Smooth Jazz",
     nomeArtista: "Marcus Blue",
     album: "Late Night Sessions",
     duracao: "5:24",
     imagemURL: "/smooth-jazz.png",
+    caminhoDoArquivo: "/audios/smooth-jazz.mp3",
   },
 ];
 

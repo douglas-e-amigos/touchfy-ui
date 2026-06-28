@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import { MusicaType } from "@/src/shared/types/Musica.types";
+import { MusicaType } from "@/src/shared/types/musica.types";
 
 interface ListPlaylistProps {
   readonly musicas: MusicaType[];
   readonly onClick: (musica: MusicaType) => void;
-  readonly musicaAtualId?: number | null;
+  readonly musicaAtualId?: string | null;
 }
 
 export default function ListPlaylist({

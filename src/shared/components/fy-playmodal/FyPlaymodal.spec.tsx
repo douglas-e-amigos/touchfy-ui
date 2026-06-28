@@ -3,7 +3,7 @@ import { cleanup, render } from "@testing-library/react";
 import { screen } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import FyPlaymodal from "./FyPlaymodal";
-import { MusicaAtual } from "../../types/MusicaAtual.types";
+import { MusicaAtual } from "@/src/shared/types/musica.types";
 
 vi.mock("../fy-play/FyPlay", () => ({
   default: () => <section aria-label="Ações da música" />,
@@ -43,9 +43,10 @@ describe("FyPlaymodal", () => {
 
 function montarMusicaAtual(): MusicaAtual {
   return {
-    id: 1,
+    id: "1",
     imagemURL: "/capa.png",
     nomeMusica: "Música atual",
     nomeArtista: "Artista atual",
+    caminhoDoArquivo: "/audios/musica.mp3",
   };
 }

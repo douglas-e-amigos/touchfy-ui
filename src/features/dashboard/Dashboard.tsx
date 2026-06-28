@@ -1,88 +1,41 @@
 "use client";
 
-import ImageCard, {
-  Variantes,
-} from "@/src/shared/components/fy-imagecard/ImageCard";
-// Módulo
 import DashboardHeader from "./components/DashboardHeader/DashboardHeader";
-import SecaoHome from "./components/DashboardSection/DashboardSection";
-import { itensMediaCard } from "./constants/default-card";
 import styles from "./Dashboard.module.css";
-
-// Componentes compartilhados
-import { MediaCard } from "@/src/shared/components/fy-mediacard/MediaCard";
-
-// Estados
-import { useMusicaAtualContext } from "@/src/shared/providers/MusicaAtual.Provider";
+import RenderMusica, {
+  extrairArtista,
+  DEFAULT_IMAGE,
+} from "@/src/shared/design-system/RenderMusica/RenderMusica";
+import {
+  useMusicaAtualContext,
+  type MusicaAtual,
+} from "@/src/shared/providers/MusicaAtual.Provider";
+import type { MusicaBackend } from "@/src/shared/types/musica.types";
 
 export default function Dashboard() {
-  const { setMusicaAtual } = useMusicaAtualContext();
+  const { selecionarMusica } = useMusicaAtualContext();
+
+  function handleSelecionarMusica(
+    musica: MusicaBackend,
+    fila: MusicaBackend[]
+  ) {
+    selecionarMusica(toMusicaAtual(musica), fila.map(toMusicaAtual));
+  }
 
   return (
     <main className={styles.main}>
       <DashboardHeader />
-
-      <section className={styles.mediaSection}>
-        {itensMediaCard.map((item) => (
-          <MediaCard
-            key={item.id}
-            imagemURL={item.image}
-            rodarMusica={() =>
-              setMusicaAtual({
-                id: item.id,
-                nomeMusica: item.title,
-                nomeArtista: item.artist,
-                imagemURL: item.image,
-              })
-            }
-            nomeArtista={item.artist}
-            nomeMusica={item.title}
-            className={styles.mediaCard}
-          />
-        ))}
-      </section>
-
-      <SecaoHome titulo="Artistas em destaque">
-        {itensMediaCard.map((item) => (
-          <ImageCard
-            key={item.id}
-            capaURL={item.image}
-            tituloCard={item.title}
-            nomeCard={item.title}
-            descritor={item.createBy}
-            variante={Variantes.CIRCULAR}
-            abrirPlaylist={() => {}}
-          />
-        ))}
-      </SecaoHome>
-
-      <SecaoHome titulo="Recomendadas para você">
-        {itensMediaCard.map((item) => (
-          <ImageCard
-            key={item.id}
-            capaURL={item.image}
-            tituloCard={item.title}
-            nomeCard={item.title}
-            descritor={item.createBy}
-            variante={Variantes.QUADRADO_SM}
-            abrirPlaylist={() => {}}
-          />
-        ))}
-      </SecaoHome>
-
-      <SecaoHome titulo="Novos lançamentos">
-        {itensMediaCard.map((item) => (
-          <ImageCard
-            key={item.id}
-            capaURL={item.image}
-            tituloCard={item.title}
-            nomeCard={item.title}
-            descritor={item.createBy}
-            variante={Variantes.QUADRADO_MD}
-            abrirPlaylist={() => {}}
-          />
-        ))}
-      </SecaoHome>
+      <RenderMusica aoSelecionarMusica={handleSelecionarMusica} />
     </main>
   );
+}
+
+function toMusicaAtual(musica: MusicaBackend): MusicaAtual {
+  return {
+    id: musica.id,
+    nomeMusica: musica.nome,
+    nomeArtista: extrairArtista(musica),
+    imagemURL: DEFAULT_IMAGE,
+    caminhoDoArquivo: musica.caminhoDoArquivo,
+  };
 }
