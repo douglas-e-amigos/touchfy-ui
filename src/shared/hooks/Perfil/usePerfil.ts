@@ -5,6 +5,8 @@ import { usuarioService } from "@/src/features/usuario/services/usuario.service"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useEffect, useState } from "react";
 
+const ARTISTA_ROLE = "artista";
+
 export function usePerfil({ router }: { router: AppRouterInstance }) {
   const [usuario, setUsuario] = useState<UsuarioResponse | null>(null);
   const [isLoadingUsuario, setIsLoadingUsuario] = useState(true);
@@ -16,7 +18,7 @@ export function usePerfil({ router }: { router: AppRouterInstance }) {
       .buscarUsuarioLogado()
       .then((usuarioLogado) => {
         if (isMounted) {
-          setUsuario(usuarioLogado);
+          setUsuario(aplicarRoleTemporaria(usuarioLogado));
         }
       })
       .catch((error) => {
@@ -44,4 +46,19 @@ export function usePerfil({ router }: { router: AppRouterInstance }) {
   };
 
   return { abrirPerfil, isLoadingUsuario, usuario };
+}
+
+function aplicarRoleTemporaria(usuario: UsuarioResponse): UsuarioResponse {
+  if (usuario.role) {
+    return usuario;
+  }
+
+  if (usuario.nomeUsuario.toLowerCase() !== ARTISTA_ROLE) {
+    return usuario;
+  }
+
+  return {
+    ...usuario,
+    role: ARTISTA_ROLE,
+  };
 }
