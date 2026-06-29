@@ -15,6 +15,7 @@ export interface MusicaBackend {
   nome: string;
   caminhoDoArquivo: string;
   letra: string;
+  artistaId: string;
   tags: Tag[];
   generosMusicais: GeneroMusical[];
 }
