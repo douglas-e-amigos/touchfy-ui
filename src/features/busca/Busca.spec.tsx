@@ -26,6 +26,7 @@ const musicaEncontrada = {
   nome: "Around the World",
   caminhoDoArquivo: "/musicas/around.mp3",
   letra: "",
+  artistaId: "00000000-0000-0000-0000-000000000000",
   tags: [{ id: "tag-1", nome: "Daft Punk" }],
   generosMusicais: [],
 };
