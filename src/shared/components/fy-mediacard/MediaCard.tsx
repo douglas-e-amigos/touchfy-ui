@@ -60,6 +60,8 @@ export function MediaCard({
           <Pencil
             onClick={onEditar}
             className="h-5 w-5 cursor-pointer text-zinc-400 hover:text-white"
+            role="button"
+            aria-label={`Editar música ${nomeMusica}`}
           />
         )}
 

@@ -7,6 +7,7 @@ import MusicsList from "./MusicsList";
 import useMusicsList from "./useMusicsList";
 import { usuarioService } from "@/src/features/usuario/services/usuario.service";
 import { useMusicaAtualContext } from "@/src/shared/providers/MusicaAtual.Provider";
+import { musicaService } from "@/src/shared/services/musica.service";
 import type { MusicaBackend } from "@/src/shared/types/musica.types";
 
 vi.mock("@/src/features/usuario/services/usuario.service", () => ({
@@ -15,11 +16,21 @@ vi.mock("@/src/features/usuario/services/usuario.service", () => ({
   },
 }));
 
+vi.mock("@/src/shared/services/musica.service", () => ({
+  musicaService: {
+    buscarTags: vi.fn(),
+    buscarGenerosMusicais: vi.fn(),
+    criarTag: vi.fn(),
+    criarGeneroMusical: vi.fn(),
+  },
+}));
+
 vi.mock("@/src/shared/providers/MusicaAtual.Provider", () => ({
   useMusicaAtualContext: vi.fn(),
 }));
 
 const usuarioServiceMock = vi.mocked(usuarioService);
+const musicaServiceMock = vi.mocked(musicaService);
 const useMusicaAtualContextMock = vi.mocked(useMusicaAtualContext);
 const setMusicaAtualMock = vi.fn();
 
@@ -229,6 +240,93 @@ describe("useMusicsList", () => {
 
     deleteFetchMock.mockRestore();
   });
+
+  it("handleEditarClick define musicaParaEditar", async () => {
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    const { result } = renderHook(() => useMusicsList());
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    result.current.handleEditarClick(mockMusicas[0]);
+
+    await waitFor(() => {
+      expect(result.current.musicaParaEditar).toEqual(mockMusicas[0]);
+    });
+
+    fetchMock.mockRestore();
+  });
+
+  it("handleEditarCancelar limpa musicaParaEditar", async () => {
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    const { result } = renderHook(() => useMusicsList());
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    result.current.handleEditarClick(mockMusicas[0]);
+
+    await waitFor(() => {
+      expect(result.current.musicaParaEditar).toEqual(mockMusicas[0]);
+    });
+
+    result.current.handleEditarCancelar();
+
+    await waitFor(() => {
+      expect(result.current.musicaParaEditar).toBeNull();
+    });
+
+    fetchMock.mockRestore();
+  });
+
+  it("handleEditarSalvar limpa musicaParaEditar", async () => {
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    const { result } = renderHook(() => useMusicsList());
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    result.current.handleEditarClick(mockMusicas[0]);
+
+    await waitFor(() => {
+      expect(result.current.musicaParaEditar).toEqual(mockMusicas[0]);
+    });
+
+    result.current.handleEditarSalvar();
+
+    await waitFor(() => {
+      expect(result.current.musicaParaEditar).toBeNull();
+    });
+
+    fetchMock.mockRestore();
+  });
 });
 
 describe("MusicsList", () => {
@@ -407,6 +505,72 @@ describe("MusicsList", () => {
     });
 
     expect(screen.getByText("Musica Dois")).toBeDefined();
+
+    fetchMock.mockRestore();
+  });
+
+  it("abre modal de edicao ao clicar em editar", async () => {
+    musicaServiceMock.buscarTags.mockResolvedValue([]);
+    musicaServiceMock.buscarGenerosMusicais.mockResolvedValue([]);
+
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    render(<MusicsList />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Musica Um")).toBeDefined();
+    });
+
+    const editButton = screen.getByRole("button", { name: /editar música Musica Um/i });
+    await userEvent.click(editButton);
+
+    await waitFor(() => {
+      expect(screen.getByText("Editar música")).toBeDefined();
+    });
+
+    expect(screen.getByDisplayValue("Musica Um")).toBeDefined();
+
+    fetchMock.mockRestore();
+  });
+
+  it("fecha modal de edicao ao clicar em cancelar", async () => {
+    musicaServiceMock.buscarTags.mockResolvedValue([]);
+    musicaServiceMock.buscarGenerosMusicais.mockResolvedValue([]);
+
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    render(<MusicsList />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Musica Um")).toBeDefined();
+    });
+
+    const editButton = screen.getByRole("button", { name: /editar música Musica Um/i });
+    await userEvent.click(editButton);
+
+    await waitFor(() => {
+      expect(screen.getByText("Editar música")).toBeDefined();
+    });
+
+    await userEvent.click(screen.getByText("Cancelar"));
+
+    await waitFor(() => {
+      expect(screen.queryByText("Editar música")).toBeNull();
+    });
 
     fetchMock.mockRestore();
   });

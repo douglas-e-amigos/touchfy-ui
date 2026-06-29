@@ -17,6 +17,10 @@ export interface UseMusicsListReturn {
   handleDeletarClick: (musica: MusicaBackend) => void;
   handleDeletarCancelar: () => void;
   handleDeletarConfirmar: () => Promise<void>;
+  musicaParaEditar: MusicaBackend | null;
+  handleEditarClick: (musica: MusicaBackend) => void;
+  handleEditarCancelar: () => void;
+  handleEditarSalvar: () => void;
 }
 
 export default function useMusicsList(): UseMusicsListReturn {
@@ -24,6 +28,8 @@ export default function useMusicsList(): UseMusicsListReturn {
   const [isLoading, setIsLoading] = useState(true);
   const [artistaId, setArtistaId] = useState<string | null>(null);
   const [musicaParaDeletar, setMusicaParaDeletar] =
+    useState<MusicaBackend | null>(null);
+  const [musicaParaEditar, setMusicaParaEditar] =
     useState<MusicaBackend | null>(null);
   const { setMusicaAtual } = useMusicaAtualContext();
 
@@ -90,6 +96,18 @@ export default function useMusicsList(): UseMusicsListReturn {
     }
   }, [musicaParaDeletar]);
 
+  const handleEditarClick = useCallback((musica: MusicaBackend) => {
+    setMusicaParaEditar(musica);
+  }, []);
+
+  const handleEditarCancelar = useCallback(() => {
+    setMusicaParaEditar(null);
+  }, []);
+
+  const handleEditarSalvar = useCallback(() => {
+    setMusicaParaEditar(null);
+  }, []);
+
   return {
     musicas,
     isLoading,
@@ -98,5 +116,9 @@ export default function useMusicsList(): UseMusicsListReturn {
     handleDeletarClick,
     handleDeletarCancelar,
     handleDeletarConfirmar,
+    musicaParaEditar,
+    handleEditarClick,
+    handleEditarCancelar,
+    handleEditarSalvar,
   };
 }
