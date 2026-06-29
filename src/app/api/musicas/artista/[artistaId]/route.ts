@@ -3,12 +3,9 @@ import {
   getHttpErrorResponseData,
   getHttpErrorStatus,
 } from "@/src/shared/utils/http-error";
+import { getFromCache, setCache } from "@/src/app/api/musicas/artista/cache";
 import type { MusicaBackend } from "@/src/shared/types/musica.types";
 import { NextRequest, NextResponse } from "next/server";
-
-const CACHE_TTL_MS = 5 * 60 * 1000;
-
-const cache = new Map<string, { data: MusicaBackend[]; expiresAt: number }>();
 
 export async function GET(
   _request: NextRequest,
@@ -23,9 +20,9 @@ export async function GET(
     );
   }
 
-  const cached = cache.get(artistaId);
-  if (cached && cached.expiresAt > Date.now()) {
-    return NextResponse.json(cached.data);
+  const cached = getFromCache(artistaId);
+  if (cached) {
+    return NextResponse.json(cached);
   }
 
   try {
@@ -34,10 +31,7 @@ export async function GET(
       url: `/musicas/artista/${artistaId}`,
     });
 
-    cache.set(artistaId, {
-      data: response.data,
-      expiresAt: Date.now() + CACHE_TTL_MS,
-    });
+    setCache(artistaId, response.data);
 
     return NextResponse.json(response.data);
   } catch (error: unknown) {

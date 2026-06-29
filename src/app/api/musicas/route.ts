@@ -3,6 +3,7 @@ import {
   getHttpErrorResponseData,
   getHttpErrorStatus,
 } from "@/src/shared/utils/http-error";
+import { limparCacheMusicasArtista } from "@/src/app/api/musicas/artista/cache";
 import type { MusicaBackend } from "@/src/shared/types/musica.types";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -94,6 +95,7 @@ export async function POST(request: NextRequest) {
     });
 
     limparCacheMusicas();
+    limparCacheMusicasArtista();
 
     return NextResponse.json(response.data);
   } catch (error: unknown) {
