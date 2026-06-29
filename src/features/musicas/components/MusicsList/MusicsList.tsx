@@ -2,10 +2,19 @@
 
 import { MediaCard } from "@/src/shared/components/fy-mediacard/MediaCard";
 import { extrairArtista } from "@/src/shared/design-system/RenderMusica/RenderMusica";
+import DeletarMusicaModal from "@/src/features/musicas/components/DeletarMusicaModal/DeletarMusicaModal";
 import useMusicsList from "./useMusicsList";
 
 export default function MusicsList() {
-  const { musicas, isLoading, handlePlay } = useMusicsList();
+  const {
+    musicas,
+    isLoading,
+    handlePlay,
+    musicaParaDeletar,
+    handleDeletarClick,
+    handleDeletarCancelar,
+    handleDeletarConfirmar,
+  } = useMusicsList();
 
   if (isLoading) {
     return (
@@ -52,10 +61,19 @@ export default function MusicsList() {
             nomeMusica={musica.nome}
             nomeArtista={extrairArtista(musica)}
             onEditar={() => {}}
-            onDeletar={() => {}}
+            onDeletar={() => handleDeletarClick(musica)}
           />
         ))}
       </div>
+
+      {musicaParaDeletar && (
+        <DeletarMusicaModal
+          open={!!musicaParaDeletar}
+          nomeMusica={musicaParaDeletar.nome}
+          onClose={handleDeletarCancelar}
+          onConfirmar={handleDeletarConfirmar}
+        />
+      )}
     </section>
   );
 }

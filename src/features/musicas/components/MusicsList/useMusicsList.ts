@@ -13,12 +13,18 @@ export interface UseMusicsListReturn {
   musicas: MusicaBackend[];
   isLoading: boolean;
   handlePlay: (musica: MusicaBackend) => void;
+  musicaParaDeletar: MusicaBackend | null;
+  handleDeletarClick: (musica: MusicaBackend) => void;
+  handleDeletarCancelar: () => void;
+  handleDeletarConfirmar: () => Promise<void>;
 }
 
 export default function useMusicsList(): UseMusicsListReturn {
   const [musicas, setMusicas] = useState<MusicaBackend[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [artistaId, setArtistaId] = useState<string | null>(null);
+  const [musicaParaDeletar, setMusicaParaDeletar] =
+    useState<MusicaBackend | null>(null);
   const { setMusicaAtual } = useMusicaAtualContext();
 
   useEffect(() => {
@@ -56,5 +62,41 @@ export default function useMusicsList(): UseMusicsListReturn {
     [setMusicaAtual],
   );
 
-  return { musicas, isLoading, handlePlay };
+  const handleDeletarClick = useCallback((musica: MusicaBackend) => {
+    setMusicaParaDeletar(musica);
+  }, []);
+
+  const handleDeletarCancelar = useCallback(() => {
+    setMusicaParaDeletar(null);
+  }, []);
+
+  const handleDeletarConfirmar = useCallback(async () => {
+    if (!musicaParaDeletar) return;
+
+    try {
+      const res = await fetch(`/api/musicas/${musicaParaDeletar.id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("Falha ao deletar música");
+
+      setMusicas((prev) =>
+        prev.filter((m) => m.id !== musicaParaDeletar.id),
+      );
+    } catch (error) {
+      console.error("Erro ao deletar música:", error);
+    } finally {
+      setMusicaParaDeletar(null);
+    }
+  }, [musicaParaDeletar]);
+
+  return {
+    musicas,
+    isLoading,
+    handlePlay,
+    musicaParaDeletar,
+    handleDeletarClick,
+    handleDeletarCancelar,
+    handleDeletarConfirmar,
+  };
 }

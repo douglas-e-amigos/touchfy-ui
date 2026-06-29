@@ -84,7 +84,7 @@ describe("useMusicsList", () => {
 
   it("carrega musicas do artista logado", async () => {
     const fetchMock = vi
-      .spyOn(globalThis, "fetch")
+      .spyOn(global, "fetch")
       .mockResolvedValue({
         ok: true,
         json: () => Promise.resolve(mockMusicas),
@@ -106,7 +106,7 @@ describe("useMusicsList", () => {
 
   it("handlePlay chama setMusicaAtual com dados corretos", async () => {
     const fetchMock = vi
-      .spyOn(globalThis, "fetch")
+      .spyOn(global, "fetch")
       .mockResolvedValue({
         ok: true,
         json: () => Promise.resolve(mockMusicas),
@@ -132,6 +132,103 @@ describe("useMusicsList", () => {
 
     fetchMock.mockRestore();
   });
+
+  it("handleDeletarClick define musicaParaDeletar", async () => {
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    const { result } = renderHook(() => useMusicsList());
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    result.current.handleDeletarClick(mockMusicas[0]);
+
+    await waitFor(() => {
+      expect(result.current.musicaParaDeletar).toEqual(mockMusicas[0]);
+    });
+
+    fetchMock.mockRestore();
+  });
+
+  it("handleDeletarCancelar limpa musicaParaDeletar", async () => {
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    const { result } = renderHook(() => useMusicsList());
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    result.current.handleDeletarClick(mockMusicas[0]);
+
+    await waitFor(() => {
+      expect(result.current.musicaParaDeletar).toEqual(mockMusicas[0]);
+    });
+
+    result.current.handleDeletarCancelar();
+
+    await waitFor(() => {
+      expect(result.current.musicaParaDeletar).toBeNull();
+    });
+
+    fetchMock.mockRestore();
+  });
+
+  it("handleDeletarConfirmar remove musica da lista", async () => {
+    const deleteFetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ mensagem: "Deletado", deletado: true, deletadoEm: new Date() }),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    const { result } = renderHook(() => useMusicsList());
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    result.current.handleDeletarClick(mockMusicas[0]);
+
+    await waitFor(() => {
+      expect(result.current.musicaParaDeletar).toEqual(mockMusicas[0]);
+    });
+
+    await result.current.handleDeletarConfirmar();
+
+    await waitFor(() => {
+      expect(result.current.musicas).toHaveLength(1);
+      expect(result.current.musicas[0].id).toBe("musica-2");
+      expect(result.current.musicaParaDeletar).toBeNull();
+    });
+
+    expect(deleteFetchMock).toHaveBeenCalledWith("/api/musicas/musica-1", {
+      method: "DELETE",
+    });
+
+    deleteFetchMock.mockRestore();
+  });
 });
 
 describe("MusicsList", () => {
@@ -147,7 +244,7 @@ describe("MusicsList", () => {
 
   it("renderiza lista vazia quando sem musicas", async () => {
     const fetchMock = vi
-      .spyOn(globalThis, "fetch")
+      .spyOn(global, "fetch")
       .mockResolvedValue({
         ok: true,
         json: () => Promise.resolve([]),
@@ -166,7 +263,7 @@ describe("MusicsList", () => {
 
   it("renderiza lista de musicas", async () => {
     const fetchMock = vi
-      .spyOn(globalThis, "fetch")
+      .spyOn(global, "fetch")
       .mockResolvedValue({
         ok: true,
         json: () => Promise.resolve(mockMusicas),
@@ -186,7 +283,7 @@ describe("MusicsList", () => {
 
   it("chama handlePlay ao clicar em uma musica", async () => {
     const fetchMock = vi
-      .spyOn(globalThis, "fetch")
+      .spyOn(global, "fetch")
       .mockResolvedValue({
         ok: true,
         json: () => Promise.resolve(mockMusicas),
@@ -209,6 +306,107 @@ describe("MusicsList", () => {
       imagemURL: expect.any(String),
       caminhoDoArquivo: "/path/1",
     });
+
+    fetchMock.mockRestore();
+  });
+
+  it("abre modal de confirmacao ao clicar em deletar", async () => {
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    render(<MusicsList />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Musica Um")).toBeDefined();
+    });
+
+    const deleteButton = screen.getByRole("button", { name: /deletar música Musica Um/i });
+    await userEvent.click(deleteButton);
+
+    expect(
+      screen.getByText(/Tem certeza de que deseja deletar/),
+    ).toBeDefined();
+    expect(screen.getByText("Confirmar Deleção")).toBeDefined();
+    expect(screen.getByText("Cancelar")).toBeDefined();
+
+    fetchMock.mockRestore();
+  });
+
+  it("fecha modal ao clicar em cancelar", async () => {
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    render(<MusicsList />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Musica Um")).toBeDefined();
+    });
+
+    const deleteButton = screen.getByRole("button", { name: /deletar música Musica Um/i });
+    await userEvent.click(deleteButton);
+
+    expect(
+      screen.getByText(/Tem certeza de que deseja deletar/),
+    ).toBeDefined();
+
+    await userEvent.click(screen.getByText("Cancelar"));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText(/Tem certeza de que deseja deletar/),
+      ).toBeNull();
+    });
+
+    fetchMock.mockRestore();
+  });
+
+  it("deleta musica ao confirmar", async () => {
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            mensagem: "Deletado",
+            deletado: true,
+            deletadoEm: new Date(),
+          }),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    render(<MusicsList />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Musica Um")).toBeDefined();
+    });
+
+    const deleteButton = screen.getByRole("button", { name: /deletar música Musica Um/i });
+    await userEvent.click(deleteButton);
+
+    await userEvent.click(screen.getByText("Confirmar Deleção"));
+
+    await waitFor(() => {
+      expect(screen.queryByText("Musica Um")).toBeNull();
+    });
+
+    expect(screen.getByText("Musica Dois")).toBeDefined();
 
     fetchMock.mockRestore();
   });

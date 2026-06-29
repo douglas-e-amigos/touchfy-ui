@@ -67,6 +67,8 @@ export function MediaCard({
           <Trash2
             onClick={onDeletar}
             className="h-5 w-5 cursor-pointer text-zinc-400 hover:text-red-400"
+            role="button"
+            aria-label={`Deletar música ${nomeMusica}`}
           />
         )}
       </div>
