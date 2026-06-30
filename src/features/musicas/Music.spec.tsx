@@ -1,9 +1,11 @@
-import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 
 import Music from "./Music";
 import { musicaService } from "@/src/shared/services/musica.service";
+import { usuarioService } from "@/src/features/usuario/services/usuario.service";
+import { MusicaAtualProvider } from "@/src/shared/providers/MusicaAtual.Provider";
 
 vi.mock("@/src/shared/services/musica.service", () => ({
   musicaService: {
@@ -14,6 +16,17 @@ vi.mock("@/src/shared/services/musica.service", () => ({
     criar: vi.fn(),
   },
 }));
+
+vi.mock("@/src/features/usuario/services/usuario.service", () => ({
+  usuarioService: {
+    buscarUsuarioLogado: vi.fn(),
+  },
+}));
+
+const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+  ok: true,
+  json: () => Promise.resolve([]),
+} as Response);
 
 const musicaServiceMock = vi.mocked(musicaService);
 
@@ -45,6 +58,15 @@ beforeEach(() => {
     criado: true,
     criadoEm: new Date("2026-01-01"),
   });
+
+  vi.mocked(usuarioService.buscarUsuarioLogado).mockResolvedValue({
+    id: "user-123",
+    nome: "Artista",
+    nomeUsuario: "artista",
+    email: "artista@test.com",
+    dataNascimento: "2000-01-01",
+    fotoPerfil: null,
+  });
 });
 
 afterEach(() => {
@@ -52,9 +74,21 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
+afterAll(() => {
+  fetchMock.mockRestore();
+});
+
+function renderMusic() {
+  return render(
+    <MusicaAtualProvider>
+      <Music />
+    </MusicaAtualProvider>,
+  );
+}
+
 describe("Music", () => {
-  it("renderiza a base da página de músicas", () => {
-    render(<Music />);
+  it("renderiza a base da página de músicas", async () => {
+    renderMusic();
 
     expect(
       screen.getByRole("main", { name: "Página de músicas" }),
@@ -74,13 +108,18 @@ describe("Music", () => {
     expect(
       screen.getByRole("region", { name: "Lista de músicas" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Nenhuma música cadastrada")).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Nenhuma música cadastrada"),
+      ).toBeInTheDocument();
+    });
   });
 
   it("abre o modal de cadastro ao clicar em adicionar música", async () => {
     const user = userEvent.setup();
 
-    render(<Music />);
+    renderMusic();
 
     await user.click(screen.getByRole("button", { name: "Adicionar música" }));
 
@@ -113,7 +152,7 @@ describe("Music", () => {
         { id: "genero-3", nome: "Samba" },
       ]);
 
-    render(<Music />);
+    renderMusic();
 
     await user.click(screen.getByRole("button", { name: "Adicionar música" }));
     await user.type(await screen.findByLabelText("Nova tag"), "Indie");
@@ -137,7 +176,7 @@ describe("Music", () => {
     const user = userEvent.setup();
     const arquivo = new File(["audio"], "musica.mp3", { type: "audio/mpeg" });
 
-    render(<Music />);
+    renderMusic();
 
     await user.click(screen.getByRole("button", { name: "Adicionar música" }));
     await user.type(await screen.findByLabelText("Nome da música"), "Nova faixa");
@@ -161,7 +200,7 @@ describe("Music", () => {
   it("valida nome e arquivo obrigatórios", async () => {
     const user = userEvent.setup();
 
-    render(<Music />);
+    renderMusic();
 
     await user.click(screen.getByRole("button", { name: "Adicionar música" }));
     await user.click(await screen.findByRole("button", { name: "Salvar música" }));

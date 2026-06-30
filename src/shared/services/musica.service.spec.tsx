@@ -25,6 +25,7 @@ describe("MusicaService", () => {
         nome: "Musica 1",
         caminhoDoArquivo: "/path/1",
         letra: "",
+        artistaId: "00000000-0000-0000-0000-000000000000",
         tags: [],
         generosMusicais: [],
       },
@@ -44,6 +45,7 @@ describe("MusicaService", () => {
       nome: "Around the World",
       caminhoDoArquivo: "/path/1",
       letra: "",
+      artistaId: "00000000-0000-0000-0000-000000000000",
       tags: [],
       generosMusicais: [],
     };
