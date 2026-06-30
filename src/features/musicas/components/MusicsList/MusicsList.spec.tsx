@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, renderHook, waitFor } from "@testing-library/react";
+import { useMusicaSearchContext } from "@/src/shared/contexts/MusicaSearch.context";
 import { screen } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 
@@ -29,10 +30,15 @@ vi.mock("@/src/shared/providers/MusicaAtual.Provider", () => ({
   useMusicaAtualContext: vi.fn(),
 }));
 
+vi.mock("@/src/shared/contexts/MusicaSearch.context", () => ({
+  useMusicaSearchContext: vi.fn(),
+}));
+
 const usuarioServiceMock = vi.mocked(usuarioService);
 const musicaServiceMock = vi.mocked(musicaService);
 const useMusicaAtualContextMock = vi.mocked(useMusicaAtualContext);
 const setMusicaAtualMock = vi.fn();
+const useMusicaSearchContextMock = vi.mocked(useMusicaSearchContext);
 
 const usuarioLogado = {
   id: "user-123",
@@ -73,6 +79,10 @@ beforeEach(() => {
     selecionarMusica: vi.fn(),
     tocarProxima: vi.fn(),
     tocarAnterior: vi.fn(),
+  });
+  useMusicaSearchContextMock.mockReturnValue({
+    termoBusca: "",
+    setTermoBusca: vi.fn(),
   });
 });
 
@@ -327,6 +337,91 @@ describe("useMusicsList", () => {
 
     fetchMock.mockRestore();
   });
+
+  it("inicia com termoBusca vazio", () => {
+    usuarioServiceMock.buscarUsuarioLogado.mockReturnValue(
+      new Promise(() => {}),
+    );
+
+    const { result } = renderHook(() => useMusicsList());
+
+    expect(result.current.termoBusca).toBe("");
+  });
+
+  it("musicasFiltradas retorna todas sem termo de busca", async () => {
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    const { result } = renderHook(() => useMusicsList());
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    expect(result.current.musicasFiltradas).toEqual(mockMusicas);
+
+    fetchMock.mockRestore();
+  });
+
+  it("musicasFiltradas filtra por substring case-insensitive", async () => {
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    const { result, rerender } = renderHook(() => useMusicsList());
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.musicasFiltradas).toEqual(mockMusicas);
+    });
+
+    useMusicaSearchContextMock.mockReturnValue({
+      termoBusca: "um",
+      setTermoBusca: vi.fn(),
+    });
+
+    rerender();
+
+    await waitFor(() => {
+      expect(result.current.musicasFiltradas).toHaveLength(1);
+      expect(result.current.musicasFiltradas[0].id).toBe("musica-1");
+    });
+
+    useMusicaSearchContextMock.mockReturnValue({
+      termoBusca: "MUSICA",
+      setTermoBusca: vi.fn(),
+    });
+
+    rerender();
+
+    await waitFor(() => {
+      expect(result.current.musicasFiltradas).toHaveLength(2);
+    });
+
+    useMusicaSearchContextMock.mockReturnValue({
+      termoBusca: "xyz",
+      setTermoBusca: vi.fn(),
+    });
+
+    rerender();
+
+    await waitFor(() => {
+      expect(result.current.musicasFiltradas).toHaveLength(0);
+    });
+
+    fetchMock.mockRestore();
+  });
 });
 
 describe("MusicsList", () => {
@@ -571,6 +666,36 @@ describe("MusicsList", () => {
     await waitFor(() => {
       expect(screen.queryByText("Editar música")).toBeNull();
     });
+
+    fetchMock.mockRestore();
+  });
+
+
+  it("mostra mensagem quando busca nao encontra resultados", async () => {
+    const fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockMusicas),
+      } as Response);
+
+    usuarioServiceMock.buscarUsuarioLogado.mockResolvedValue(usuarioLogado);
+
+    useMusicaSearchContextMock.mockReturnValue({
+      termoBusca: "xyz",
+      setTermoBusca: vi.fn(),
+    });
+
+    render(<MusicsList />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Nenhuma música encontrada para a busca"),
+      ).toBeDefined();
+    });
+
+    expect(screen.queryByText("Musica Um")).toBeNull();
+    expect(screen.queryByText("Musica Dois")).toBeNull();
 
     fetchMock.mockRestore();
   });

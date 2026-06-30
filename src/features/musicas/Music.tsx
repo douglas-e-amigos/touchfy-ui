@@ -5,6 +5,7 @@ import MusicFormModal from "./components/MusicFormModal/MusicFormModal";
 import MusicsHeader from "./components/MusicsHeader/MusicsHeader";
 import MusicsList from "./components/MusicsList/MusicsList";
 import MusicsSearch from "./components/MusicsSearch/MusicsSearch";
+import { MusicaSearchProvider } from "@/src/shared/contexts/MusicaSearch.context";
 import { useMusicForm } from "./hooks/useMusicForm";
 
 export default function Music() {
@@ -21,8 +22,10 @@ export default function Music() {
           <MusicAdd onClick={musicForm.abrirModal} />
         </div>
 
-        <MusicsSearch />
-        <MusicsList />
+        <MusicaSearchProvider>
+          <MusicsSearch />
+          <MusicsList />
+        </MusicaSearchProvider>
       </div>
 
       <MusicFormModal

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { usuarioService } from "@/src/features/usuario/services/usuario.service";
 import { useMusicaAtualContext } from "@/src/shared/providers/MusicaAtual.Provider";
 import {
@@ -8,10 +8,13 @@ import {
   extrairArtista,
 } from "@/src/shared/design-system/RenderMusica/RenderMusica";
 import type { MusicaBackend } from "@/src/shared/types/musica.types";
+import { useMusicaSearchContext } from "@/src/shared/contexts/MusicaSearch.context";
 
 export interface UseMusicsListReturn {
   musicas: MusicaBackend[];
+  musicasFiltradas: MusicaBackend[];
   isLoading: boolean;
+  termoBusca: string;
   handlePlay: (musica: MusicaBackend) => void;
   musicaParaDeletar: MusicaBackend | null;
   handleDeletarClick: (musica: MusicaBackend) => void;
@@ -31,7 +34,15 @@ export default function useMusicsList(): UseMusicsListReturn {
     useState<MusicaBackend | null>(null);
   const [musicaParaEditar, setMusicaParaEditar] =
     useState<MusicaBackend | null>(null);
+  const { termoBusca } = useMusicaSearchContext();
   const { setMusicaAtual } = useMusicaAtualContext();
+
+  const musicasFiltradas = useMemo(
+    () => musicas.filter((m) =>
+      m.nome.toLowerCase().includes(termoBusca.toLowerCase()),
+    ),
+    [musicas, termoBusca],
+  );
 
   useEffect(() => {
     usuarioService
@@ -110,7 +121,9 @@ export default function useMusicsList(): UseMusicsListReturn {
 
   return {
     musicas,
+    musicasFiltradas,
     isLoading,
+    termoBusca,
     handlePlay,
     musicaParaDeletar,
     handleDeletarClick,

@@ -9,6 +9,7 @@ import useMusicsList from "./useMusicsList";
 export default function MusicsList() {
   const {
     musicas,
+    musicasFiltradas,
     isLoading,
     handlePlay,
     musicaParaDeletar,
@@ -58,17 +59,23 @@ export default function MusicsList() {
       className="rounded-md border border-zinc-800 bg-zinc-950/60"
     >
       <div className="flex flex-col gap-1 p-2">
-        {musicas.map((musica) => (
-          <MediaCard
-            key={musica.id}
-            imagemURL={""}
-            rodarMusica={() => handlePlay(musica)}
-            nomeMusica={musica.nome}
-            nomeArtista={extrairArtista(musica)}
-            onEditar={() => handleEditarClick(musica)}
-            onDeletar={() => handleDeletarClick(musica)}
-          />
-        ))}
+        {musicasFiltradas.length === 0 && musicas.length > 0 ? (
+          <div className="flex h-24 items-center justify-center text-sm text-zinc-500">
+            Nenhuma música encontrada para a busca
+          </div>
+        ) : (
+          musicasFiltradas.map((musica) => (
+            <MediaCard
+              key={musica.id}
+              imagemURL={""}
+              rodarMusica={() => handlePlay(musica)}
+              nomeMusica={musica.nome}
+              nomeArtista={extrairArtista(musica)}
+              onEditar={() => handleEditarClick(musica)}
+              onDeletar={() => handleDeletarClick(musica)}
+            />
+          ))
+        )}
       </div>
 
       {musicaParaDeletar && (
