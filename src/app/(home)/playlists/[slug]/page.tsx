@@ -1,5 +1,11 @@
 import Playlist from "@/src/features/playlist/Playlist";
 
-export default function PlaylistPage() {
-  return <Playlist />;
+interface PlaylistPageProps {
+  readonly params: Promise<{ slug: string }>;
+}
+
+export default async function PlaylistPage({ params }: PlaylistPageProps) {
+  const { slug } = await params;
+
+  return <Playlist slug={slug} />;
 }
