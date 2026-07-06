@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, Home, Search, Library, Music, Plus } from "lucide-react";
+import { Heart, Home, Search, Music, Plus } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 import FyButton from "../../components/fy-button/FyButton";
@@ -12,8 +12,7 @@ type NavLinksProps = {
 
 const navigationLinks = [
   { name: "Início", icon: Home, href: "/dashboard" },
-  { name: "Buscar", icon: Search, href: "/busca" },
-  { name: "Biblioteca", icon: Library, href: "/biblioteca" },
+  { name: "Buscar", icon: Search, href: "/busca" }, 
 ];
 
 const artistaLinks = [
