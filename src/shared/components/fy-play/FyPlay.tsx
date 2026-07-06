@@ -12,6 +12,8 @@ import useFyPlay from "../../hooks/FyPlay/useFyPlay";
 interface FyPlayProps {
   readonly play?: boolean;
   readonly setPlay?: (play: boolean) => void;
+  readonly favorite?: boolean;
+  readonly setFavorite?: (favorite: boolean) => void;
   readonly onNext?: () => void;
   readonly onPrevious?: () => void;
 }
@@ -19,6 +21,8 @@ interface FyPlayProps {
 export default function FyPlay({
   play: externalPlay,
   setPlay: externalSetPlay,
+  favorite: externalFavorite,
+  setFavorite: externalSetFavorite,
   onNext,
   onPrevious,
 }: FyPlayProps = {}) {
@@ -29,8 +33,8 @@ export default function FyPlay({
     setLeft,
     play: internalPlay,
     setPlay: internalSetPlay,
-    favorite,
-    setFavorite,
+    favorite: internalFavorite,
+    setFavorite: internalSetFavorite,
     shuffle,
     setShuffle,
     repeat,
@@ -39,6 +43,8 @@ export default function FyPlay({
 
   const play = externalPlay ?? internalPlay;
   const setPlay = externalSetPlay ?? internalSetPlay;
+  const favorite = externalFavorite ?? internalFavorite;
+  const setFavorite = externalSetFavorite ?? internalSetFavorite;
   const buttonClassName =
     "grid h-8 w-8 place-items-center rounded-full text-white transition hover:text-pink-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400";
 
