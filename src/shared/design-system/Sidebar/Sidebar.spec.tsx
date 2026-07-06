@@ -104,6 +104,26 @@ describe("Design-System: Sidebar", () => {
     expect(screen.getByRole("button", { name: /^Músicas$/i })).toBeInTheDocument();
   });
 
+  it("renderiza o botão Músicas quando o backend envia roles com ARTISTA", () => {
+    perfilMock.usePerfil.mockReturnValue({
+      abrirPerfil: perfilMock.abrirPerfil,
+      isLoadingUsuario: false,
+      usuario: {
+        id: "usuario-1",
+        nome: "Biel",
+        nomeUsuario: "biel",
+        email: "biel@email.com",
+        dataNascimento: "2000-01-01",
+        fotoPerfil: null,
+        roles: ["ARTISTA"],
+      },
+    });
+
+    render(<Sidebar />);
+
+    expect(screen.getByRole("button", { name: /^Músicas$/i })).toBeInTheDocument();
+  });
+
   it("não renderiza o botão Músicas quando o usuário não é artista", () => {
     perfilMock.usePerfil.mockReturnValue({
       abrirPerfil: perfilMock.abrirPerfil,

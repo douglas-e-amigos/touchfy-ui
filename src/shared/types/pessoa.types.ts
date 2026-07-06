@@ -6,4 +6,5 @@ export type Pessoa = {
   dataNascimento: string;
   fotoPerfil: string | null;
   role?: string;
+  roles?: string[];
 };
