@@ -9,6 +9,7 @@ import {
   MusicaAtualProvider,
   useMusicaAtualContext,
 } from "@/src/shared/providers/MusicaAtual.Provider";
+import { MusicasCurtidasProvider } from "@/src/shared/providers/MusicasCurtidas.Provider";
 
 export default function HomeLayout({
   children,
@@ -16,9 +17,11 @@ export default function HomeLayout({
   readonly children: ReactNode;
 }) {
   return (
-    <MusicaAtualProvider>
-      <HomeShell>{children}</HomeShell>
-    </MusicaAtualProvider>
+    <MusicasCurtidasProvider>
+      <MusicaAtualProvider>
+        <HomeShell>{children}</HomeShell>
+      </MusicaAtualProvider>
+    </MusicasCurtidasProvider>
   );
 }
 
