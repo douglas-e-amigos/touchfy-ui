@@ -1,10 +1,8 @@
-import { serverApiRequest } from "@/src/infrastructure/http/server-http";
 import {
   getHttpErrorResponseData,
   getHttpErrorStatus,
 } from "@/src/shared/utils/http-error";
-import { getFromCache, setCache } from "@/src/app/api/musicas/artista/cache";
-import type { MusicaBackend } from "@/src/shared/types/musica.types";
+import { buscarMusicasArtistaComCache } from "@/src/app/api/musicas/artista/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -20,20 +18,10 @@ export async function GET(
     );
   }
 
-  const cached = getFromCache(artistaId);
-  if (cached) {
-    return NextResponse.json(cached);
-  }
-
   try {
-    const response = await serverApiRequest<MusicaBackend[]>({
-      method: "GET",
-      url: `/musicas/artista/${artistaId}`,
-    });
+    const musicas = await buscarMusicasArtistaComCache(artistaId);
 
-    setCache(artistaId, response.data);
-
-    return NextResponse.json(response.data);
+    return NextResponse.json(musicas);
   } catch (error: unknown) {
     console.error("ROUTE ERROR:", getHttpErrorResponseData(error) ?? error);
     return NextResponse.json(

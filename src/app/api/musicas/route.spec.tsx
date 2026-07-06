@@ -1,14 +1,55 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AxiosResponse } from "axios";
 import type { NextRequest } from "next/server";
-import { serverApiRequest } from "@/src/infrastructure/http/server-http";
+import {
+  getServerAccessToken,
+  serverApiRequest,
+  serverApiRequestWithAccessToken,
+} from "@/src/infrastructure/http/server-http";
 import { GET, POST, limparCacheMusicas } from "./route";
 
-vi.mock("@/src/infrastructure/http/server-http", () => ({
-  serverApiRequest: vi.fn(),
+const nextCacheMock = vi.hoisted(() => {
+  const store = new Map<string, unknown>();
+
+  return {
+    store,
+    revalidateTag: vi.fn(() => {
+      store.clear();
+    }),
+    unstableCache: vi.fn(
+      <T extends (...args: never[]) => Promise<unknown>>(
+        callback: T,
+        keyParts: string[] = [],
+      ) =>
+        async (...args: Parameters<T>) => {
+          const cacheKey = JSON.stringify([keyParts, args]);
+
+          if (!store.has(cacheKey)) {
+            store.set(cacheKey, await callback(...args));
+          }
+
+          return store.get(cacheKey);
+        },
+    ),
+  };
+});
+
+vi.mock("next/cache", () => ({
+  revalidateTag: nextCacheMock.revalidateTag,
+  unstable_cache: nextCacheMock.unstableCache,
 }));
 
+vi.mock("@/src/infrastructure/http/server-http", () => ({
+  getServerAccessToken: vi.fn(),
+  serverApiRequest: vi.fn(),
+  serverApiRequestWithAccessToken: vi.fn(),
+}));
+
+const getServerAccessTokenMock = vi.mocked(getServerAccessToken);
 const serverApiRequestMock = vi.mocked(serverApiRequest);
+const serverApiRequestWithAccessTokenMock = vi.mocked(
+  serverApiRequestWithAccessToken,
+);
 
 function createAxiosResponse<T>(data: T): AxiosResponse<T> {
   return {
@@ -36,6 +77,7 @@ function createGetRequest(nome: string): NextRequest {
 describe("GET /api/musicas", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    getServerAccessTokenMock.mockResolvedValue(undefined);
     limparCacheMusicas();
   });
 
@@ -51,21 +93,30 @@ describe("GET /api/musicas", () => {
       },
     ];
 
-    serverApiRequestMock.mockResolvedValueOnce(createAxiosResponse(mockMusicas));
+    serverApiRequestWithAccessTokenMock.mockResolvedValueOnce(
+      createAxiosResponse(mockMusicas),
+    );
 
     const response = await GET();
 
-    expect(serverApiRequestMock).toHaveBeenCalledWith({
+    expect(getServerAccessTokenMock).toHaveBeenCalledWith({
       method: "GET",
       url: "/musicas",
     });
+    expect(serverApiRequestWithAccessTokenMock).toHaveBeenCalledWith(
+      {
+        method: "GET",
+        url: "/musicas",
+      },
+      undefined,
+    );
     await expect(response.json()).resolves.toEqual(mockMusicas);
   });
 
   it("retorna erro quando o backend falha", async () => {
     const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    serverApiRequestMock.mockRejectedValueOnce({
+    serverApiRequestWithAccessTokenMock.mockRejectedValueOnce({
       isAxiosError: true,
       response: {
         data: { message: "Erro interno" },
@@ -97,12 +148,14 @@ describe("GET /api/musicas", () => {
       },
     ];
 
-    serverApiRequestMock.mockResolvedValueOnce(createAxiosResponse(mockMusicas));
+    serverApiRequestWithAccessTokenMock.mockResolvedValueOnce(
+      createAxiosResponse(mockMusicas),
+    );
 
     const firstResponse = await GET();
     const secondResponse = await GET();
 
-    expect(serverApiRequestMock).toHaveBeenCalledTimes(1);
+    expect(serverApiRequestWithAccessTokenMock).toHaveBeenCalledTimes(1);
     await expect(firstResponse.json()).resolves.toEqual(mockMusicas);
     await expect(secondResponse.json()).resolves.toEqual(mockMusicas);
   });
@@ -127,12 +180,14 @@ describe("GET /api/musicas", () => {
       },
     ];
 
-    serverApiRequestMock.mockResolvedValueOnce(createAxiosResponse(mockMusicas));
+    serverApiRequestWithAccessTokenMock.mockResolvedValueOnce(
+      createAxiosResponse(mockMusicas),
+    );
 
     const firstResponse = await GET(createGetRequest("around"));
     const secondResponse = await GET(createGetRequest("one"));
 
-    expect(serverApiRequestMock).toHaveBeenCalledTimes(1);
+    expect(serverApiRequestWithAccessTokenMock).toHaveBeenCalledTimes(1);
     await expect(firstResponse.json()).resolves.toEqual(mockMusicas[0]);
     await expect(secondResponse.json()).resolves.toEqual(mockMusicas[1]);
   });
@@ -141,6 +196,7 @@ describe("GET /api/musicas", () => {
 describe("POST /api/musicas", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    getServerAccessTokenMock.mockResolvedValue(undefined);
     limparCacheMusicas();
   });
 
@@ -204,17 +260,19 @@ describe("POST /api/musicas", () => {
     formData.append("arquivo", "musica.mp3");
 
     serverApiRequestMock
-      .mockResolvedValueOnce(createAxiosResponse(musicasAntes))
       .mockResolvedValueOnce(
         createAxiosResponse({ mensagem: "Música criada", criado: true }),
-      )
+      );
+    serverApiRequestWithAccessTokenMock
+      .mockResolvedValueOnce(createAxiosResponse(musicasAntes))
       .mockResolvedValueOnce(createAxiosResponse(musicasDepois));
 
     await GET();
     await POST(createPostRequest(formData));
     const response = await GET();
 
-    expect(serverApiRequestMock).toHaveBeenCalledTimes(3);
+    expect(serverApiRequestMock).toHaveBeenCalledTimes(1);
+    expect(serverApiRequestWithAccessTokenMock).toHaveBeenCalledTimes(2);
     await expect(response.json()).resolves.toEqual(musicasDepois);
   });
 });

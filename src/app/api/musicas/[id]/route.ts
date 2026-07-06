@@ -4,7 +4,7 @@ import {
   getHttpErrorResponseData,
   getHttpErrorStatus,
 } from "@/src/shared/utils/http-error";
-import { limparCacheMusicas } from "@/src/app/api/musicas/route";
+import { limparCacheMusicas } from "@/src/app/api/musicas/cache";
 import { limparCacheMusicasArtista } from "@/src/app/api/musicas/artista/cache";
 import { NextRequest, NextResponse } from "next/server";
 
