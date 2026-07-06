@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { musicaService } from "@/src/shared/services/musica.service";
+import { musicaKeys } from "@/src/shared/utils/musicaKeys";
 import type {
   GeneroMusical,
   MusicaBackend,
@@ -37,6 +39,7 @@ export default function useEditarMusica(
   musica: MusicaBackend,
   onSalvar: () => void,
 ): UseEditarMusicaReturn {
+  const queryClient = useQueryClient();
   const [nome, setNome] = useState(musica.nome);
   const [letra, setLetra] = useState(musica.letra);
   const [tagIds, setTagIds] = useState<string[]>(
@@ -92,13 +95,23 @@ export default function useEditarMusica(
         throw new Error(body?.message ?? "Erro ao atualizar música");
       }
 
+      await queryClient.invalidateQueries({ queryKey: musicaKeys.all });
       onSalvar();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao atualizar música");
     } finally {
       setIsSubmitting(false);
     }
-  }, [nome, letra, tagIds, generoMusicalIds, arquivo, musica.id, onSalvar]);
+  }, [
+    nome,
+    letra,
+    tagIds,
+    generoMusicalIds,
+    arquivo,
+    musica.id,
+    onSalvar,
+    queryClient,
+  ]);
 
   const handleCriarTag = useCallback(async () => {
     const nomeTag = novaTag.trim();

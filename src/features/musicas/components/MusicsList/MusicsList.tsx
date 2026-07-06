@@ -67,7 +67,7 @@ export default function MusicsList() {
           musicasFiltradas.map((musica) => (
             <MediaCard
               key={musica.id}
-              imagemURL={""}
+              imagemURL={"https://cvv.org.br/wp-content/uploads/2023/05/music-heart-1.jpg"}
               rodarMusica={() => handlePlay(musica)}
               nomeMusica={musica.nome}
               nomeArtista={extrairArtista(musica)}

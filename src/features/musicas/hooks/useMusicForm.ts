@@ -3,11 +3,13 @@
 import { useForm } from "@/src/shared/hooks/Form/useForm";
 import { musicaService } from "@/src/shared/services/musica.service";
 import { notificationService } from "@/src/shared/services/notification.service";
+import { musicaKeys } from "@/src/shared/utils/musicaKeys";
 import type {
   GeneroMusical,
   Tag,
 } from "@/src/shared/types/musica.types";
 import { getHttpErrorMessage } from "@/src/shared/utils/http-error";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 export type MusicFormValues = {
@@ -27,6 +29,7 @@ const initialMusicFormValues: MusicFormValues = {
 };
 
 export function useMusicForm() {
+  const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tags, setTags] = useState<Tag[]>([]);
   const [generosMusicais, setGenerosMusicais] = useState<GeneroMusical[]>([]);
@@ -136,6 +139,7 @@ export function useMusicForm() {
         },
         4,
       );
+      await queryClient.invalidateQueries({ queryKey: musicaKeys.all });
       fecharModal();
     } catch (error) {
       console.error(error);

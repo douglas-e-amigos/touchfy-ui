@@ -1,6 +1,7 @@
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import Music from "./Music";
 import { musicaService } from "@/src/shared/services/musica.service";
@@ -14,6 +15,7 @@ vi.mock("@/src/shared/services/musica.service", () => ({
     criarTag: vi.fn(),
     criarGeneroMusical: vi.fn(),
     criar: vi.fn(),
+    buscarPorArtista: vi.fn(),
   },
 }));
 
@@ -41,6 +43,7 @@ const generosMusicais = [
 ];
 
 beforeEach(() => {
+  musicaServiceMock.buscarPorArtista.mockResolvedValue([]);
   musicaServiceMock.buscarTags.mockResolvedValue(tags);
   musicaServiceMock.buscarGenerosMusicais.mockResolvedValue(generosMusicais);
   musicaServiceMock.criar.mockResolvedValue({
@@ -79,10 +82,23 @@ afterAll(() => {
 });
 
 function renderMusic() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+      mutations: {
+        retry: false,
+      },
+    },
+  });
+
   return render(
-    <MusicaAtualProvider>
-      <Music />
-    </MusicaAtualProvider>,
+    <QueryClientProvider client={queryClient}>
+      <MusicaAtualProvider>
+        <Music />
+      </MusicaAtualProvider>
+    </QueryClientProvider>,
   );
 }
 
