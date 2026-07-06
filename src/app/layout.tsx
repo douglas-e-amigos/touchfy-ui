@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import FyToast from "../shared/components/fy-toast/FyToast";
 import "./globals.css";
+import { Provider } from "./provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,8 +32,10 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <FyToast />
-        {children}
+        <Provider>
+          <FyToast />
+          {children}
+        </Provider>
       </body>
     </html>
   );

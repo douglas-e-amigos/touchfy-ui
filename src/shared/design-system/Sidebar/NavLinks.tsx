@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Search, Library, Music, Plus } from "lucide-react";
+import { Heart, Home, Search, Music, Plus } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 import FyButton from "../../components/fy-button/FyButton";
@@ -12,8 +12,7 @@ type NavLinksProps = {
 
 const navigationLinks = [
   { name: "Início", icon: Home, href: "/dashboard" },
-  { name: "Buscar", icon: Search, href: "/busca" },
-  { name: "Biblioteca", icon: Library, href: "/biblioteca" },
+  { name: "Buscar", icon: Search, href: "/busca" }, 
 ];
 
 const artistaLinks = [
@@ -21,9 +20,7 @@ const artistaLinks = [
 ];
 
 const playlistLinks = [
-  { name: "Músicas Curtidas" },
-  { name: "Workout Vibes", href: "/playlists/workout-vibes" },
-  { name: "Chill Nights", href: "/playlists/chill-nights" },
+  { name: "Curtidas", icon: Heart, href: "/playlists/favorites" },
 ];
 
 export function NavLinks({ isArtista = false }: Readonly<NavLinksProps>) {
@@ -72,18 +69,23 @@ export function NavLinks({ isArtista = false }: Readonly<NavLinksProps>) {
 
         {/* Lista de playlists */}
         <div className="flex flex-col gap-2">
-          {playlistLinks.map((playlist) => (
-            <FyButton
-              key={playlist.name}
-              type="ghost"
-              className={`w-full flex items-center gap-4 justify-start font-light text-sm ${
-                playlist.href === pathname ? "text-white" : ""
-              }`}
-              onClick={() => navigateTo(playlist.href)}
-            >
-              {playlist.name}
-            </FyButton>
-          ))}
+          {playlistLinks.map((playlist) => {
+            const Icon = playlist.icon;
+
+            return (
+              <FyButton
+                key={playlist.name}
+                type="ghost"
+                className={`w-full flex items-center gap-4 justify-start font-light text-sm ${
+                  playlist.href === pathname ? "text-white" : ""
+                }`}
+                onClick={() => navigateTo(playlist.href)}
+              >
+                <Icon size={18} />
+                <span>{playlist.name}</span>
+              </FyButton>
+            );
+          })}
         </div>
       </div>
     </div>

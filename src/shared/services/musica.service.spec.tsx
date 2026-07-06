@@ -7,11 +7,13 @@ vi.mock("@/src/infrastructure/http/http-client", () => ({
   default: {
     get: vi.fn(),
     post: vi.fn(),
+    delete: vi.fn(),
   },
 }));
 
 const getMock = vi.mocked(httpClient.get);
 const postMock = vi.mocked(httpClient.post);
+const deleteMock = vi.mocked(httpClient.delete);
 
 describe("MusicaService", () => {
   beforeEach(() => {
@@ -58,6 +60,27 @@ describe("MusicaService", () => {
       params: { nome: "around" },
     });
     expect(result).toEqual(mockMusica);
+  });
+
+  it("busca músicas por artista", async () => {
+    const mockMusicas: MusicaBackend[] = [
+      {
+        id: "1",
+        nome: "Musica 1",
+        caminhoDoArquivo: "/path/1",
+        letra: "",
+        artistaId: "artista-1",
+        tags: [],
+        generosMusicais: [],
+      },
+    ];
+
+    getMock.mockResolvedValueOnce({ data: mockMusicas });
+
+    const result = await musicaService.buscarPorArtista("artista-1");
+
+    expect(getMock).toHaveBeenCalledWith("/musicas/artista/artista-1");
+    expect(result).toEqual(mockMusicas);
   });
 
   it("retorna null quando a música não é encontrada por nome", async () => {
@@ -141,5 +164,16 @@ describe("MusicaService", () => {
       "/musicas/generos-musicais",
       { nome: "MPB" },
     );
+  });
+
+  it("deleta música", async () => {
+    deleteMock.mockResolvedValueOnce({
+      data: { mensagem: "Música deletada", deletado: true },
+    });
+
+    const result = await musicaService.deletar("musica-1");
+
+    expect(deleteMock).toHaveBeenCalledWith("/musicas/musica-1");
+    expect(result.deletado).toBe(true);
   });
 });

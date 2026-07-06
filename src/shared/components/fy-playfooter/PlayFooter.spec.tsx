@@ -2,22 +2,39 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, waitFor } from "@testing-library/react";
 import { screen } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
+import type { ReactElement } from "react";
 import PlayFooter, { PlayFooterMusica } from "./PlayFooter";
+import {
+  MusicasCurtidasProvider,
+  useMusicasCurtidasContext,
+} from "@/src/shared/providers/MusicasCurtidas.Provider";
 
 const useAudioMock = vi.hoisted(() => vi.fn());
 const fyProgressMock = vi.hoisted(() => vi.fn());
+const fyPlayMock = vi.hoisted(() => vi.fn());
 
 vi.mock("../fy-play/FyPlay", () => ({
-  default: ({ onNext, onPrevious }: FyPlayMockProps) => (
-    <section aria-label="Ações da música">
-      <button type="button" onClick={onNext}>
-        Avançar música
-      </button>
-      <button type="button" onClick={onPrevious}>
-        Voltar música
-      </button>
-    </section>
-  ),
+  default: (props: FyPlayMockProps) => {
+    fyPlayMock(props);
+
+    return (
+      <section aria-label="Ações da música">
+        <button
+          type="button"
+          aria-pressed={props.favorite}
+          onClick={() => props.setFavorite?.(!props.favorite)}
+        >
+          {props.favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+        </button>
+        <button type="button" onClick={props.onNext}>
+          Avançar música
+        </button>
+        <button type="button" onClick={props.onPrevious}>
+          Voltar música
+        </button>
+      </section>
+    );
+  },
 }));
 
 vi.mock("../fy-playmodal/FyPlaymodal", () => ({
@@ -46,6 +63,7 @@ vi.mock("../../hooks/Audio/useAudio", () => ({
 }));
 
 beforeEach(() => {
+  localStorage.clear();
   useAudioMock.mockReturnValue({
     isPlaying: false,
     duration: 0,
@@ -55,6 +73,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
+  localStorage.clear();
   vi.clearAllMocks();
 });
 
@@ -62,7 +81,7 @@ describe("PlayFooter", () => {
   it("inicia a reprodução quando recebe uma música selecionada", async () => {
     const musica = montarMusica();
 
-    render(<PlayFooter musica={musica} />);
+    renderPlayFooter(<PlayFooter musica={musica} />);
 
     await waitFor(() => {
       expect(useAudioMock).toHaveBeenLastCalledWith(
@@ -76,7 +95,7 @@ describe("PlayFooter", () => {
   it("renderiza o player da música selecionada", () => {
     const musica = montarMusica();
 
-    render(<PlayFooter musica={musica} />);
+    renderPlayFooter(<PlayFooter musica={musica} />);
 
     expect(
       screen.getByLabelText("Player da música selecionada")
@@ -96,7 +115,7 @@ describe("PlayFooter", () => {
       currentTime: 60,
     });
 
-    render(<PlayFooter musica={musica} />);
+    renderPlayFooter(<PlayFooter musica={musica} />);
 
     expect(fyProgressMock).toHaveBeenCalledWith({
       currentTime: 60,
@@ -108,7 +127,7 @@ describe("PlayFooter", () => {
     const user = userEvent.setup();
     const musica = montarMusica();
 
-    render(<PlayFooter musica={musica} />);
+    renderPlayFooter(<PlayFooter musica={musica} />);
 
     await user.click(
       screen.getByRole("button", {
@@ -137,7 +156,7 @@ describe("PlayFooter", () => {
     const onPrevious = vi.fn();
     const musica = montarMusica();
 
-    render(
+    renderPlayFooter(
       <PlayFooter
         musica={musica}
         onNext={onNext}
@@ -151,9 +170,35 @@ describe("PlayFooter", () => {
     expect(onNext).toHaveBeenCalledTimes(1);
     expect(onPrevious).toHaveBeenCalledTimes(1);
   });
+
+  it("curte a música selecionada pelo controle do player", async () => {
+    const user = userEvent.setup();
+    const musica = montarMusica();
+
+    renderPlayFooter(
+      <>
+        <PlayFooter musica={musica} />
+        <ResumoCurtidas />
+      </>,
+    );
+
+    await user.click(
+      screen.getByRole("button", { name: "Adicionar aos favoritos" }),
+    );
+
+    expect(screen.getByText("Curtidas: Nova faixa")).toBeInTheDocument();
+    expect(fyPlayMock).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        favorite: true,
+        setFavorite: expect.any(Function),
+      }),
+    );
+  });
 });
 
 interface FyPlayMockProps {
+  readonly favorite?: boolean;
+  readonly setFavorite?: (favorite: boolean) => void;
   readonly onNext?: () => void;
   readonly onPrevious?: () => void;
 }
@@ -176,4 +221,21 @@ function montarMusica(): PlayFooterMusica {
     nomeArtista: "Artista teste",
     caminhoDoArquivo: "/audios/teste.mp3",
   };
+}
+
+function renderPlayFooter(ui: ReactElement) {
+  return render(<MusicasCurtidasProvider>{ui}</MusicasCurtidasProvider>);
+}
+
+function ResumoCurtidas() {
+  const { musicasCurtidas } = useMusicasCurtidasContext();
+
+  return (
+    <p>
+      Curtidas:{" "}
+      {musicasCurtidas.length > 0
+        ? musicasCurtidas.map((musica) => musica.nomeMusica).join(", ")
+        : "Nenhuma"}
+    </p>
+  );
 }

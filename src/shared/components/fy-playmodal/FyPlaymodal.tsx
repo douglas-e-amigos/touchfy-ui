@@ -10,6 +10,8 @@ interface FyPlaymodalProps {
   readonly musicaAtual: MusicaAtual;
   readonly play?: boolean;
   readonly setPlay?: (play: boolean) => void;
+  readonly favorite?: boolean;
+  readonly setFavorite?: (favorite: boolean) => void;
   readonly onNext?: () => void;
   readonly onPrevious?: () => void;
   readonly currentTime?: number;
@@ -21,6 +23,8 @@ export default function FyPlaymodal({
   musicaAtual,
   play,
   setPlay,
+  favorite,
+  setFavorite,
   onNext,
   onPrevious,
   currentTime,
@@ -61,6 +65,8 @@ export default function FyPlaymodal({
           <FyPlay
             play={play}
             setPlay={setPlay}
+            favorite={favorite}
+            setFavorite={setFavorite}
             onNext={onNext}
             onPrevious={onPrevious}
           />

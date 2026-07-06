@@ -77,9 +77,7 @@ describe("Design-System: Sidebar", () => {
     expect(screen.getByRole("button", { name: /Buscar/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Biblioteca/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Playlists/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Músicas Curtidas/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Workout Vibes/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Chill Nights/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Curtidas/i })).toBeInTheDocument();
     expect(screen.getByText("Maria Silva")).toBeInTheDocument();
     expect(screen.getByText("maria@email.com")).toBeInTheDocument();
   });
@@ -96,6 +94,26 @@ describe("Design-System: Sidebar", () => {
         dataNascimento: "2000-01-01",
         fotoPerfil: null,
         role: "artista",
+      },
+    });
+
+    render(<Sidebar />);
+
+    expect(screen.getByRole("button", { name: /^Músicas$/i })).toBeInTheDocument();
+  });
+
+  it("renderiza o botão Músicas quando o backend envia roles com ARTISTA", () => {
+    perfilMock.usePerfil.mockReturnValue({
+      abrirPerfil: perfilMock.abrirPerfil,
+      isLoadingUsuario: false,
+      usuario: {
+        id: "usuario-1",
+        nome: "Biel",
+        nomeUsuario: "biel",
+        email: "biel@email.com",
+        dataNascimento: "2000-01-01",
+        fotoPerfil: null,
+        roles: ["ARTISTA"],
       },
     });
 

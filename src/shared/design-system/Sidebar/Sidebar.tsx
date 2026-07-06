@@ -11,6 +11,10 @@ import { useSiderbar } from "../../hooks/Sidebar/useSidebar";
 
 const ARTISTA_ROLE = "artista";
 
+function normalizarRole(role: string) {
+  return role.trim().toLowerCase().replace(/^role_/, "");
+}
+
 export default function Sidebar() {
   const router = useRouter();
   const {
@@ -21,7 +25,12 @@ export default function Sidebar() {
     isSidebarOpen,
   } = useSiderbar();
   const { abrirPerfil, isLoadingUsuario, usuario } = usePerfil({ router });
-  const isArtista = usuario?.role?.toLowerCase() === ARTISTA_ROLE;
+  const usuarioRoles = [usuario?.role, ...(usuario?.roles ?? [])].flatMap(
+    (role) => (role ? [role] : []),
+  );
+  const isArtista = usuarioRoles.some(
+    (role) => normalizarRole(role) === ARTISTA_ROLE,
+  );
 
   const logout = async () => {
     await authService.logout();

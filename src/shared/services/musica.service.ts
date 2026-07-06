@@ -1,5 +1,6 @@
 import httpClient from "@/src/infrastructure/http/http-client";
 import type { NovoRecursoResponse } from "@/src/shared/models/http.model";
+import type { RecursoDeletadoResponse } from "@/src/shared/models/http.model";
 import type {
   CriarMusicaRequest,
   GeneroMusical,
@@ -37,6 +38,13 @@ class MusicaService {
 
   async buscarTodas(): Promise<MusicaBackend[]> {
     const response = await httpClient.get<MusicaBackend[]>("/musicas");
+    return response.data;
+  }
+
+  async buscarPorArtista(artistaId: string): Promise<MusicaBackend[]> {
+    const response = await httpClient.get<MusicaBackend[]>(
+      `/musicas/artista/${artistaId}`,
+    );
     return response.data;
   }
 
@@ -81,6 +89,12 @@ class MusicaService {
     return response.data;
   }
 
+  async deletar(id: string): Promise<RecursoDeletadoResponse> {
+    const response = await httpClient.delete<RecursoDeletadoResponse>(
+      `/musicas/${id}`,
+    );
+    return response.data;
+  }
 }
 
 export const musicaService = new MusicaService();

@@ -54,6 +54,7 @@ describe("usePerfil", () => {
       expect(result.current.usuario).toEqual({
         ...usuarioArtistaMock,
         role: "artista",
+        roles: ["artista"],
       }),
     );
   });

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import type { MusicaBackend } from "@/src/shared/types/musica.types";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { musicaService } from "@/src/shared/services/musica.service";
+import { musicaKeys } from "@/src/shared/utils/musicaKeys";
 
 const ITEMS_PER_SECTION = 6;
 
@@ -16,11 +17,10 @@ function selecionarAleatorios<T>(lista: T[], quantidade: number): T[] {
 }
 
 export default function useMusicas() {
-  const [musicas, setMusicas] = useState<MusicaBackend[]>([]);
-
-  useEffect(() => {
-    musicaService.buscarTodas().then(setMusicas);
-  }, []);
+  const { data: musicas = [] } = useQuery({
+    queryKey: musicaKeys.list(),
+    queryFn: () => musicaService.buscarTodas(),
+  });
 
   const musicasAleatorias = useMemo(
     () => selecionarAleatorios(musicas, ITEMS_PER_SECTION),

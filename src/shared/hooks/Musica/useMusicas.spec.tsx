@@ -1,5 +1,7 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 import useMusicas from "./useMusicas";
 import { musicaService } from "@/src/shared/services/musica.service";
 import type { MusicaBackend } from "@/src/shared/types/musica.types";
@@ -40,11 +42,29 @@ const mockMusicas: MusicaBackend[] = [
   },
 ];
 
+function criarQueryWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
+  return function QueryWrapper({ children }: { readonly children: ReactNode }) {
+    return (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    );
+  };
+}
+
 describe("useMusicas", () => {
   it("retorna músicas aleatórias após carregar", async () => {
     vi.mocked(musicaService.buscarTodas).mockResolvedValue(mockMusicas);
 
-    const { result } = renderHook(() => useMusicas());
+    const { result } = renderHook(() => useMusicas(), {
+      wrapper: criarQueryWrapper(),
+    });
 
     expect(musicaService.buscarTodas).toHaveBeenCalledTimes(1);
 

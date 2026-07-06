@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { usuarioService } from "@/src/features/usuario/services/usuario.service";
 import { useMusicaAtualContext } from "@/src/shared/providers/MusicaAtual.Provider";
 import {
@@ -9,6 +10,10 @@ import {
 } from "@/src/shared/design-system/RenderMusica/RenderMusica";
 import type { MusicaBackend } from "@/src/shared/types/musica.types";
 import { useMusicaSearchContext } from "@/src/shared/contexts/MusicaSearch.context";
+import { musicaService } from "@/src/shared/services/musica.service";
+import { musicaKeys } from "@/src/shared/utils/musicaKeys";
+
+const EMPTY_MUSICAS: MusicaBackend[] = [];
 
 export interface UseMusicsListReturn {
   musicas: MusicaBackend[];
@@ -27,15 +32,32 @@ export interface UseMusicsListReturn {
 }
 
 export default function useMusicsList(): UseMusicsListReturn {
-  const [musicas, setMusicas] = useState<MusicaBackend[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [artistaId, setArtistaId] = useState<string | null>(null);
+  const queryClient = useQueryClient();
   const [musicaParaDeletar, setMusicaParaDeletar] =
     useState<MusicaBackend | null>(null);
   const [musicaParaEditar, setMusicaParaEditar] =
     useState<MusicaBackend | null>(null);
   const { termoBusca } = useMusicaSearchContext();
   const { setMusicaAtual } = useMusicaAtualContext();
+
+  const usuarioLogadoQuery = useQuery({
+    queryKey: ["usuario", "me"],
+    queryFn: () => usuarioService.buscarUsuarioLogado(),
+  });
+
+  const artistaId = usuarioLogadoQuery.data?.id ?? null;
+
+  const musicasQuery = useQuery({
+    queryKey: artistaId
+      ? musicaKeys.artist(artistaId)
+      : [...musicaKeys.lists(), "artist", "pending"],
+    queryFn: () => musicaService.buscarPorArtista(artistaId!),
+    enabled: Boolean(artistaId),
+  });
+
+  const musicas = musicasQuery.data ?? EMPTY_MUSICAS;
+  const isLoading =
+    usuarioLogadoQuery.isLoading || (Boolean(artistaId) && musicasQuery.isLoading);
 
   const musicasFiltradas = useMemo(
     () => musicas.filter((m) =>
@@ -44,27 +66,34 @@ export default function useMusicsList(): UseMusicsListReturn {
     [musicas, termoBusca],
   );
 
-  useEffect(() => {
-    usuarioService
-      .buscarUsuarioLogado()
-      .then((usuario) => setArtistaId(usuario.id))
-      .catch((error) => console.error("Erro ao buscar usuário:", error));
-  }, []);
+  const deletarMusicaMutation = useMutation({
+    mutationFn: (musicaId: string) => musicaService.deletar(musicaId),
+    onMutate: async (musicaId) => {
+      if (!artistaId) {
+        return null;
+      }
 
-  useEffect(() => {
-    if (!artistaId) return;
+      const queryKey = musicaKeys.artist(artistaId);
+      await queryClient.cancelQueries({ queryKey });
 
-    fetch(`/api/musicas/artista/${artistaId}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Falha ao buscar músicas");
-        return res.json();
-      })
-      .then((data) => {
-        if (Array.isArray(data)) setMusicas(data);
-      })
-      .catch((error) => console.error("Erro ao buscar músicas:", error))
-      .finally(() => setIsLoading(false));
-  }, [artistaId]);
+      const musicasAnteriores =
+        queryClient.getQueryData<MusicaBackend[]>(queryKey);
+
+      queryClient.setQueryData<MusicaBackend[]>(queryKey, (musicasAtuais) =>
+        musicasAtuais?.filter((musica) => musica.id !== musicaId) ?? [],
+      );
+
+      return { queryKey, musicasAnteriores };
+    },
+    onError: (_error, _musicaId, context) => {
+      if (context?.musicasAnteriores) {
+        queryClient.setQueryData(context.queryKey, context.musicasAnteriores);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: musicaKeys.lists() });
+    },
+  });
 
   const handlePlay = useCallback(
     (musica: MusicaBackend) => {
@@ -91,21 +120,13 @@ export default function useMusicsList(): UseMusicsListReturn {
     if (!musicaParaDeletar) return;
 
     try {
-      const res = await fetch(`/api/musicas/${musicaParaDeletar.id}`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) throw new Error("Falha ao deletar música");
-
-      setMusicas((prev) =>
-        prev.filter((m) => m.id !== musicaParaDeletar.id),
-      );
+      await deletarMusicaMutation.mutateAsync(musicaParaDeletar.id);
     } catch (error) {
       console.error("Erro ao deletar música:", error);
     } finally {
       setMusicaParaDeletar(null);
     }
-  }, [musicaParaDeletar]);
+  }, [deletarMusicaMutation, musicaParaDeletar]);
 
   const handleEditarClick = useCallback((musica: MusicaBackend) => {
     setMusicaParaEditar(musica);
@@ -116,8 +137,9 @@ export default function useMusicsList(): UseMusicsListReturn {
   }, []);
 
   const handleEditarSalvar = useCallback(() => {
+    void queryClient.invalidateQueries({ queryKey: musicaKeys.lists() });
     setMusicaParaEditar(null);
-  }, []);
+  }, [queryClient]);
 
   return {
     musicas,

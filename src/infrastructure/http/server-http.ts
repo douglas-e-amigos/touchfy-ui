@@ -136,6 +136,23 @@ async function retryAfterUnauthorized<T>(
   return axios(buildRequestConfig(config, refreshedTokens.accessToken));
 }
 
+export async function getServerAccessToken(
+  config: AxiosRequestConfig,
+): Promise<string | undefined> {
+  const cookieStore = await cookies();
+  const authState = getAuthState(cookieStore);
+  logAuthState(config, authState);
+
+  return tryPreflightRefresh(cookieStore, config, authState);
+}
+
+export async function serverApiRequestWithAccessToken<T>(
+  config: AxiosRequestConfig,
+  accessToken?: string,
+): Promise<AxiosResponse<T>> {
+  return axios(buildRequestConfig(config, accessToken));
+}
+
 /**
  * Realiza uma requisição para a API do backend, automaticamente lidando com tokens de acesso e refresh.
  * 

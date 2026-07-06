@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import DashboardHeader from "./components/DashboardHeader/DashboardHeader";
 import styles from "./Dashboard.module.css";
 import RenderMusica, {
@@ -15,12 +16,12 @@ import type { MusicaBackend } from "@/src/shared/types/musica.types";
 export default function Dashboard() {
   const { selecionarMusica } = useMusicaAtualContext();
 
-  function handleSelecionarMusica(
-    musica: MusicaBackend,
-    fila: MusicaBackend[]
-  ) {
-    selecionarMusica(toMusicaAtual(musica), fila.map(toMusicaAtual));
-  }
+  const handleSelecionarMusica = useCallback(
+    (musica: MusicaBackend, fila: MusicaBackend[]) => {
+      selecionarMusica(toMusicaAtual(musica), fila.map(toMusicaAtual));
+    },
+    [selecionarMusica],
+  );
 
   return (
     <main className={styles.main}>

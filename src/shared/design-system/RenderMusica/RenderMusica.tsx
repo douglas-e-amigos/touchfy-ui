@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import type { MusicaBackend } from "@/src/shared/types/musica.types";
 import useMusicas from "@/src/shared/hooks/Musica/useMusicas";
 import { MediaCard } from "@/src/shared/components/fy-mediacard/MediaCard";
@@ -21,7 +22,7 @@ interface RenderMusicaProps {
   ) => void;
 }
 
-export default function RenderMusica({
+function RenderMusica({
   aoSelecionarMusica,
 }: RenderMusicaProps) {
   const { musicasAleatorias } = useMusicas();
@@ -41,3 +42,5 @@ export default function RenderMusica({
     </section>
   );
 }
+
+export default memo(RenderMusica);

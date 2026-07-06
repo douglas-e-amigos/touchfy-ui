@@ -62,6 +62,24 @@ describe("FyPlay", () => {
     expect(onNext).toHaveBeenCalledTimes(1);
     expect(onPrevious).toHaveBeenCalledTimes(1);
   });
+
+  it("usa o estado externo de curtida quando informado", async () => {
+    const user = userEvent.setup();
+    const setFavorite = vi.fn();
+    useFyPlayMock.mockReturnValue(montarEstado({ favorite: false }));
+
+    render(<FyPlay favorite={false} setFavorite={setFavorite} />);
+
+    const favoriteButton = screen.getByRole("button", {
+      name: "Adicionar aos favoritos",
+    });
+
+    expect(favoriteButton).toHaveAttribute("aria-pressed", "false");
+
+    await user.click(favoriteButton);
+
+    expect(setFavorite).toHaveBeenCalledWith(true);
+  });
 });
 
 interface EstadoFyPlay {

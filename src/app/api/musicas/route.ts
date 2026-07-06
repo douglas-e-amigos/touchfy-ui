@@ -4,37 +4,14 @@ import {
   getHttpErrorStatus,
 } from "@/src/shared/utils/http-error";
 import { limparCacheMusicasArtista } from "@/src/app/api/musicas/artista/cache";
+import {
+  buscarMusicasComCache,
+  limparCacheMusicas,
+} from "@/src/app/api/musicas/cache";
 import type { MusicaBackend } from "@/src/shared/types/musica.types";
 import { NextRequest, NextResponse } from "next/server";
 
-const CACHE_TTL_MS = 5 * 60 * 1000;
-
-let musicasCache: {
-  data: MusicaBackend[];
-  expiresAt: number;
-} | null = null;
-
-export function limparCacheMusicas() {
-  musicasCache = null;
-}
-
-async function buscarMusicasComCache(): Promise<MusicaBackend[]> {
-  if (musicasCache && musicasCache.expiresAt > Date.now()) {
-    return musicasCache.data;
-  }
-
-  const response = await serverApiRequest<MusicaBackend[]>({
-    method: "GET",
-    url: "/musicas",
-  });
-
-  musicasCache = {
-    data: response.data,
-    expiresAt: Date.now() + CACHE_TTL_MS,
-  };
-
-  return response.data;
-}
+export { limparCacheMusicas };
 
 function buscarMusicaPorNome(musicas: MusicaBackend[], nome: string) {
   const termoBusca = nome.trim().toLowerCase();

@@ -7,6 +7,7 @@ import styles from "./PlayFooter.module.css";
 import FyProgress from "../fy-progress/FyProgress";
 import useFyPlay from "../../hooks/FyPlay/useFyPlay";
 import useAudio from "../../hooks/Audio/useAudio";
+import { useMusicasCurtidasContext } from "../../providers/MusicasCurtidas.Provider";
 
 export interface PlayFooterMusica {
   readonly id: string;
@@ -31,6 +32,12 @@ export default function PlayFooter({
 }: PlayFooterProps) {
   const [modalAberto, setModalAberto] = useState(false);
   const { play, setPlay } = useFyPlay();
+  const {
+    curtirMusica,
+    descurtirMusica,
+    isMusicaCurtida,
+  } = useMusicasCurtidasContext();
+  const favorite = isMusicaCurtida(musica.id);
 
   const src = musica.id
     ? `/api/musicas/stream/${musica.id}`
@@ -49,6 +56,15 @@ export default function PlayFooter({
 
   function fecharModal() {
     setModalAberto(false);
+  }
+
+  function setFavorite(favorite: boolean) {
+    if (favorite) {
+      curtirMusica(musica);
+      return;
+    }
+
+    descurtirMusica(musica.id);
   }
 
   return (
@@ -81,6 +97,8 @@ export default function PlayFooter({
         <FyPlay
           play={play}
           setPlay={setPlay}
+          favorite={favorite}
+          setFavorite={setFavorite}
           onNext={onNext}
           onPrevious={onPrevious}
         />
@@ -92,6 +110,8 @@ export default function PlayFooter({
           musicaAtual={musica}
           play={play}
           setPlay={setPlay}
+          favorite={favorite}
+          setFavorite={setFavorite}
           onNext={onNext}
           onPrevious={onPrevious}
           currentTime={currentTime}

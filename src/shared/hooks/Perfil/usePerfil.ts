@@ -49,7 +49,7 @@ export function usePerfil({ router }: { router: AppRouterInstance }) {
 }
 
 function aplicarRoleTemporaria(usuario: UsuarioResponse): UsuarioResponse {
-  if (usuario.role) {
+  if (usuario.role || usuario.roles?.length) {
     return usuario;
   }
 
@@ -60,5 +60,6 @@ function aplicarRoleTemporaria(usuario: UsuarioResponse): UsuarioResponse {
   return {
     ...usuario,
     role: ARTISTA_ROLE,
+    roles: [ARTISTA_ROLE],
   };
 }
