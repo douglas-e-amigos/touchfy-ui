@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { RefreshTokenRequest, TokenResponse } from "@/src/features/usuario/models/dto.model";
 
 const publicOnlyRoutes = ["/login", "/register"];
-const API_URL = "https://api.hydromesh.com.br";
+const API_URL = (process.env.BACKEND_API_URL || "http://localhost:8080").replace(/\/+$/, "");
 
 async function refreshAccessToken(request: NextRequest) {
   const refreshToken = request.cookies.get("refresh_token")?.value;
@@ -12,7 +12,7 @@ async function refreshAccessToken(request: NextRequest) {
   }
 
   try {
-    const response = await fetch(`${API_URL}usuarios/auth/refresh`, {
+    const response = await fetch(`${API_URL}/usuarios/auth/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
